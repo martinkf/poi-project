@@ -1,15 +1,14 @@
 local FrameW2 = 1600
 local FrameH2 = 900
 local PreviewDelay = THEME:GetMetric("ScreenSelectMusic", "SampleMusicDelay")
-local VHSText_Y = -100
-local VHSText_visible = false -- use this lever to enable or disable the VHS text
+local VHSText_visible = false -- use this lever to enable or disable the VHS text, disabled for now
 
 local t = Def.ActorFrame {
 	OnCommand=function(self)
-		self:xy(SCREEN_CENTER_X, SCREEN_CENTER_Y-100):zoom(0.8)		
+		self:xy(SCREEN_CENTER_X, SCREEN_CENTER_Y-100):zoom(0.8)
 	end,
 	
-	-- noise fx when switching song
+	-- noise fx when switching song - technically it's always running, right under the BG graphic or BG video
 	Def.ActorFrame {
 		Name="Noise",
 
@@ -31,7 +30,7 @@ local t = Def.ActorFrame {
 				Font="VCR OSD Mono 40px",
 				Text="",
 				InitCommand=function(self)
-					self:zoom(2):xy(0,VHSText_Y)
+					self:zoom(2):xy(0,-100)
 					:shadowlength(4)					
 				end,
 				ScrollMessageCommand=function(self, params)
@@ -48,7 +47,7 @@ local t = Def.ActorFrame {
 						:zoom(2.3)
 						:easeoutquad(0.2)
 						:zoom(2)
-					end					
+					end
 				end,
 			},
 		},
@@ -74,10 +73,10 @@ local t = Def.ActorFrame {
 		LoadBGCommand=function(self)
 			local Path = Song:GetBackgroundPath()
 			if Path and FILEMAN:DoesFileExist(Path) then
-				self:LoadFromCached("Background", Path):zoomto(FrameW2, FrameH2):y(125)
+				self:Load(Path):zoomto(FrameW2, FrameH2):y(125)
 				:linear(PreviewDelay):diffusealpha(1):diffuse(color("#ffffff"))
 			else
-				self:LoadFromCached("Banner", Song:GetBannerPath()):zoomto(FrameW2, FrameH2):y(125)
+				self:Load(Song:GetBannerPath()):zoomto(FrameW2, FrameH2):y(125)
 				:linear(PreviewDelay):diffusealpha(1):diffuse(color("#ffffff"))
 			end
 		end,
@@ -94,6 +93,5 @@ local t = Def.ActorFrame {
 	},
 	
 }
-
 
 return t
