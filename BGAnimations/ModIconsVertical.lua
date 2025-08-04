@@ -80,7 +80,7 @@ local t = Def.ActorFrame {
 		end
 
 		-- forcing Arrow 70% because fuck you that's why
-		GAMESTATE:GetPlayerState(pn):GetPlayerOptions("ModsLevel_Preferred"):Mini(0.3)			
+		GAMESTATE:GetPlayerState(pn):GetPlayerOptions("ModsLevel_Preferred"):Mini(0.3)
 		removeFirst(PlayerModsArray, "30% Mini") -- we don't want it displayed
 		
 		-- Timing mode
@@ -97,6 +97,7 @@ local t = Def.ActorFrame {
 			if ModText ~= "" then PlayerModsArray[i] = ModText end
 		end
 
+		--[[
 		-- BGA darkness
 		local BGAFilter = LoadModule("Config.Load.lua")("ScreenFilter",CheckIfUserOrMachineProfile(pnNum).."/OutFoxPrefs.ini") or 0
 		-- Increase the value so that we can use it as percentage
@@ -104,6 +105,7 @@ local t = Def.ActorFrame {
 		if BGAFilter ~= 0 then
 			table.insert(PlayerModsArray, 2, THEME:GetString("ModIcons", "Filter") .. " " .. (BGAFilter == 100 and "Off" or BGAFilter .. "%"))
 		end
+		]]--
 
 		-- Music rate
 		local RushAmount = GAMESTATE:GetSongOptionsObject("ModsLevel_Song"):MusicRate()
@@ -128,12 +130,6 @@ local t = Def.ActorFrame {
 			self:x(0):setsize(46,46):diffuse(0,0,0,0.4)
 		end
 	}
-	--[[Def.Sprite {
-		Texture=THEME:GetPathG("", "UI/ModIcon"),
-		InitCommand=function(self) 
-		self:x(0):zoomx(IconW/64)
-		end
-	}]]--
 }
 
 -- This will be responsible for displaying the selected noteskin
@@ -164,14 +160,6 @@ for i = 1, IconAmount do
 				:visible(false):x(0)
 			end
 		},
-		--[[Def.Sprite {
-			Name="Icon",
-			Texture=THEME:GetPathG("", "UI/ModIcon"),
-			InitCommand=function(self)					
-				self:y((IconH + IconSpacing) + (i - 1) * (IconH + IconSpacing))
-				:visible(false):zoomx(IconW/64):x(0)
-			end
-		},]]--
 		Def.BitmapText {
 			Name="Text",
 			Font="Montserrat semibold 40px",

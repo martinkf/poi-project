@@ -272,14 +272,13 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					end,
 					
 					RefreshCommand=function(self)
-						if SCREENMAN:GetTopScreen():GetName() == "ScreenGameplay" then						
+						if SCREENMAN:GetTopScreen():GetName() == "ScreenGameplay" then
 							self:visible(false)
 						end
 					end,
 				},
 				
 				-- mod icons (vertical)
-				-- NYI
 				LoadActor("ModIconsVertical.lua", pn) .. {
 					InitCommand=function(self)						
 						self:xy(pn == PLAYER_2 and (modIcons_X * 2) or (modIcons_X * -2), modIcons_Y+50)
@@ -288,7 +287,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					end,
 					
 					RefreshCommand=function(self)
-						if SCREENMAN:GetTopScreen():GetName() ~= "ScreenGameplay" then						
+						if SCREENMAN:GetTopScreen():GetName() ~= "ScreenGameplay" then
 							self:visible(false)
 						end
 					end,
