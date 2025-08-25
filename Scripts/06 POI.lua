@@ -5906,7 +5906,7 @@ function GetColor_POI(inputString)
 		BRONZE = color("#dd7733"),
 		PASSED = color("#3399ff"),
 		FAILED = color("0,0,0,0.4"),
-		NOT_PLAYED = color("0,0,0,0.4"),
+		NOT_PLAYED = color("0,0,0,0.2"),
 	}
 
 	return colorMap[inputString] or colorMap["Black"]
@@ -6281,7 +6281,7 @@ end
 -- 1) a chart object
 -- 2) a string detailing what you want, from this list:
 -- "Chart POI Name", "Chart Origin", "Chart Meter"
--- "Chart Stepstype Color", "Chart PersonalRecords Color", 
+-- "Chart Stepstype Color"
 -- returns:
 -- it actually depends on what you want, really
 function FetchFromChart(input_chart, fetch_details)
@@ -6332,10 +6332,6 @@ function FetchFromChart(input_chart, fetch_details)
 		else 
 			output = GetColor_POI(ToEnumShortString(ToEnumShortString(input_chart:GetStepsType())))
 		end
-
-	elseif fetch_details == "Chart PersonalRecords Color" then
-		-- returns a color object, such to use inside a self:diffuse(x)
-
 
 	end
 
@@ -6437,10 +6433,12 @@ end
 -- inputs:
 -- 1) an array of Chart objects
 -- 2) a string detailing what you want, from this list:
--- "Singles", "Not Singles"
+-- "Singles", "Not Singles",
+-- "Easy Station", "Normal", "Hard", "Crazy", 
+-- "Half-Double", "Freestyle", "Nightmare"
 -- returns:
 -- an array of Chart objects
-function SplitChartArrayByStepstype_POI(input_chartArray, input_string)
+function SplitChartArray(input_chartArray, input_string)
 	
 	local PrevChartArray = ShallowCopy(input_chartArray)
 	local output = ShallowCopy(input_chartArray)
@@ -6457,8 +6455,61 @@ function SplitChartArrayByStepstype_POI(input_chartArray, input_string)
 				table.remove(output, i)
 			end
 		end
+	elseif input_string == "Easy Station" then
+		for i = #output, 1, -1 do
+			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
+   			if not (chartPOIName == "EASY STATION" or chartPOIName == "EASY STATION i" or chartPOIName == "EASY STATION ii" or chartPOIName == "EASY STATION iii") then
+				table.remove(output, i)
+			end
+		end
+	elseif input_string == "Normal" then
+		for i = #output, 1, -1 do
+			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
+   			if not (chartPOIName == "NORMAL" or chartPOIName == "NORMAL i" or chartPOIName == "NORMAL ii" or chartPOIName == "NORMAL iii"
+			or chartPOIName == "DIVISION ALL NORMAL") then
+				table.remove(output, i)
+			end
+		end
+	elseif input_string == "Hard" then
+		for i = #output, 1, -1 do
+			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
+   			if not (chartPOIName == "HARD" or chartPOIName == "HARD i" or chartPOIName == "HARD ii" or chartPOIName == "HARD iii"
+			or chartPOIName == "DIVISION ALL GROOVE") then
+				table.remove(output, i)
+			end
+		end
+	elseif input_string == "Crazy" then
+		for i = #output, 1, -1 do
+			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
+   			if not (chartPOIName == "CRAZY" or chartPOIName == "CRAZY i" or chartPOIName == "CRAZY ii" or chartPOIName == "CRAZY iii"
+			or chartPOIName == "EXTRA EXPERT" or chartPOIName == "DIVISION ALL WILD" or chartPOIName == "DIVISION WILD STYLE ONE-W"
+			or chartPOIName == "DIVISION WILD STYLE TWO-WW") then
+				table.remove(output, i)
+			end
+		end
+	elseif input_string == "Half-Double" then
+		for i = #output, 1, -1 do
+			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
+   			if not (chartPOIName == "HALF-DOUBLE" or chartPOIName == "HALF-DOUBLE i" or chartPOIName == "HALF-DOUBLE ii" or chartPOIName == "HALF-DOUBLE iii") then
+				table.remove(output, i)
+			end
+		end
+	elseif input_string == "Freestyle" then
+		for i = #output, 1, -1 do
+			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
+   			if not (chartPOIName == "FREESTYLE" or chartPOIName == "FREESTYLE i" or chartPOIName == "FREESTYLE ii" or chartPOIName == "FREESTYLE iii") then
+				table.remove(output, i)
+			end
+		end
+	elseif input_string == "Nightmare" then
+		for i = #output, 1, -1 do
+			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
+   			if not (chartPOIName == "NIGHTMARE" or chartPOIName == "NIGHTMARE i" or chartPOIName == "NIGHTMARE ii" or chartPOIName == "NIGHTMARE iii"
+			or chartPOIName == "EXTRA EXPERT DOUBLE") then
+				table.remove(output, i)
+			end
+		end
 	end
-	--if #output == 0 then output = ShallowCopy(PrevChartArray) end --actually it's OK for this chartArray to be size 0 sometimes
 
 	return output
 end

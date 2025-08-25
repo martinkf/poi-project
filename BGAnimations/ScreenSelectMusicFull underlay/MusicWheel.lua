@@ -664,8 +664,8 @@ for i = 1, WheelSize do
 				-- updates arrayOfFilteredCharts variables for the children to use
 				arrayOfFilteredCharts = GetAllowedCharts_POI(SongUtil.GetPlayableSteps(Songs[Targets[i]]), GroupsList[GroupIndex].SubGroups[SubGroupIndex].Name, Targets[i])
 				table.sort(arrayOfFilteredCharts, SortCharts)
-				arrayOfFilteredChartsSingles = SplitChartArrayByStepstype_POI(arrayOfFilteredCharts, "Singles")
-				arrayOfFilteredChartsNotSingles = SplitChartArrayByStepstype_POI(arrayOfFilteredCharts, "Not Singles")
+				arrayOfFilteredChartsSingles = SplitChartArray(arrayOfFilteredCharts, "Singles")
+				arrayOfFilteredChartsNotSingles = SplitChartArray(arrayOfFilteredCharts, "Not Singles")
 
 				-- hide everything if outside the wheel boundaries
 					if i > WheelCenter+3 or i < WheelCenter-3 then

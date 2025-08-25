@@ -252,26 +252,11 @@ else
 						MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = false })
 					end
 				end
-				
-			elseif button == "UpRight" or button == "UpLeft" or button == "Up" or button == "MenuUp" then
-				if not IsFocusedMain then 
+			elseif button == "UpRight" or button == "UpLeft" or button == "Up" or button == "MenuUp"
+				or button == "GroupSelectPad1" or button == "GroupSelectPad2" then
+				if not IsFocusedMain then
 					IsFocusedMain = true
 					MESSAGEMAN:Broadcast("RefreshHighlight")
-				elseif IsHome or IsEvent then 
-					MESSAGEMAN:Broadcast("ExitPressed")
-				end
-			end
-
-			if IsHome or IsEvent then
-				if event.type == "InputEventType_Repeat" then
-					if button == "UpLeft" or button == "UpRight" or button == "Up" then
-						TickCount = TickCount + 1
-						MESSAGEMAN:Broadcast("ExitTickUp")
-						if TickCount == 15 then
-							BlockScreenInput(false)
-							SCREENMAN:GetTopScreen():Cancel()
-						end
-					end
 				end
 			end
 		end

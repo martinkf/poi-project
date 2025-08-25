@@ -19,6 +19,7 @@ local t = Def.ActorFrame {
 			self:zoomto(1272, 608)
 			self:align(0.5, 0)
 			self:diffuse(color("0,0,0,0.4"))
+			self:visible(false) --disabling it for now
 		end,
 		SongChosenMessageCommand=function(self)
 			self:stoptweening():xy(SCREEN_CENTER_X, SCREEN_CENTER_Y-252):zoomto(1272, 608):easeoutexpo(1):xy(SCREEN_CENTER_X, SCREEN_CENTER_Y-286):zoomto(1272, 86)
@@ -42,7 +43,8 @@ local t = Def.ActorFrame {
 		InitCommand=function(self)
 			self:xy(SCREEN_CENTER_X-640, SCREEN_CENTER_Y-450)
 		end,
-		LoadActor("MusicWheel") .. { Name="MusicWheel" }
+		--LoadActor("MusicWheel") .. { Name="MusicWheel" }
+		LoadActor("TestMusicWheelTest") .. { Name="MusicWheel" }
 	},
 
 	-- a group
@@ -67,13 +69,13 @@ local t = Def.ActorFrame {
 -- a group of elements that come from below when song is confirmed and we're now selecting the chart
 t[#t+1] = Def.ActorFrame {
 	InitCommand=function(self)
-		self:xy(SCREEN_CENTER_X, 732+560)
+		self:xy(SCREEN_CENTER_X, 696+596)
 	end,
 	SongChosenMessageCommand=function(self)
-		self:stoptweening():easeoutexpo(1):y(732)
+		self:stoptweening():easeoutexpo(1):y(696)
 	end,
 	SongUnchosenMessageCommand=function(self)
-		self:stoptweening():easeoutexpo(0.5):y(732+560)
+		self:stoptweening():easeoutexpo(0.5):y(696+596)
 	end,
 	
 	-- quad background: ChartDisplay
