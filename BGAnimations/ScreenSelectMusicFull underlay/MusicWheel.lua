@@ -662,10 +662,14 @@ for i = 1, WheelSize do
 			RefreshCommand=function(self,param)
 
 				-- updates arrayOfFilteredCharts variables for the children to use
-				arrayOfFilteredCharts = GetAllowedCharts_POI(SongUtil.GetPlayableSteps(Songs[Targets[i]]), GroupsList[GroupIndex].SubGroups[SubGroupIndex].Name, Targets[i])
+				local currentNameOfPlaylist = GroupsList[GroupIndex].SubGroups[SubGroupIndex].Name
+				local currentSongName = Songs[Targets[i]]:GetDisplayMainTitle()
+
+				arrayOfFilteredCharts = GetAllowedCharts_POI(SongUtil.GetPlayableSteps(Songs[Targets[i]]), currentNameOfPlaylist, Targets[i])
 				table.sort(arrayOfFilteredCharts, SortCharts)
-				arrayOfFilteredChartsSingles = SplitChartArray(arrayOfFilteredCharts, "Singles")
-				arrayOfFilteredChartsNotSingles = SplitChartArray(arrayOfFilteredCharts, "Not Singles")
+
+				arrayOfFilteredChartsSingles = SplitChartArray(arrayOfFilteredCharts, "Singles", currentNameOfPlaylist, currentSongName)
+				arrayOfFilteredChartsNotSingles = SplitChartArray(arrayOfFilteredCharts, "Not Singles", currentNameOfPlaylist, currentSongName)
 
 				-- hide everything if outside the wheel boundaries
 					if i > WheelCenter+3 or i < WheelCenter-3 then

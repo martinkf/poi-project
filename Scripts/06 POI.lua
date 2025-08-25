@@ -6436,9 +6436,11 @@ end
 -- "Singles", "Not Singles",
 -- "Easy Station", "Normal", "Hard", "Crazy", 
 -- "Half-Double", "Freestyle", "Nightmare"
+-- 3) a string representing the name of the playlist
+-- 4) a string representing the name of the song
 -- returns:
 -- an array of Chart objects
-function SplitChartArray(input_chartArray, input_string)
+function SplitChartArray(input_chartArray, input_string, input_playlistAsString, input_songNameAsString)
 	
 	local PrevChartArray = ShallowCopy(input_chartArray)
 	local output = ShallowCopy(input_chartArray)
@@ -6474,7 +6476,7 @@ function SplitChartArray(input_chartArray, input_string)
 		for i = #output, 1, -1 do
 			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
    			if not (chartPOIName == "HARD" or chartPOIName == "HARD i" or chartPOIName == "HARD ii" or chartPOIName == "HARD iii"
-			or chartPOIName == "DIVISION ALL GROOVE") then
+			or chartPOIName == "DIVISION ALL GROOVE" or chartPOIName == "ANOTHER HARD") then
 				table.remove(output, i)
 			end
 		end
@@ -6483,7 +6485,7 @@ function SplitChartArray(input_chartArray, input_string)
 			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
    			if not (chartPOIName == "CRAZY" or chartPOIName == "CRAZY i" or chartPOIName == "CRAZY ii" or chartPOIName == "CRAZY iii"
 			or chartPOIName == "EXTRA EXPERT" or chartPOIName == "DIVISION ALL WILD" or chartPOIName == "DIVISION WILD STYLE ONE-W"
-			or chartPOIName == "DIVISION WILD STYLE TWO-WW") then
+			or chartPOIName == "DIVISION WILD STYLE TWO-WW" or chartPOIName == "ANOTHER CRAZY") then
 				table.remove(output, i)
 			end
 		end
@@ -6497,16 +6499,44 @@ function SplitChartArray(input_chartArray, input_string)
 	elseif input_string == "Freestyle" then
 		for i = #output, 1, -1 do
 			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-   			if not (chartPOIName == "FREESTYLE" or chartPOIName == "FREESTYLE i" or chartPOIName == "FREESTYLE ii" or chartPOIName == "FREESTYLE iii") then
-				table.remove(output, i)
+			if ((input_playlistAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Chicken Wing"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Holiday"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Radetzky Can Can"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Chicken Wing"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Holiday"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Radetzky Can Can"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Premiere 3") and (input_songNameAsString == "Chicken Wing")) then
+				-- these are exceptions to the rule
+				if not (chartPOIName == "EXTRA EXPERT DOUBLE") then
+					table.remove(output, i)
+				end
+			else
+				-- regular situation
+   				if not (chartPOIName == "FREESTYLE" or chartPOIName == "FREESTYLE i" or chartPOIName == "FREESTYLE ii" or chartPOIName == "FREESTYLE iii"
+				or chartPOIName == "ANOTHER FREESTYLE" or chartPOIName == "ANOTHER FREESTYLE i" or chartPOIName == "ANOTHER FREESTYLE ii") then
+					table.remove(output, i)
+				end
 			end
 		end
 	elseif input_string == "Nightmare" then
 		for i = #output, 1, -1 do
 			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-   			if not (chartPOIName == "NIGHTMARE" or chartPOIName == "NIGHTMARE i" or chartPOIName == "NIGHTMARE ii" or chartPOIName == "NIGHTMARE iii"
-			or chartPOIName == "EXTRA EXPERT DOUBLE") then
+			if ((input_playlistAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Chicken Wing"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Holiday"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Radetzky Can Can"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Chicken Wing"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Holiday"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Radetzky Can Can"))
+			or ((input_playlistAsString == "Experience: Pump It Up The Premiere 3") and (input_songNameAsString == "Chicken Wing")) then
+				-- these are exceptions to the rule
 				table.remove(output, i)
+			else
+				-- regular situation
+   				if not (chartPOIName == "NIGHTMARE" or chartPOIName == "NIGHTMARE i" or chartPOIName == "NIGHTMARE ii" or chartPOIName == "NIGHTMARE iii"
+				or chartPOIName == "EXTRA EXPERT DOUBLE" or chartPOIName == "ANOTHER NIGHTMARE" or chartPOIName == "ANOTHER NIGHTMARE i"
+				or chartPOIName == "ANOTHER NIGHTMARE ii" or chartPOIName == "STAFF ROLL") then
+					table.remove(output, i)
+				end
 			end
 		end
 	end

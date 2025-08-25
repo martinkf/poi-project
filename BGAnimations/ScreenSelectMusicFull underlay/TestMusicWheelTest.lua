@@ -610,17 +610,21 @@ for i = 1, WheelSize do
 			RefreshCommand=function(self,param)
 
 				-- updates arrayOfFilteredCharts variables for the children to use
-				arrayOfFilteredCharts = GetAllowedCharts_POI(SongUtil.GetPlayableSteps(Songs[Targets[i]]), GroupsList[GroupIndex].SubGroups[SubGroupIndex].Name, Targets[i])
+				local currentNameOfPlaylist = GroupsList[GroupIndex].SubGroups[SubGroupIndex].Name
+				local currentSongName = Songs[Targets[i]]:GetDisplayMainTitle()
+
+				arrayOfFilteredCharts = GetAllowedCharts_POI(SongUtil.GetPlayableSteps(Songs[Targets[i]]), currentNameOfPlaylist, Targets[i])
 				table.sort(arrayOfFilteredCharts, SortCharts)
-				arrayOfFilteredChartsSingles = SplitChartArray(arrayOfFilteredCharts, "Singles")
-				arrayOfFilteredChartsNotSingles = SplitChartArray(arrayOfFilteredCharts, "Not Singles")
-				arrayOfFilteredChartsEasyStation = SplitChartArray(arrayOfFilteredCharts, "Easy Station")
-				arrayOfFilteredChartsNormal = SplitChartArray(arrayOfFilteredCharts, "Normal")
-				arrayOfFilteredChartsHard = SplitChartArray(arrayOfFilteredCharts, "Hard")
-				arrayOfFilteredChartsCrazy = SplitChartArray(arrayOfFilteredCharts, "Crazy")
-				arrayOfFilteredChartsHalfdouble = SplitChartArray(arrayOfFilteredCharts, "Half-Double")
-				arrayOfFilteredChartsFreestyle = SplitChartArray(arrayOfFilteredCharts, "Freestyle")
-				arrayOfFilteredChartsNightmare = SplitChartArray(arrayOfFilteredCharts, "Nightmare")
+				
+				arrayOfFilteredChartsSingles = SplitChartArray(arrayOfFilteredCharts, "Singles", currentNameOfPlaylist, currentSongName)
+				arrayOfFilteredChartsNotSingles = SplitChartArray(arrayOfFilteredCharts, "Not Singles", currentNameOfPlaylist, currentSongName)
+				arrayOfFilteredChartsEasyStation = SplitChartArray(arrayOfFilteredCharts, "Easy Station", currentNameOfPlaylist, currentSongName)
+				arrayOfFilteredChartsNormal = SplitChartArray(arrayOfFilteredCharts, "Normal", currentNameOfPlaylist, currentSongName)
+				arrayOfFilteredChartsHard = SplitChartArray(arrayOfFilteredCharts, "Hard", currentNameOfPlaylist, currentSongName)
+				arrayOfFilteredChartsCrazy = SplitChartArray(arrayOfFilteredCharts, "Crazy", currentNameOfPlaylist, currentSongName)
+				arrayOfFilteredChartsHalfdouble = SplitChartArray(arrayOfFilteredCharts, "Half-Double", currentNameOfPlaylist, currentSongName)
+				arrayOfFilteredChartsFreestyle = SplitChartArray(arrayOfFilteredCharts, "Freestyle", currentNameOfPlaylist, currentSongName)
+				arrayOfFilteredChartsNightmare = SplitChartArray(arrayOfFilteredCharts, "Nightmare", currentNameOfPlaylist, currentSongName)
 
 				-- hide everything if outside the wheel boundaries
 					if i > WheelCenter+3 or i < WheelCenter-3 then
@@ -1588,19 +1592,15 @@ for i = 1, WheelSize do
 				-- populates some useful local variables
 				local currentPlaylist = GroupsList[GroupIndex].SubGroups[SubGroupIndex].Name
 
-				-- visibility: Easy Station
-				if currentPlaylist == "Experience: Pump It Up The 1st Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The 2nd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The 3rd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The Season Evolution Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up Perfect Collection" then
-					self:GetChild("DifficultyLabel-EasyStation"):visible(false)
-					self:GetChild("DifficultyText-EasyStation"):visible(false)
-				else
+				-- availability: Easy Station
+				if currentPlaylist == "Experience: Pump It Up Zero" then
 					self:GetChild("DifficultyLabel-EasyStation"):visible(true)
 					self:GetChild("DifficultyText-EasyStation"):visible(true)
+				else
+					self:GetChild("DifficultyLabel-EasyStation"):visible(false)
+					self:GetChild("DifficultyText-EasyStation"):visible(false)
 				end
-				-- visibility: Crazy
+				-- availability: Crazy
 				if currentPlaylist == "Experience: Pump It Up The 1st Dance Floor"
 				or currentPlaylist == "Experience: Pump It Up The 2nd Dance Floor" then
 					self:GetChild("DifficultyLabel-Crazy"):visible(false)
@@ -1609,29 +1609,27 @@ for i = 1, WheelSize do
 					self:GetChild("DifficultyLabel-Crazy"):visible(true)
 					self:GetChild("DifficultyText-Crazy"):visible(true)
 				end
-				-- visibility: Half-Double
-				if currentPlaylist == "Experience: Pump It Up The 1st Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The 2nd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The 3rd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The Season Evolution Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up Perfect Collection" then
-					self:GetChild("DifficultyLabel-HalfDouble"):visible(false)
-					self:GetChild("DifficultyText-HalfDouble"):visible(false)
-				else
+				-- availability: Half-Double
+				if currentPlaylist == "Experience: Pump It Up The Rebirth"
+				or currentPlaylist == "Experience: Pump It Up The Premiere 2"
+				or currentPlaylist == "Experience: Pump It Up The Premiere 3"
+				or currentPlaylist == "Experience: Pump It Up The Prex 3" then
 					self:GetChild("DifficultyLabel-HalfDouble"):visible(true)
 					self:GetChild("DifficultyText-HalfDouble"):visible(true)
-				end
-				-- visibility: Nightmare
-				if currentPlaylist == "Experience: Pump It Up The 1st Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The 2nd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The 3rd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The Season Evolution Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up Perfect Collection" then
-					self:GetChild("DifficultyLabel-Nightmare"):visible(false)
-					self:GetChild("DifficultyText-Nightmare"):visible(false)
 				else
+					self:GetChild("DifficultyLabel-HalfDouble"):visible(false)
+					self:GetChild("DifficultyText-HalfDouble"):visible(false)
+				end
+				-- availability: Nightmare
+				if currentPlaylist == "Experience: Pump It Up The Prex 3"
+				or currentPlaylist == "Experience: Pump It Up Exceed"
+				or currentPlaylist == "Experience: Pump It Up Exceed 2"
+				or currentPlaylist == "Experience: Pump It Up Zero" then
 					self:GetChild("DifficultyLabel-Nightmare"):visible(true)
 					self:GetChild("DifficultyText-Nightmare"):visible(true)
+				else
+					self:GetChild("DifficultyLabel-Nightmare"):visible(false)
+					self:GetChild("DifficultyText-Nightmare"):visible(false)
 				end
 
 				-- coloring: Normal
@@ -1650,6 +1648,22 @@ for i = 1, WheelSize do
 					self:GetChild("DifficultyText-Hard"):diffuse(color("#ff9900"))
 					self:GetChild("DifficultyText-Hard"):diffusealpha(1)
 				end
+				-- coloring: Crazy
+				if #arrayOfFilteredChartsCrazy < 1 then
+					self:GetChild("DifficultyText-Crazy"):diffuse(color("#aaaaaa"))
+					self:GetChild("DifficultyText-Crazy"):diffusealpha(0.4)
+				else
+					self:GetChild("DifficultyText-Crazy"):diffuse(color("#ff6600"))
+					self:GetChild("DifficultyText-Crazy"):diffusealpha(1)
+				end
+				-- coloring: Half-Double
+				if #arrayOfFilteredChartsHalfdouble < 1 then
+					self:GetChild("DifficultyText-HalfDouble"):diffuse(color("#aaaaaa"))
+					self:GetChild("DifficultyText-HalfDouble"):diffusealpha(0.4)
+				else
+					self:GetChild("DifficultyText-HalfDouble"):diffuse(color("#99ccee"))
+					self:GetChild("DifficultyText-HalfDouble"):diffusealpha(1)
+				end
 				-- coloring: Freestyle
 				if #arrayOfFilteredChartsFreestyle < 1 then
 					self:GetChild("DifficultyText-FreeStyle"):diffuse(color("#aaaaaa"))
@@ -1658,33 +1672,74 @@ for i = 1, WheelSize do
 					self:GetChild("DifficultyText-FreeStyle"):diffuse(color("#00ee66"))
 					self:GetChild("DifficultyText-FreeStyle"):diffusealpha(1)
 				end
+				-- coloring: Nightmare
+				if #arrayOfFilteredChartsNightmare < 1 then
+					self:GetChild("DifficultyText-Nightmare"):diffuse(color("#aaaaaa"))
+					self:GetChild("DifficultyText-Nightmare"):diffusealpha(0.4)
+				else
+					self:GetChild("DifficultyText-Nightmare"):diffuse(color("#00cc55"))
+					self:GetChild("DifficultyText-Nightmare"):diffusealpha(1)
+				end
 
-				-- changes name: Normal > Easy
+				-- renaming: Normal > Easy
 				if currentPlaylist == "Experience: Pump It Up The 1st Dance Floor"
 				or currentPlaylist == "Experience: Pump It Up The 2nd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The 3rd Dance Floor" then
+				or currentPlaylist == "Experience: Pump It Up The O.B.G. The 3rd Dance Floor"
+				or currentPlaylist == "Experience: Pump It Up The Rebirth"
+				or currentPlaylist == "Experience: Pump It Up The Premiere 2" then
 					self:GetChild("DifficultyText-Normal"):settext("EASY")
 				else
 					self:GetChild("DifficultyText-Normal"):settext("NORMAL")
 				end
 
-				-- changes name: Freestyle > Double
+				-- renaming: Crazy > Extra Expert
+				if currentPlaylist == "Experience: Pump It Up Extra" then
+					self:GetChild("DifficultyText-Crazy"):settext("EXTRA EXPERT")
+				else
+					self:GetChild("DifficultyText-Crazy"):settext("CRAZY")
+				end
+
+				-- renaming: Freestyle > Double
+				-- renaming: Freestyle > Full-Double
 				if currentPlaylist == "Experience: Pump It Up The 1st Dance Floor"
 				or currentPlaylist == "Experience: Pump It Up The 2nd Dance Floor"
 				or currentPlaylist == "Experience: Pump It Up The O.B.G. The 3rd Dance Floor"
 				or currentPlaylist == "Experience: Pump It Up The O.B.G. The Season Evolution Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up Perfect Collection" then
+				or currentPlaylist == "Experience: Pump It Up Perfect Collection"
+				or currentPlaylist == "Experience: Pump It Up Extra"
+				or currentPlaylist == "Experience: Pump It Up The Premiere"
+				or currentPlaylist == "Experience: Pump It Up The Prex"
+				or currentPlaylist == "Experience: Pump It Up The Prex 2" then
 					self:GetChild("DifficultyText-FreeStyle"):settext("DOUBLE")
+				elseif currentPlaylist == "Experience: Pump It Up The Rebirth"
+				or currentPlaylist == "Experience: Pump It Up The Premiere 2"
+				or currentPlaylist == "Experience: Pump It Up The Premiere 3" then
+					self:GetChild("DifficultyText-FreeStyle"):settext("FULL-DOUBLE")
 				else
 					self:GetChild("DifficultyText-FreeStyle"):settext("FREESTYLE")
 				end
 
+				-- renaming: Nightmare > Extra Expert Double
+				if currentPlaylist == "Experience: Pump It Up Extra" then
+					self:GetChild("DifficultyText-Nightmare"):settext("EXTRA EXPERT DOUBLE")
+				else
+					self:GetChild("DifficultyText-Nightmare"):settext("NIGHTMARE")
+				end
+
+			end,
+			RefreshVisibilityCommand=function(self, param)
+				-- visibility, since this element technically gets cloned for each wheel element
+				if i == WheelCenter then
+					self:visible(true)
+				else
+					self:visible(false)
+				end
 			end,
 			SongChosenMessageCommand=function(self)
 				self:visible(false)
 			end,
 			SongUnchosenMessageCommand=function(self)
-				self:playcommand("Refresh")
+				self:playcommand("RefreshVisibility")
 			end,
 
 			Def.Quad { Name="DifficultyLabel-EasyStation",
