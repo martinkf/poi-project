@@ -1632,6 +1632,14 @@ for i = 1, WheelSize do
 					self:GetChild("DifficultyText-Nightmare"):visible(false)
 				end
 
+				-- coloring: Easy Station
+				if #arrayOfFilteredChartsEasyStation < 1 then
+					self:GetChild("DifficultyText-EasyStation"):diffuse(color("#aaaaaa"))
+					self:GetChild("DifficultyText-EasyStation"):diffusealpha(0.4)
+				else
+					self:GetChild("DifficultyText-EasyStation"):diffuse(color("#ff77aa"))
+					self:GetChild("DifficultyText-EasyStation"):diffusealpha(1)
+				end
 				-- coloring: Normal
 				if #arrayOfFilteredChartsNormal < 1 then
 					self:GetChild("DifficultyText-Normal"):diffuse(color("#aaaaaa"))
