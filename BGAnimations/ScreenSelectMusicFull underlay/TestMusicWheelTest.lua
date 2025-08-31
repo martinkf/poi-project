@@ -5,14 +5,14 @@ local ChartPreview = LoadModule("Config.Load.lua")("ChartPreview","Save/OutFoxPr
 
 local WheelSize = 9
 local WheelCenter = math.ceil( WheelSize * 0.5 )
-local WheelItem = { Width = 200, Height = 150 }
-local WheelSpacing = 209
+local WheelItem = { Width = 208, Height = 117 }
+local WheelSpacing = 214
 local WheelRotation = 0 -- zeroing it out. default was 0.15
 local curvature = 0 -- zeroing it out. default was 65
 local fieldOfView = 0 -- zeroing it out. default was 90
 
 local EntireWheel_SelectingSongX = 0
-local EntireWheel_SelectingSongY = 483
+local EntireWheel_SelectingSongY = 502
 local EntireWheel_SelectingChartY = -173
 
 local arrayOfFilteredCharts
@@ -248,9 +248,10 @@ local t = Def.ActorFrame {
 	},
 	
 	Def.Sound { Name="Sound 1",
-		File=THEME:GetPathS("MusicWheel", "change"),
+		File=THEME:GetPathS("", "StartCommandWindow"),
 		IsAction=true,
-		ScrollMessageCommand=function(self) self:play() end
+		CurrentSongChangedMessageCommand=function(self) self:queuecommand("Refresh") end,
+		RefreshCommand=function(self) self:play() end
 	},
 	
 	Def.Sound { Name="Sound 2",
@@ -262,8 +263,8 @@ local t = Def.ActorFrame {
 	-- the background highlight of the song currently being hovered on
 	Def.Quad { Name="Highlight",
 		InitCommand=function(self)
-			self:xy(SCREEN_CENTER_X, SCREEN_CENTER_Y-226)
-			self:zoomto(1280, 178)
+			self:xy(SCREEN_CENTER_X, SCREEN_CENTER_Y-212)
+			self:zoomto(1280, 144)
 			self:align(0.5, 0)
 			--self:diffuse(color("0,0,0,0"))
 			self:diffuse(color("1,1,1,0.6"))
@@ -277,7 +278,7 @@ local t = Def.ActorFrame {
 			self:stoptweening():diffuse(color("1,1,1,0.6")):easeoutexpo(1):diffuse(color("0,0,0,0.4")):y(SCREEN_CENTER_Y-24):zoomto(1272, 50)
 		end,
 		SongUnchosenMessageCommand=function(self)
-			self:stoptweening():diffuse(color("0,0,0,0.4")):easeoutexpo(0.5):diffuse(color("1,1,1,0.6")):y(SCREEN_CENTER_Y-226):zoomto(1280, 178)
+			self:stoptweening():diffuse(color("0,0,0,0.4")):easeoutexpo(0.5):diffuse(color("1,1,1,0.6")):y(SCREEN_CENTER_Y-212):zoomto(1280, 144)
 		end,
 	},
 
@@ -362,7 +363,7 @@ for i = 1, WheelSize do
 
 		Def.Quad { Name="IndexIndicator",
 			InitCommand=function(self)
-				self:y(89)
+				self:y(70)
 				self:align(0.5,0.5)
 				self:diffuse(color("1,1,1,0.8"))
 			end,
@@ -398,8 +399,8 @@ for i = 1, WheelSize do
 
 		Def.Quad { Name="BGFrame",
 			InitCommand=function(self)
-				self:y(-7)
-				self:zoomto(206, 170)
+				self:y(-10)
+				self:zoomto(211, 140)
 				self:diffuse(color("0,0,0,0.4"))
 			end,
 			RefreshCommand=function(self, param)
@@ -447,7 +448,7 @@ for i = 1, WheelSize do
 		Def.BitmapText { Name="OriginLabel",
 			Font="Montserrat semibold 40px",
 			InitCommand=function(self)
-				self:addx(0):addy(-84)
+				self:addx(0):addy(-70)
 				self:zoom(0.4)				
 				:shadowlength(1)
 				self:align(0.5,0.5)
