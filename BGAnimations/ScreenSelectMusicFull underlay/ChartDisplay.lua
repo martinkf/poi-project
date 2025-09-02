@@ -207,7 +207,6 @@ local t = Def.ActorFrame {
 			-- POI - this is where I set up my interference rigging module!
 			-- uses the FilterChartFromSublist POI function to filter out the charts that will be displayed.
 			-- takes into consideration the current Playlist, the current Sublist, and the current Song being selected (by checking the MusicWheel SongIndex)
-			SCREENMAN:SystemMessage("oi "..CurGroupName.. " ola "..GetCurrentSongIndex())
 			ChartArray = GetAllowedCharts_POI(ChartArray, CurGroupName, GetCurrentSongIndex())
 			
 			-- If no charts are left, load all of them again in an attempt to avoid other crashes

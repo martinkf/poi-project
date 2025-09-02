@@ -153,11 +153,8 @@ else
 					MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = false })
 				end
 				
-			elseif button == "UpRight" or button == "UpLeft" or button == "Up" or button == "MenuUp"
-				or button == "GroupSelectPad1" or button == "GroupSelectPad2" then
-				
+			elseif button == "UpRight" or button == "UpLeft" or button == "Up" or button == "MenuUp" then				
 				MESSAGEMAN:Broadcast("RefreshHighlight")
-				
 			end
 		end
 	end
@@ -184,13 +181,12 @@ else
 		OptionsListClosedMessageCommand=function(self, params) IsOptionsList[params.Player] = false end,
 
 		CodeMessageCommand=function(self, params)
-			if params.Name == "GroupSelectPad1" then
+			if params.Name == "GroupSelectCombo" then
 				if not IsBusy and not IsOptionsList[PLAYER_1] and not IsOptionsList[PLAYER_2] then
-					MESSAGEMAN:Broadcast("GoToPrevPlaylist")
-				end
-			elseif params.Name == "GroupSelectPad2" then
-				if not IsBusy and not IsOptionsList[PLAYER_1] and not IsOptionsList[PLAYER_2] then
-					MESSAGEMAN:Broadcast("GoToNextPlaylist")
+					-- Prevent the song list from moving when transitioning
+					BlockScreenInput(true)
+					MESSAGEMAN:Broadcast("OpenGroupWheel")
+					self:stoptweening():sleep(0.01):queuecommand("OpenGroup"):easeoutexpo(1):diffusealpha(1)
 				end
 			end
 		end,
@@ -223,7 +219,9 @@ else
 		Def.Sound {
 			File=THEME:GetPathS("Common", "Start"),
 			IsAction=true,
-			CloseGroupWheelMessageCommand=function(self) self:play() end
+			CloseGroupWheelMessageCommand=function(self)
+				--self:play()
+			end
 		},
 	}
 

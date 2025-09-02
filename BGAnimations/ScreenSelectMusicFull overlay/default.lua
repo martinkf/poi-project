@@ -75,6 +75,22 @@ end
 
 t[#t+1] = Def.ActorFrame {
 	
+	-- Background for the group select wheel
+	Def.Quad {
+		InitCommand=function(self)
+			self:CenterX():y(SCREEN_CENTER_Y+18):zoomto(SCREEN_WIDTH, 580):diffuse(Color.Black):diffusealpha(0)
+		end,
+		CloseGroupWheelMessageCommand=function(self) self:stoptweening():easeoutexpo(0.25):diffusealpha(0) end,
+		OpenGroupWheelMessageCommand=function(self) self:stoptweening():easeoutexpo(1):diffusealpha(0.95) end,
+	},
+
+	LoadActor("GroupSelect") .. {
+		-- Zoom doesn't center things so we need to recenter them
+		InitCommand=function(self)
+			self:zoom(1.25):xy(-SCREEN_WIDTH / 8, -SCREEN_HEIGHT / 8)
+		end
+	}, 
+
 	LoadActor("OptionsList"),
 
 	Def.Sound {

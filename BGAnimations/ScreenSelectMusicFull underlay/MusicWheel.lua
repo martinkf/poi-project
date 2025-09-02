@@ -29,7 +29,6 @@ local arrayOfFilteredChartsHalfdouble
 local arrayOfFilteredChartsFreestyle
 local arrayOfFilteredChartsNightmare
 
-local IsOptionsList = { PLAYER_1 = false, PLAYER_2 = false }
 
 --
 
@@ -204,60 +203,19 @@ local t = Def.ActorFrame {
 		:playcommand("NotBusy")
 	end,
 
-	OptionsListOpenedMessageCommand=function(self, params) IsOptionsList[params.Player] = true end,
-	OptionsListClosedMessageCommand=function(self, params) IsOptionsList[params.Player] = false end,
-	CodeMessageCommand=function(self, params)
-		if params.Name == "GroupSelectPad1" then
-			if not IsBusy and not IsOptionsList[PLAYER_1] and not IsOptionsList[PLAYER_2] then
-				MESSAGEMAN:Broadcast("GoToPrevPlaylist")
-			end
-		elseif params.Name == "GroupSelectPad2" then
-			if not IsBusy and not IsOptionsList[PLAYER_1] and not IsOptionsList[PLAYER_2] then
-				MESSAGEMAN:Broadcast("GoToNextPlaylist")
-			end
+	OpenGroupWheelMessageCommand=function(self) IsBusy = true end,
+	CloseGroupWheelMessageCommand=function(self, params)
+		if params.Silent == false then
+			-- Grab the new list of songs from the selected group
+			Songs = GroupsList[GroupIndex].Songs
+			-- Reset back to the first song of the list
+			SongIndex = 1
+			GAMESTATE:SetCurrentSong(Songs[SongIndex])
 		end
-	end,
-	GoToPrevPlaylistMessageCommand=function(self, params)
-		-- retrocesses index
-		GroupIndex = GroupIndex - 1
-		if GroupIndex < 1 then GroupIndex = #GroupsList end
-
-		-- Grab the new list of songs from the selected group
-		Songs = GroupsList[GroupIndex].Songs
-		
-		-- Reset back to the first song of the list
-		SongIndex = 1
-		GAMESTATE:SetCurrentSong(Songs[SongIndex])
-		
 		-- Update wheel yada yada
 		UpdateItemTargets(SongIndex)
 		MESSAGEMAN:Broadcast("ForceUpdate")
 		self:sleep(0.01):queuecommand("NotBusy")
-
-		-- Save CurGroup to .ini
-		LastGroupMainIndex = GroupIndex
-		LoadModule("Config.Save.lua")("GroupMainIndex", LastGroupMainIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
-	end,
-	GoToNextPlaylistMessageCommand=function(self, params)
-		-- advances index
-		GroupIndex = GroupIndex + 1
-		if GroupIndex > #GroupsList then GroupIndex = 1 end
-
-		-- Grab the new list of songs from the selected group
-		Songs = GroupsList[GroupIndex].Songs
-
-		-- Reset back to the first song of the list
-		SongIndex = 1
-		GAMESTATE:SetCurrentSong(Songs[SongIndex])
-		
-		-- Update wheel yada yada
-		UpdateItemTargets(SongIndex)
-		MESSAGEMAN:Broadcast("ForceUpdate")
-		self:sleep(0.01):queuecommand("NotBusy")
-
-		-- Save CurGroup to .ini
-		LastGroupMainIndex = GroupIndex
-		LoadModule("Config.Save.lua")("GroupMainIndex", LastGroupMainIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
 	end,
 	
 	BusyCommand=function(self) IsBusy = true end,
@@ -1788,6 +1746,9 @@ for i = 1, WheelSize do
 				else
 					self:visible(false)
 				end
+
+				-- global toggle for developers
+				self:visible(ChartsListVisibility)
 			end,
 			SongChosenMessageCommand=function(self)
 				self:visible(false)
