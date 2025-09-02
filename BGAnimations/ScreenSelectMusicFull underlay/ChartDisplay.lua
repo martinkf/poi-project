@@ -163,7 +163,7 @@ local t = Def.ActorFrame {
 			ChartArray = SongUtil.GetPlayableSteps(CurrentSong)
 			
 			-- Filter out unwanted charts recursively
-			local CurGroupName = GroupsList[LastGroupMainIndex] ~= nil and GroupsList[LastGroupMainIndex].SubGroups[LastGroupSubIndex].Name or ""
+			local CurGroupName = GroupsList[LastGroupMainIndex] ~= nil and GroupsList[LastGroupMainIndex].Name or ""
 			
 			local ShowFilters = {"ShowUCSCharts", "ShowQuestCharts", "ShowHiddenCharts" }
 			local ChartFilters = {"UCS", "QUEST", "HIDDEN" }
@@ -207,7 +207,8 @@ local t = Def.ActorFrame {
 			-- POI - this is where I set up my interference rigging module!
 			-- uses the FilterChartFromSublist POI function to filter out the charts that will be displayed.
 			-- takes into consideration the current Playlist, the current Sublist, and the current Song being selected (by checking the MusicWheel SongIndex)
-			ChartArray = FilterChartFromSublist_POI(CurGroupName,GetCurrentSongIndex(),ChartArray)
+			SCREENMAN:SystemMessage("oi "..CurGroupName.. " ola "..GetCurrentSongIndex())
+			ChartArray = GetAllowedCharts_POI(ChartArray, CurGroupName, GetCurrentSongIndex())
 			
 			-- If no charts are left, load all of them again in an attempt to avoid other crashes
 			if #ChartArray == 0 then ChartArray = SongUtil.GetPlayableSteps(CurrentSong) end

@@ -34,7 +34,7 @@ t[#t+1] = Def.ActorFrame {
 			self:xy(SCREEN_CENTER_X, y_position_when_selecting_song)
 			self:zoom(0.4)
 			self:shadowlength(1)
-			self:settext(GroupsList[GroupIndex].SubGroups[SubGroupIndex].Name):queuecommand('Refresh')
+			self:settext(GroupsList[GroupIndex].Name):queuecommand('Refresh')
 		end,
 		
 		ScreenChangedMessageCommand=function(self) self:playcommand('Refresh') end,
@@ -42,7 +42,7 @@ t[#t+1] = Def.ActorFrame {
 		CurrentSongChangedMessageCommand=function(self) self:playcommand('Refresh') end,
 		
 		RefreshCommand=function(self)
-			self:settext(GroupsList[GroupIndex].SubGroups[SubGroupIndex].Name)
+			self:settext(GroupsList[GroupIndex].Name)
 		end,
 
 	},

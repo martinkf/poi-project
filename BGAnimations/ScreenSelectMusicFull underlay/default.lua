@@ -43,8 +43,8 @@ local t = Def.ActorFrame {
 		InitCommand=function(self)
 			self:xy(SCREEN_CENTER_X-640, SCREEN_CENTER_Y-450)
 		end,
-		--LoadActor("MusicWheel") .. { Name="MusicWheel" }
-		LoadActor("TestMusicWheelTest") .. { Name="MusicWheel" }
+		LoadActor("MusicWheel") .. { Name="MusicWheel" }
+		--LoadActor("TestMusicWheelTest") .. { Name="MusicWheel" }
 	},
 
 	-- a group

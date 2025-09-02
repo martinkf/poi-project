@@ -23,7 +23,7 @@ local t = Def.ActorFrame {
 			
 			-- Filter out unwanted charts recursively
 			local CurGroupName = GroupsList[LastGroupMainIndex] ~= nil and 
-			GroupsList[LastGroupMainIndex].SubGroups[LastGroupSubIndex].Name or ""
+			GroupsList[LastGroupMainIndex].Name or ""
 			
 			local ShowFilters = {"ShowUCSCharts", "ShowQuestCharts", "ShowHiddenCharts" }
 			local ChartFilters = {"UCS", "QUEST", "HIDDEN" }
@@ -56,7 +56,7 @@ local t = Def.ActorFrame {
 			-- POI - this is where I set up my interference rigging module!
 			-- uses the FilterChartFromSublist POI function to filter out the charts that will be displayed.
 			-- takes into consideration the current Playlist, the current Sublist, and the current Song being selected (by checking the MusicWheel SongIndex)
-			ChartArray = FilterChartFromSublist_POI(CurGroupName,GetCurrentSongIndex(),ChartArray)
+			ChartArray = GetAllowedCharts_POI(ChartArray, CurGroupName, GetCurrentSongIndex())
 			-- problem 2, nope, my interference rigging module should be different and not that the musicwheel index, maybe?
 			
 			-- If no charts are left, load all of them again in an attempt to avoid other crashes
