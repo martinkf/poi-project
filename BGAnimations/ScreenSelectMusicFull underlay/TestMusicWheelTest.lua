@@ -360,7 +360,7 @@ for i = 1, WheelSize do
 			end,
 			RefreshCommand=function(self, param)
 				-- alters its height depending on the number of songs in the group
-				local totalSongsFromGroup = GetNumberOfSongsFromGroup_POI(GroupsList[GroupIndex].Name)
+				local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
 				local calculatedHeight = 590 / totalSongsFromGroup
 				local usedHeight
 				if calculatedHeight < 14 then

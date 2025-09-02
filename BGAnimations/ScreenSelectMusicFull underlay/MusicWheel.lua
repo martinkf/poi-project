@@ -344,6 +344,7 @@ for i = 1, WheelSize do
 
 			-- refresh the children frames
 			self:GetChild("IndexIndicator"):playcommand("Refresh")
+			self:GetChild("IndexIndicatorText"):playcommand("Refresh")
 
 			self:GetChild("BGFrame"):playcommand("Refresh")
 			self:GetChild("Banner"):playcommand("Refresh")
@@ -367,15 +368,49 @@ for i = 1, WheelSize do
 			end,
 			RefreshCommand=function(self, param)
 				-- alters its width depending on the number of songs in the group
-				local totalSongsFromGroup = GetNumberOfSongsFromGroup_POI(GroupsList[GroupIndex].Name)
-				local calculatedWidth = 1268 / totalSongsFromGroup
+				local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
+				local calculatedWidth = 1252 / totalSongsFromGroup
 				local usedWidth
-				if calculatedWidth < 12 then
-					usedWidth = 12
+				if calculatedWidth < 30 then
+					usedWidth = 30
 				else 
 					usedWidth = calculatedWidth
 				end
 				self:zoomto(usedWidth, 12)
+
+				-- alters its x position depending on the current i
+				self:x((Targets[i] - (totalSongsFromGroup + 1) / 2) * calculatedWidth)
+				
+				-- visibility, since this element technically gets cloned for each wheel element
+				if i == WheelCenter then
+					self:visible(true)
+				else
+					self:visible(false)
+				end
+			end,
+			SongChosenMessageCommand=function(self)
+				self:visible(false)
+			end,
+			SongUnchosenMessageCommand=function(self)
+				self:playcommand("Refresh")
+			end,
+		},
+		Def.BitmapText { Name="IndexIndicatorText",
+			Font="Montserrat semibold 40px",
+			InitCommand=function(self)
+				self:addx(0):addy(70)
+				self:zoom(0.3)
+				self:align(0.5,0.5)
+				self:diffuse(color("0,0,0,0.8"))
+			end,
+			
+			RefreshCommand=function(self,param)
+				-- alters some necessary variables depending on the number of songs in the group
+				local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
+				local calculatedWidth = 1252 / totalSongsFromGroup
+
+				-- alters its text depending on the current i
+				self:settext(Targets[i])
 
 				-- alters its x position depending on the current i
 				self:x((Targets[i] - (totalSongsFromGroup + 1) / 2) * calculatedWidth)

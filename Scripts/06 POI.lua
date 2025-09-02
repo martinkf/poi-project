@@ -2226,18 +2226,3 @@ function SplitChartArray(input_chartArray, input_string, input_playlistNameAsStr
 
 	return output
 end
-
--- inputs
--- 1) a string, related to the name of a playlist, such as |"Experience: Pump It Up Exceed 2"|
--- returns: an integer, related to the total number of allowed songs in that group
-function GetNumberOfSongsFromGroup_POI(input_groupName_as_string)
-	for _, playlist in ipairs(Database_POI()) do
-		if playlist.Name == input_groupName_as_string then
-			return #playlist.AllowedSongs
-		end
-	end
-
-	-- if no playlist found, warn and return 0
-	Warn("Playlist not found: " .. tostring(input_groupName_as_string))
-	return 0
-end
