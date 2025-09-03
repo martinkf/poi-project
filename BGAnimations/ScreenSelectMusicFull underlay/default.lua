@@ -69,13 +69,13 @@ local t = Def.ActorFrame {
 -- a group of elements that come from below when song is confirmed and we're now selecting the chart
 t[#t+1] = Def.ActorFrame {
 	InitCommand=function(self)
-		self:xy(SCREEN_CENTER_X, 696+596)
+		self:xy(SCREEN_CENTER_X, 718+596)
 	end,
 	SongChosenMessageCommand=function(self)
-		self:stoptweening():easeoutexpo(1):y(696)
+		self:stoptweening():easeoutexpo(1):y(718)
 	end,
 	SongUnchosenMessageCommand=function(self)
-		self:stoptweening():easeoutexpo(0.5):y(696+596)
+		self:stoptweening():easeoutexpo(0.5):y(718+596)
 	end,
 	
 	-- quad background: ChartDisplay

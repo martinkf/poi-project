@@ -1,9 +1,9 @@
 -- Has hard-coded content!
 function Database_POI()
 	return {
-		{	Name = "Experience: Pump It Up The 1st Dance Floor",
+		{	Name = "Pump It Up The 1st Dance Floor",
 			Banner = "Playlists/01-the1stdf.png",
-			Description = "Description for -Experience: Pump It Up The 1st Dance Floor-",
+			Description = "Description for -Pump It Up The 1st Dance Floor-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/101 - IGNITION STARTS/", Charts = { "1ST-HARD", "1ST-FREESTYLE", "1ST-2PHARD" } },
 				{ SongPath = "/Songs/POI-database/102 - HYPNOSIS/", Charts = { "1ST-HARD", "1ST-FREESTYLE", "1ST-2PHARD" } },
@@ -27,9 +27,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/119 - -REMIX- TURBO REMIX/", Charts = { "1ST-HARD", "1ST-2PHARD" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The 2nd Dance Floor",
+		{	Name = "Pump It Up The 2nd Dance Floor",
 			Banner = "Playlists/02-the2nddf.png",
-			Description = "Description for -Experience: Pump It Up The 2nd Dance Floor-",
+			Description = "Description for -Pump It Up The 2nd Dance Floor-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/201 - CREAMY SKINNY/", Charts = { "2ND-NORMAL", "2ND-FREESTYLE", "2ND-2PNORMAL" } },
 				{ SongPath = "/Songs/POI-database/202 - HATE/", Charts = { "2ND-NORMAL", "2ND-HARD", "2ND-FREESTYLE", "2ND-2PNORMAL", "2ND-2PHARD" } },
@@ -63,9 +63,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/119 - -REMIX- TURBO REMIX/", Charts = { "1ST-HARD", "2ND-FREESTYLE", "1ST-2PHARD" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The O.B.G. The 3rd Dance Floor",
+		{	Name = "Pump It Up The O.B.G. The 3rd Dance Floor",
 			Banner = "Playlists/03-obgthe3rd.png",
-			Description = "Description for -Experience: Pump It Up The O.B.G. The 3rd Dance Floor-",
+			Description = "Description for -Pump It Up The O.B.G. The 3rd Dance Floor-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/301 - FINAL AUDITION 2/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "3RD-2PHARD", "3RD-2PCRAZY" } },
 				{ SongPath = "/Songs/POI-database/302 - NAISSANCE/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "3RD-2PHARD", "3RD-2PCRAZY" } },
@@ -100,9 +100,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/225 - -REMIX- 2ND HIDDEN REMIX/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "3RD-2PHARD", "3RD-2PCRAZY" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The O.B.G. The Season Evolution Dance Floor",
+		{	Name = "Pump It Up The O.B.G. The Season Evolution Dance Floor",
 			Banner = "Playlists/04-obgse.png",
-			Description = "Description for -Experience: Pump It Up The O.B.G. The Season Evolution Dance Floor-",
+			Description = "Description for -Pump It Up The O.B.G. The Season Evolution Dance Floor-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/401 - OH! ROSA/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "OBGSE-CRAZY", "OBGSE-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/402 - FIRST LOVE/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "OBGSE-CRAZY", "OBGSE-FREESTYLE" } },
@@ -152,9 +152,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/225 - -REMIX- 2ND HIDDEN REMIX/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "3RD-2PHARD", "3RD-2PCRAZY" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up Perfect Collection",
+		{	Name = "Pump It Up Perfect Collection",
 			Banner = "Playlists/05-perfect.png",
-			Description = "Description for -Experience: Pump It Up Perfect Collection-",
+			Description = "Description for -Pump It Up Perfect Collection-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/501 - PUMP JUMP/", Charts = { "PERF-NORMAL", "PERF-HARD", "PERF-CRAZY", "PERF-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/502 - N/", Charts = { "PERF-NORMAL", "PERF-HARD", "PERF-CRAZY", "PERF-FREESTYLE" } },
@@ -259,9 +259,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/119 - -REMIX- TURBO REMIX/", Charts = { "1ST-HARD", "2ND-FREESTYLE", "1ST-2PHARD" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up Extra",
+		{	Name = "Pump It Up Extra",
 			Banner = "Playlists/06-extra.png",
-			Description = "Description for -Experience: Pump It Up Extra",
+			Description = "Description for -Pump It Up Extra",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/922 - FINAL AUDITION EPISODE 1/", Charts = { "EXTRA-HARD", "EXTRA-XXPERT", "EXTRA-FREESTYLE", "EXTRA-XXDOUBLE", "EXTRA-2PHARD" } },
 				{ SongPath = "/Songs/POI-database/911 - CHICKEN WING/", Charts = { "EXTRA-XXPERT", "EXTRA-XXDOUBLE" } },
@@ -335,9 +335,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/119 - -REMIX- TURBO REMIX/", Charts = { "1ST-HARD", "2ND-FREESTYLE", "1ST-2PHARD" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The Premiere",
+		{	Name = "Pump It Up The Premiere",
 			Banner = "Playlists/07-premiere.png",
-			Description = "Description for -Experience: Pump It Up The Premiere-",
+			Description = "Description for -Pump It Up The Premiere-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/601 - OOPS I DID IT AGAIN/", Charts = { "PRM1-NORMAL", "PRM1-HARD", "PRM1-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/602 - BYE BYE BYE/", Charts = { "PRM1-NORMAL", "PRM1-HARD", "PRM1-FREESTYLE" } },
@@ -436,9 +436,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/115 - NO PARTICULAR REASON/", Charts = { "1ST-NORMAL", "1ST-FREESTYLE", "1ST-2PNORMAL" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The Prex",
+		{	Name = "Pump It Up The Prex",
 			Banner = "Playlists/08-prex.png",
-			Description = "Description for -Experience: Pump It Up The Prex-",
+			Description = "Description for -Pump It Up The Prex-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/922 - FINAL AUDITION EPISODE 1/", Charts = { "EXTRA-HARD", "EXTRA-XXPERT", "EXTRA-FREESTYLE", "EXTRA-2PHARD" } },
 				{ SongPath = "/Songs/POI-database/911 - CHICKEN WING/", Charts = { "EXTRA-XXPERT", "EXTRA-XXDOUBLE" } },
@@ -551,9 +551,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/115 - NO PARTICULAR REASON/", Charts = { "1ST-NORMAL", "1ST-FREESTYLE", "1ST-2PNORMAL" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The Rebirth",
+		{	Name = "Pump It Up The Rebirth",
 			Banner = "Playlists/09-rebirth.png",
-			Description = "Description for -Experience: Pump It Up The Rebirth-",
+			Description = "Description for -Pump It Up The Rebirth-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/735 - VOOK/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-HALFDOUBLE", "REB-FREESTYLE", "REB-DIVGROOVE" } },
 				{ SongPath = "/Songs/POI-database/736 - CSIKOS POST/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-HALFDOUBLE", "REB-FREESTYLE", "REB-DIVNORMAL", "REB-DIVWILD" } },
@@ -593,9 +593,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/734 - ALWAYS/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-HALFDOUBLE", "REB-FREESTYLE", "REB-DIVWILD" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The Premiere 2",
+		{	Name = "Pump It Up The Premiere 2",
 			Banner = "Playlists/10-premiere2.png",
-			Description = "Description for -Experience: Pump It Up The Premiere 2-",
+			Description = "Description for -Pump It Up The Premiere 2-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/735 - VOOK/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-HALFDOUBLE", "REB-FREESTYLE", "REB-DIVGROOVE" } },
 				{ SongPath = "/Songs/POI-database/736 - CSIKOS POST/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-HALFDOUBLE", "REB-FREESTYLE", "REB-DIVNORMAL", "REB-DIVWILD" } },
@@ -700,9 +700,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/115 - NO PARTICULAR REASON/", Charts = { "1ST-NORMAL", "1ST-FREESTYLE" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The Prex 2",
+		{	Name = "Pump It Up The Prex 2",
 			Banner = "Playlists/11-prex2.png",
-			Description = "Description for -Experience: Pump It Up The Prex 2-",
+			Description = "Description for -Pump It Up The Prex 2-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/735 - VOOK/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/736 - CSIKOS POST/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-FREESTYLE" } },
@@ -795,9 +795,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/113 - I WANT U/", Charts = { "1ST-NORMAL", "1ST-FREESTYLE" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The Premiere 3",
+		{	Name = "Pump It Up The Premiere 3",
 			Banner = "Playlists/12-premiere3.png",
-			Description = "Description for -Experience: Pump It Up The Premiere 3-",
+			Description = "Description for -Pump It Up The Premiere 3-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/802 - BEE/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "PRM3-HALFDOUBLE", "PRM3-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/807 - D GANG/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "PRM3-HALFDOUBLE", "PRM3-FREESTYLE" } },
@@ -857,9 +857,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "1ST-NORMAL", "1ST-HARD", "3RD-FREESTYLE" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up The Prex 3",
+		{	Name = "Pump It Up The Prex 3",
 			Banner = "Playlists/13-prex3.png",
-			Description = "Description for -Experience: Pump It Up The Prex 3-",
+			Description = "Description for -Pump It Up The Prex 3-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/826 - COME TO ME/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-HALFDOUBLE", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/821 - EMPIRE OF THE SUN/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-HALFDOUBLE", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
@@ -935,9 +935,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "1ST-NORMAL", "1ST-HARD", "3RD-FREESTYLE", "PREX3-NIGHTMARE" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up Exceed",
+		{	Name = "Pump It Up Exceed",
 			Banner = "Playlists/14-exceed.png",
-			Description = "Description for -Experience: Pump It Up Exceed-",
+			Description = "Description for -Pump It Up Exceed-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/A01 - FINAL AUDITION 3 U.F/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A02 - NAISSANCE 2/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
@@ -1054,9 +1054,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "1ST-NORMAL", "1ST-HARD", "3RD-FREESTYLE", "PREX3-NIGHTMARE" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up Exceed 2",
+		{	Name = "Pump It Up Exceed 2",
 			Banner = "Playlists/15-exceed2.png",
-			Description = "Description for -Experience: Pump It Up Exceed 2-",
+			Description = "Description for -Pump It Up Exceed 2-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/B16 - J BONG/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/B17 - HI-BI/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
@@ -1201,9 +1201,9 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/1059 - EXCEED 2 OPENING -SHORT CUT-/", Charts = { "EXC2-STAFFROLL" } },
 			},
 		},
-		{	Name = "Experience: Pump It Up Zero",
+		{	Name = "Pump It Up Zero",
 			Banner = "Playlists/16-zero.png",
-			Description = "Description for -Experience: Pump It Up Zero-",
+			Description = "Description for -Pump It Up Zero-",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/C01 - BEAT OF THE WAR 2/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/C02 - MOONLIGHT/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
@@ -1798,23 +1798,24 @@ function UpdateGroupSorting_POI()
 end
 
 -- inputs:
--- 1) a string related to the name of the group, such as |"Experience: Pump It Up Exceed 2"|
+-- 1) a string related to the name of the group, such as |"Pump It Up Exceed 2"|
 -- 2) an integer, related to the index of a song, such as |3|
 -- returns: an array of strings, as in this example:
 -- { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" }
-function GetAllowedChartsAsString_POI(input_groupName, input_currentIndex)	
+function GetAllowedChartsAsString_POI(input_groupName, input_currentIndex)
+
+	local output = {}
+
 	for _, playlist in ipairs(Database_POI()) do
 		if playlist.Name == input_groupName then
 			local songEntry = playlist.AllowedSongs[input_currentIndex]
 			if songEntry then
-				return songEntry.Charts
-			else				
-				return {} -- index not found
+				output = songEntry.Charts
 			end
-		else
-			return {} -- playlist not found
 		end
 	end
+	
+	return output
 end
 
 -- inputs:
@@ -1841,7 +1842,7 @@ end
 
 -- inputs:
 -- 1) an array of Chart objects
--- 2) a string related to the name of the group, such as |"Experience: Pump It Up Exceed 2"|
+-- 2) a string related to the name of the group, such as |"Pump It Up Exceed 2"|
 -- 3) an integer, related to the index of a song, such as |3|
 -- returns: an array of Chart objects, as in this example:
 -- { [Object for a "EXC2-NORMAL" chart], [Object for a "EXC2-HARD" chart], [Object for a "EXC2-CRAZY" chart] }
@@ -1856,7 +1857,7 @@ function GetAllowedCharts_POI(input_chartArray, input_groupName, input_currentIn
 	end
 
 	if #output == 0 then
-		return {} -- this will make the function return an empty ChartArray, which will be handled in some way by whomever called this function
+		return {} -- this will make the function return an empty ChartArray, which will be handled, in some way, by whatever called this function
 	end
 
 	return output
@@ -2182,13 +2183,13 @@ function SplitChartArray(input_chartArray, input_string, input_playlistNameAsStr
 	elseif input_string == "Freestyle" then
 		for i = #output, 1, -1 do
 			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-			if ((input_playlistNameAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Chicken Wing"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Holiday"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Radetzky Can Can"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Chicken Wing"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Holiday"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Radetzky Can Can"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Premiere 3") and (input_songNameAsString == "Chicken Wing")) then
+			if ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Chicken Wing"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Holiday"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Radetzky Can Can"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Chicken Wing"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Holiday"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Radetzky Can Can"))
+			or ((input_playlistNameAsString == "Pump It Up The Premiere 3") and (input_songNameAsString == "Chicken Wing")) then
 				-- these are exceptions to the rule
 				if not (chartPOIName == "EXTRA EXPERT DOUBLE") then
 					table.remove(output, i)
@@ -2204,13 +2205,13 @@ function SplitChartArray(input_chartArray, input_string, input_playlistNameAsStr
 	elseif input_string == "Nightmare" then
 		for i = #output, 1, -1 do
 			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-			if ((input_playlistNameAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Chicken Wing"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Holiday"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex") and (input_songNameAsString == "Radetzky Can Can"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Chicken Wing"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Holiday"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Prex 2") and (input_songNameAsString == "Radetzky Can Can"))
-			or ((input_playlistNameAsString == "Experience: Pump It Up The Premiere 3") and (input_songNameAsString == "Chicken Wing")) then
+			if ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Chicken Wing"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Holiday"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Radetzky Can Can"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Chicken Wing"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Holiday"))
+			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Radetzky Can Can"))
+			or ((input_playlistNameAsString == "Pump It Up The Premiere 3") and (input_songNameAsString == "Chicken Wing")) then
 				-- these are exceptions to the rule
 				table.remove(output, i)
 			else

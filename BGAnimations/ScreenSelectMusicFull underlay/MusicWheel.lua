@@ -11,9 +11,9 @@ local WheelRotation = 0 -- zeroing it out. default was 0.15
 local curvature = 0 -- zeroing it out. default was 65
 local fieldOfView = 0 -- zeroing it out. default was 90
 
-local EntireWheel_SelectingSongX = 0
-local EntireWheel_SelectingSongY = 502
-local EntireWheel_SelectingChartY = -173
+local EntireScreen_SelectingSongY = 502
+local EntireScreen_SelectingChartY = 502-720
+local SongWheel_Y = 182
 
 local ChartsListVisibility = false
 
@@ -174,8 +174,7 @@ end
 
 local t = Def.ActorFrame {
 	InitCommand=function(self)
-		self:x(EntireWheel_SelectingSongX)
-		self:y(EntireWheel_SelectingSongY)
+		self:y(EntireScreen_SelectingSongY)
 		self:fov(fieldOfView)
 		self:SetDrawByZPosition(true)
 		self:vanishpoint(SCREEN_CENTER_X, SCREEN_BOTTOM - 150 + curvature)
@@ -185,24 +184,25 @@ local t = Def.ActorFrame {
 	OnCommand=function(self)
 		GAMESTATE:SetCurrentSong(Songs[SongIndex])
 		SCREENMAN:GetTopScreen():AddInputCallback(InputHandler)
-		
-		self:easeoutexpo(1):y(EntireWheel_SelectingSongY)
 	end,
+	BusyCommand=function(self) IsBusy = true end,
+	NotBusyCommand=function(self) IsBusy = false end,
 	
 	-- Race condition workaround (yuck)
 	MusicWheelStartMessageCommand=function(self) self:sleep(0.01):queuecommand("Confirm") end,
 	ConfirmCommand=function(self) MESSAGEMAN:Broadcast("SongChosen") end,
 
-	-- These are to control the functionality of the music wheel
-	SongChosenMessageCommand=function(self)			
-		self:stoptweening():easeoutexpo(1):y(EntireWheel_SelectingChartY)
+	-- everything goes up and down when selecting songs or selecting charts!
+	SongChosenMessageCommand=function(self)
+		self:stoptweening():easeoutexpo(1):y(EntireScreen_SelectingChartY)
 		:playcommand("Busy")
 	end,
 	SongUnchosenMessageCommand=function(self)			
-		self:stoptweening():easeoutexpo(0.5):y(EntireWheel_SelectingSongY)
+		self:stoptweening():easeoutexpo(0.5):y(EntireScreen_SelectingSongY)
 		:playcommand("NotBusy")
 	end,
 
+	-- logic related to the GroupSelect overlay
 	OpenGroupWheelMessageCommand=function(self) IsBusy = true end,
 	CloseGroupWheelMessageCommand=function(self, params)
 		if params.Silent == false then
@@ -218,9 +218,8 @@ local t = Def.ActorFrame {
 		self:sleep(0.01):queuecommand("NotBusy")
 	end,
 	
-	BusyCommand=function(self) IsBusy = true end,
-	NotBusyCommand=function(self) IsBusy = false end,
-	
+
+	-- drawing: sounds
 	-- Play song preview (thanks Luizsan)
 	Def.Actor { Name="Song Preview Player",
 		CurrentSongChangedMessageCommand=function(self)
@@ -258,30 +257,120 @@ local t = Def.ActorFrame {
 		MusicWheelStartMessageCommand=function(self) self:play() end
 	},
 
-	-- the background highlight of the song currently being hovered on
-	Def.Quad { Name="Highlight",
+
+	-- drawing: visual elements	
+	Def.Quad { Name="Highlight", -- the background highlight of the song currently being hovered on
 		InitCommand=function(self)
-			self:xy(SCREEN_CENTER_X, SCREEN_CENTER_Y-212)
-			self:zoomto(1280, 144)
+			self:x(SCREEN_CENTER_X)
+			self:y(SongWheel_Y-82)
+			self:zoomto(1280, 158)
 			self:align(0.5, 0)
-			--self:diffuse(color("0,0,0,0"))
 			self:diffuse(color("1,1,1,0.6"))
 		end,
-
-		CurrentSongChangedMessageCommand=function(self)
-			--self:stoptweening():diffusealpha(0):sleep(0.4):easeoutexpo(1):diffuse(color("1,1,1,0.6"))
-		end,
-
 		SongChosenMessageCommand=function(self)
-			self:stoptweening():diffuse(color("1,1,1,0.6")):easeoutexpo(1):diffuse(color("0,0,0,0.4")):y(SCREEN_CENTER_Y-24):zoomto(1272, 50)
+			self:visible(false)
 		end,
 		SongUnchosenMessageCommand=function(self)
-			self:stoptweening():diffuse(color("0,0,0,0.4")):easeoutexpo(0.5):diffuse(color("1,1,1,0.6")):y(SCREEN_CENTER_Y-212):zoomto(1280, 144)
+			self:visible(true)
 		end,
 	},
 
-	
-
+	Def.ActorFrame { -- instructions for Song Selection and Modifiers menu opening
+		SongChosenMessageCommand=function(self)
+			self:stoptweening():easeoutexpo(1):y(0+720)
+		end,
+		SongUnchosenMessageCommand=function(self)
+			self:stoptweening():easeoutexpo(0.5):y(0)
+		end,
+		Def.Quad {
+			Name="InstructionsRowBgQuad",
+			InitCommand=function(self)
+				self:x(SCREEN_CENTER_X)
+				self:y(SongWheel_Y+80)
+				self:zoomto(1272, 42)
+				self:align(0.5,0)
+				self:diffuse(color("0,0,0,0.4"))
+			end,
+		},
+		Def.ActorFrame { Name="SongSelectInstructionsRowTexts",
+			InitCommand=function(self)
+				self:x(SCREEN_CENTER_X)
+				self:y(SongWheel_Y+90)
+			end,
+			Def.Sprite {
+				Texture=THEME:GetPathG("", "CornerArrows/ShiftDL"),
+				InitCommand=function(self)
+					self:zoom(0.07):x(-82)
+				end,
+			},
+			Def.Sprite {
+				Texture=THEME:GetPathG("", "CornerArrows/ShiftDR"),
+				InitCommand=function(self)
+					self:zoom(0.07):x(-40)
+				end,
+			},
+			Def.BitmapText {
+				Font="Montserrat semibold 40px",
+				InitCommand=function(self)
+					self:zoom(0.4)
+					self:shadowlength(1)
+					self:settext("or      to select song")
+					self:x(10)
+				end,
+			},
+		},
+		Def.ActorFrame { Name="OptionListInstructionsRowTexts",
+			InitCommand=function(self)
+				self:x(SCREEN_CENTER_X)
+				self:y(SongWheel_Y+110)
+			end,
+			Def.Sprite {
+				Texture=THEME:GetPathG("", "CornerArrows/ShiftDL"),
+				InitCommand=function(self)
+					self:zoom(0.07):x(-159)
+				end,
+			},
+			Def.Sprite {
+				Texture=THEME:GetPathG("", "CornerArrows/ShiftDR"),
+				InitCommand=function(self)
+					self:zoom(0.07):x(-139)
+				end,
+			},
+			Def.Sprite {
+				Texture=THEME:GetPathG("", "CornerArrows/ShiftDL"),
+				InitCommand=function(self)
+					self:zoom(0.07):x(-119)
+				end,
+			},
+			Def.Sprite {
+				Texture=THEME:GetPathG("", "CornerArrows/ShiftDR"),
+				InitCommand=function(self)
+					self:zoom(0.07):x(-99)
+				end,
+			},
+			Def.Sprite {
+				Texture=THEME:GetPathG("", "CornerArrows/ShiftDL"),
+				InitCommand=function(self)
+					self:zoom(0.07):x(-79)
+				end,
+			},
+			Def.Sprite {
+				Texture=THEME:GetPathG("", "CornerArrows/ShiftDR"),
+				InitCommand=function(self)
+					self:zoom(0.07):x(-59)
+				end,
+			},
+			Def.BitmapText {
+				Font="Montserrat semibold 40px",
+				InitCommand=function(self)
+					self:zoom(0.4)
+					self:shadowlength(1)
+					self:settext("to open the Modifiers menu")
+					self:x(70)
+				end,
+			},
+		},
+	},
 }
 
 -- The Wheel: originally made by Luizsan
@@ -337,7 +426,7 @@ for i = 1, WheelSize do
 			end
 
 			-- Animate!
-			self:y(230)
+			self:y(SongWheel_Y)
 			self:rotationy((SCREEN_CENTER_X - xpos - displace) * -WheelRotation)
 			self:x(xpos + displace)
 			--self:z(-math.abs(SCREEN_CENTER_Y - xpos - displace) * 0.25) -- not sure what this does
@@ -362,9 +451,9 @@ for i = 1, WheelSize do
 
 		Def.Quad { Name="IndexIndicator",
 			InitCommand=function(self)
-				self:y(70)
+				self:y(68)
 				self:align(0.5,0.5)
-				self:diffuse(color("1,1,1,0.8"))
+				self:diffuse(color("0,0,0,0.4"))
 			end,
 			RefreshCommand=function(self, param)
 				-- alters its width depending on the number of songs in the group
@@ -398,10 +487,10 @@ for i = 1, WheelSize do
 		Def.BitmapText { Name="IndexIndicatorText",
 			Font="Montserrat semibold 40px",
 			InitCommand=function(self)
-				self:addx(0):addy(70)
+				self:addx(0):addy(68)
 				self:zoom(0.3)
 				self:align(0.5,0.5)
-				self:diffuse(color("0,0,0,0.8"))
+				self:diffuse(color("1,1,1,0.8"))
 			end,
 			
 			RefreshCommand=function(self,param)
@@ -464,11 +553,12 @@ for i = 1, WheelSize do
 				end
 			end,
 			SongChosenMessageCommand=function(self)
-				--if i == WheelCenter then
-					--self:visible(true)
-				--else
+				if i == WheelCenter then
+					self:visible(true)
+				else
 					self:visible(false)
-				--end
+				end
+				self:stoptweening():easeoutexpo(0.5):y(220):zoomto(179, 98)
 			end,
 			SongUnchosenMessageCommand=function(self)
 				if i > WheelCenter+3 or i < WheelCenter-3 then
@@ -476,6 +566,7 @@ for i = 1, WheelSize do
 				else
 					self:visible(true)
 				end
+				self:stoptweening():easeoutexpo(0.5):y(0):zoomto(208, 117)
 			end,
 		},						
 		Def.BitmapText { Name="OriginLabel",
@@ -498,7 +589,7 @@ for i = 1, WheelSize do
 				end
 			end,
 			SongChosenMessageCommand=function(self)
-				self:visible(i == WheelCenter)
+				self:visible(false)
 			end,
 			SongUnchosenMessageCommand=function(self)
 				if i > WheelCenter+3 or i < WheelCenter-3 then
@@ -543,12 +634,13 @@ for i = 1, WheelSize do
 		Def.BitmapText { Name="NameLabel",
 			Font="Montserrat semibold 40px",
 			InitCommand=function(self)
-				self:addx(0):addy(100+20)
+				self:y(SongWheel_Y+32)
 				self:zoom(0.6)
 				self:align(0.5,0.5)
 				self:maxwidth(832)
-				:diffuse(Color.White)
-				:shadowlength(1.5)
+				self:diffuse(Color.White)
+				self:shadowlength(1.5)
+				self:visible(false) --disabling
 			end,
 			
 			RefreshCommand=function(self,param)
@@ -566,10 +658,12 @@ for i = 1, WheelSize do
 				else
 					self:visible(true)
 				end
+				self:visible(false) --disabling
 			end,
 			
 			SongChosenMessageCommand=function(self)
 				self:visible(i == WheelCenter)
+				self:visible(false) --disabling
 			end,
 			SongUnchosenMessageCommand=function(self)
 				if i > WheelCenter+0 or i < WheelCenter-0 then
@@ -577,13 +671,14 @@ for i = 1, WheelSize do
 				else
 					self:visible(true)
 				end
+				self:visible(false) --disabling
 			end,
 			LoopToWhiteThenBackCommand=function(self)
-				self:easeoutexpo(1):diffuse(Color.White)
+				self:easeoutexpo(0.5):diffuse(Color.White)
 				self:queuecommand("SpecialColorLoop")
 			end,
 			SpecialColorLoopCommand=function(self)
-				self:easeoutexpo(1):diffuse(FetchFromSong(Songs[Targets[i]], "Song Category Color"))
+				self:easeoutexpo(0.5):diffuse(FetchFromSong(Songs[Targets[i]], "Song Category Color"))
 				self:queuecommand("LoopToWhiteThenBack")
 			end,
 
@@ -591,12 +686,13 @@ for i = 1, WheelSize do
 		Def.BitmapText { Name="ArtistLabel",
 			Font="Montserrat normal 20px",
 			InitCommand=function(self)
-				self:addx(0):addy(124+20)
+				self:y(SongWheel_Y+42)
 				self:zoom(0.8)
 				self:align(0.5,0.5)
 				self:maxwidth(832)
-				:diffuse(Color.Black)
-				:shadowlength(1)
+				self:diffuse(Color.Black)
+				self:shadowlength(1)
+				self:visible(false) --disabling
 			end,
 			
 			RefreshCommand=function(self,param)
@@ -614,10 +710,12 @@ for i = 1, WheelSize do
 				else
 					self:visible(true)
 				end
+				self:visible(false) --disabling
 			end,
 
 			SongChosenMessageCommand=function(self)
 				self:visible(i == WheelCenter)
+				self:visible(false) --disabling
 			end,
 			SongUnchosenMessageCommand=function(self)
 				if i > WheelCenter+0 or i < WheelCenter-0 then
@@ -625,13 +723,14 @@ for i = 1, WheelSize do
 				else
 					self:visible(true)
 				end
+				self:visible(false) --disabling
 			end,
 			LoopToWhiteThenBackCommand=function(self)
-				self:easeoutexpo(1):diffuse(Color.White)
+				self:easeoutexpo(0.5):diffuse(Color.White)
 				self:queuecommand("SpecialColorLoop")
 			end,
 			SpecialColorLoopCommand=function(self)
-				self:easeoutexpo(1):diffuse(FetchFromSong(Songs[Targets[i]], "Song Category Color"))
+				self:easeoutexpo(0.5):diffuse(FetchFromSong(Songs[Targets[i]], "Song Category Color"))
 				self:queuecommand("LoopToWhiteThenBack")
 			end,
 
@@ -1629,7 +1728,7 @@ for i = 1, WheelSize do
 				local currentPlaylist = GroupsList[GroupIndex].Name
 
 				-- availability: Easy Station
-				if currentPlaylist == "Experience: Pump It Up Zero" then
+				if currentPlaylist == "Pump It Up Zero" then
 					self:GetChild("DifficultyLabel-EasyStation"):visible(true)
 					self:GetChild("DifficultyText-EasyStation"):visible(true)
 				else
@@ -1637,8 +1736,8 @@ for i = 1, WheelSize do
 					self:GetChild("DifficultyText-EasyStation"):visible(false)
 				end
 				-- availability: Crazy
-				if currentPlaylist == "Experience: Pump It Up The 1st Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The 2nd Dance Floor" then
+				if currentPlaylist == "Pump It Up The 1st Dance Floor"
+				or currentPlaylist == "Pump It Up The 2nd Dance Floor" then
 					self:GetChild("DifficultyLabel-Crazy"):visible(false)
 					self:GetChild("DifficultyText-Crazy"):visible(false)
 				else
@@ -1646,10 +1745,10 @@ for i = 1, WheelSize do
 					self:GetChild("DifficultyText-Crazy"):visible(true)
 				end
 				-- availability: Half-Double
-				if currentPlaylist == "Experience: Pump It Up The Rebirth"
-				or currentPlaylist == "Experience: Pump It Up The Premiere 2"
-				or currentPlaylist == "Experience: Pump It Up The Premiere 3"
-				or currentPlaylist == "Experience: Pump It Up The Prex 3" then
+				if currentPlaylist == "Pump It Up The Rebirth"
+				or currentPlaylist == "Pump It Up The Premiere 2"
+				or currentPlaylist == "Pump It Up The Premiere 3"
+				or currentPlaylist == "Pump It Up The Prex 3" then
 					self:GetChild("DifficultyLabel-HalfDouble"):visible(true)
 					self:GetChild("DifficultyText-HalfDouble"):visible(true)
 				else
@@ -1657,11 +1756,11 @@ for i = 1, WheelSize do
 					self:GetChild("DifficultyText-HalfDouble"):visible(false)
 				end
 				-- availability: Nightmare
-				if currentPlaylist == "Experience: Pump It Up Extra"
-				or currentPlaylist == "Experience: Pump It Up The Prex 3"
-				or currentPlaylist == "Experience: Pump It Up Exceed"
-				or currentPlaylist == "Experience: Pump It Up Exceed 2"
-				or currentPlaylist == "Experience: Pump It Up Zero" then
+				if currentPlaylist == "Pump It Up Extra"
+				or currentPlaylist == "Pump It Up The Prex 3"
+				or currentPlaylist == "Pump It Up Exceed"
+				or currentPlaylist == "Pump It Up Exceed 2"
+				or currentPlaylist == "Pump It Up Zero" then
 					self:GetChild("DifficultyLabel-Nightmare"):visible(true)
 					self:GetChild("DifficultyText-Nightmare"):visible(true)
 				else
@@ -1727,18 +1826,18 @@ for i = 1, WheelSize do
 				end
 
 				-- renaming: Normal > Easy
-				if currentPlaylist == "Experience: Pump It Up The 1st Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The 2nd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The 3rd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The Rebirth"
-				or currentPlaylist == "Experience: Pump It Up The Premiere 2" then
+				if currentPlaylist == "Pump It Up The 1st Dance Floor"
+				or currentPlaylist == "Pump It Up The 2nd Dance Floor"
+				or currentPlaylist == "Pump It Up The O.B.G. The 3rd Dance Floor"
+				or currentPlaylist == "Pump It Up The Rebirth"
+				or currentPlaylist == "Pump It Up The Premiere 2" then
 					self:GetChild("DifficultyText-Normal"):settext("EASY")
 				else
 					self:GetChild("DifficultyText-Normal"):settext("NORMAL")
 				end
 
 				-- renaming: Crazy > Extra Expert
-				if currentPlaylist == "Experience: Pump It Up Extra" then
+				if currentPlaylist == "Pump It Up Extra" then
 					self:GetChild("DifficultyText-Crazy"):settext("EXTRA EXPERT")
 				else
 					self:GetChild("DifficultyText-Crazy"):settext("CRAZY")
@@ -1746,26 +1845,26 @@ for i = 1, WheelSize do
 
 				-- renaming: Freestyle > Double
 				-- renaming: Freestyle > Full-Double
-				if currentPlaylist == "Experience: Pump It Up The 1st Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The 2nd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The 3rd Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up The O.B.G. The Season Evolution Dance Floor"
-				or currentPlaylist == "Experience: Pump It Up Perfect Collection"
-				or currentPlaylist == "Experience: Pump It Up Extra"
-				or currentPlaylist == "Experience: Pump It Up The Premiere"
-				or currentPlaylist == "Experience: Pump It Up The Prex"
-				or currentPlaylist == "Experience: Pump It Up The Prex 2" then
+				if currentPlaylist == "Pump It Up The 1st Dance Floor"
+				or currentPlaylist == "Pump It Up The 2nd Dance Floor"
+				or currentPlaylist == "Pump It Up The O.B.G. The 3rd Dance Floor"
+				or currentPlaylist == "Pump It Up The O.B.G. The Season Evolution Dance Floor"
+				or currentPlaylist == "Pump It Up Perfect Collection"
+				or currentPlaylist == "Pump It Up Extra"
+				or currentPlaylist == "Pump It Up The Premiere"
+				or currentPlaylist == "Pump It Up The Prex"
+				or currentPlaylist == "Pump It Up The Prex 2" then
 					self:GetChild("DifficultyText-FreeStyle"):settext("DOUBLE")
-				elseif currentPlaylist == "Experience: Pump It Up The Rebirth"
-				or currentPlaylist == "Experience: Pump It Up The Premiere 2"
-				or currentPlaylist == "Experience: Pump It Up The Premiere 3" then
+				elseif currentPlaylist == "Pump It Up The Rebirth"
+				or currentPlaylist == "Pump It Up The Premiere 2"
+				or currentPlaylist == "Pump It Up The Premiere 3" then
 					self:GetChild("DifficultyText-FreeStyle"):settext("FULL-DOUBLE")
 				else
 					self:GetChild("DifficultyText-FreeStyle"):settext("FREESTYLE")
 				end
 
 				-- renaming: Nightmare > Extra Expert Double
-				if currentPlaylist == "Experience: Pump It Up Extra" then
+				if currentPlaylist == "Pump It Up Extra" then
 					self:GetChild("DifficultyText-Nightmare"):settext("EXTRA EXPERT DOUBLE")
 				else
 					self:GetChild("DifficultyText-Nightmare"):settext("NIGHTMARE")
