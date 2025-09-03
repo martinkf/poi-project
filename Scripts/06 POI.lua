@@ -2227,3 +2227,19 @@ function SplitChartArray(input_chartArray, input_string, input_playlistNameAsStr
 
 	return output
 end
+
+function Actor:zoomtoheight_POI(desiredH)
+    -- only works for Sprites (they have textures with width/height)
+    if self.GetWidth and self.GetHeight then
+        local nativeH = self:GetHeight()
+        if nativeH > 0 then
+            local zoom = desiredH / nativeH
+            self:zoom(zoom)
+        else
+            Warn("zoomtoheight: Sprite has no valid height yet.")
+        end
+    else
+        Warn("zoomtoheight: This actor doesn't support GetWidth/GetHeight.")
+    end
+    return self
+end

@@ -97,7 +97,7 @@ local t = Def.ActorFrame {
 		-- StageCount BG UI art
 		Def.Quad {
 			InitCommand=function(self)
-				self:setsize(92, 46):diffuse(color("0,0,0,0.4")):xy(0,45+400):queuecommand('Refresh')
+				self:setsize(92, 46):diffuse(color("0,0,0,0.4")):xy(0,45+143):queuecommand('Refresh')
 			end,
 			
 			ScreenChangedMessageCommand=function(self) self:playcommand('Refresh') end,
@@ -105,8 +105,8 @@ local t = Def.ActorFrame {
 			RefreshCommand=function(self)
 				local currentScreenName = SCREENMAN:GetTopScreen():GetName()
 								
-				if 
-				currentScreenName == "ScreenTitleMenu" or 
+				if
+				currentScreenName == "ScreenTitleMenu" or
 				currentScreenName == "ScreenTitleJoin" or
 				currentScreenName == "ScreenLogo" or
 				currentScreenName == "ScreenSelectProfile" then
@@ -127,7 +127,7 @@ local t = Def.ActorFrame {
 		Def.BitmapText {
 			Font="Montserrat semibold 40px",			
 			InitCommand=function(self)
-				self:y(31+400):zoom(0.4):shadowlength(1)
+				self:y(31+143):zoom(0.4):shadowlength(1)
 				:settext("STAGE"):queuecommand('Refresh')
 			end,
 			
@@ -158,7 +158,7 @@ local t = Def.ActorFrame {
 		Def.BitmapText {
 			Font="Montserrat semibold 40px",			
 			InitCommand=function(self)
-				self:y(52+400):zoom(0.7):shadowlength(1):queuecommand('Refresh')
+				self:y(52+143):zoom(0.7):shadowlength(1):queuecommand('Refresh')
 			end,
 			
 			ScreenChangedMessageCommand=function(self) self:playcommand('Refresh') end,

@@ -33,7 +33,7 @@ local t = Def.ActorFrame {
 	Def.Quad { Name="CurPlaylistBannerBgQuad",
 		InitCommand=function(self)
 			self:y(-30)
-			self:zoomto(186, 105)
+			self:zoomto(215, 123)
 			self:align(0.5,0)
 			self:diffuse(color("0,0,0,0.4"))
 		end,
@@ -185,9 +185,9 @@ local t = Def.ActorFrame {
 
 	Def.Banner { Name="CurPlaylistBanner",
 		InitCommand=function(self)
-			self:y(22)
-			self:zoom(0.09)
+			self:y(30)
 			self:Load(GroupsList[GroupIndex].Banner)
+			self:scaletoclipped(207,117)
 			self:queuecommand('Refresh')
 		end,
 		OnCommand=function(self)
@@ -205,12 +205,12 @@ local t = Def.ActorFrame {
 			end
 		end,
 		SongChosenMessageCommand=function(self)
-			self:stoptweening():easeoutexpo(1):y(22+596):diffusealpha(0)
+			self:stoptweening():easeoutexpo(1):diffusealpha(0)
 		end,
 		SongUnchosenMessageCommand=function(self)
-			self:stoptweening():easeoutexpo(0.5):y(22):diffusealpha(1)
+			self:stoptweening():easeoutexpo(0.5):diffusealpha(1)
 		end,
-		RefreshCommand=function(self)			
+		RefreshCommand=function(self)
 			self:Load(GroupsList[GroupIndex].Banner)
 		end,
 	},

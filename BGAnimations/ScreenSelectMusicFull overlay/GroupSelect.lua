@@ -52,11 +52,6 @@ local MainTargets = {}
 -- TODO: Not hardcode this
 local OrigGroupIndex = 2
 
-local function BlockScreenInput(State)
-    --SCREENMAN:set_input_redirected(PLAYER_1, State)
-    --SCREENMAN:set_input_redirected(PLAYER_2, State)
-end
-
 -- If no songs don't load anything
 if SONGMAN:GetNumSongs() == 0 then
     return Def.Actor {}
@@ -167,12 +162,9 @@ else
 		end,
 
 		OnCommand=function(self)
-			BlockScreenInput(false)
 			ScreenSelectMusic = SCREENMAN:GetTopScreen()
 			ScreenSelectMusic:AddInputCallback(InputHandler)
 		end,
-		
-		OffCommand=function(self) BlockScreenInput(false) end,
 		
 		SongChosenMessageCommand=function(self) self:queuecommand("Busy") end,
 		SongUnchosenMessageCommand=function(self) self:sleep(0.01):queuecommand("NotBusy") end,
@@ -183,8 +175,22 @@ else
 		CodeMessageCommand=function(self, params)
 			if params.Name == "GroupSelectCombo" then
 				if not IsBusy and not IsOptionsList[PLAYER_1] and not IsOptionsList[PLAYER_2] then
-					-- Prevent the song list from moving when transitioning
-					BlockScreenInput(true)
+					MESSAGEMAN:Broadcast("OpenGroupWheel")
+					self:stoptweening():sleep(0.01):queuecommand("OpenGroup"):easeoutexpo(1):diffusealpha(1)
+				end
+			elseif params.Name == "GroupSelectPrev" then
+				if not IsBusy and not IsOptionsList[PLAYER_1] and not IsOptionsList[PLAYER_2] then
+
+					-- WIP
+
+					MESSAGEMAN:Broadcast("OpenGroupWheel")
+					self:stoptweening():sleep(0.01):queuecommand("OpenGroup"):easeoutexpo(1):diffusealpha(1)
+				end
+			elseif params.Name == "GroupSelectNext" then
+				if not IsBusy and not IsOptionsList[PLAYER_1] and not IsOptionsList[PLAYER_2] then
+
+					-- WIP
+
 					MESSAGEMAN:Broadcast("OpenGroupWheel")
 					self:stoptweening():sleep(0.01):queuecommand("OpenGroup"):easeoutexpo(1):diffusealpha(1)
 				end
@@ -199,10 +205,9 @@ else
 
 		CloseGroupWheelMessageCommand=function(self, params)
 			self:stoptweening():easeoutexpo(0.25):diffusealpha(0)
-			
-			BlockScreenInput(false)
+
 			IsSelectingGroup = false
-			
+
 			if params.Silent == false then
 				-- The built in wheel needs to be told the group has been changed
 				ScreenSelectMusic:PostScreenMessage("SM_SongChanged", 0 )
