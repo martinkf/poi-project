@@ -65,7 +65,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 		},
 
 		-- this quad represents the background of the big "Level Number" indicator for the chart
-		Def.Quad {			
+		Def.Quad {
 			InitCommand=function(self)
 				self:x(levelQuads_X * (pn == PLAYER_2 and 1 or -1))
 				self:y(levelQuads_Y)

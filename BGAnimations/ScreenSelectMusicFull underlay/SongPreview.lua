@@ -1,7 +1,6 @@
 local FrameW2 = 1600
 local FrameH2 = 900
 local PreviewDelay = THEME:GetMetric("ScreenSelectMusic", "SampleMusicDelay")
-local VHSText_visible = false -- use this lever to enable or disable the VHS text, disabled for now
 
 local t = Def.ActorFrame {
 	OnCommand=function(self)
@@ -21,17 +20,13 @@ local t = Def.ActorFrame {
 		},
 
 		Def.ActorFrame {
-			InitCommand=function(self)
-				self:visible(VHSText_visible)
-			end,
-
 			Def.BitmapText {
 				Name="NextPrevText",
 				Font="VCR OSD Mono 40px",
 				Text="",
 				InitCommand=function(self)
-					self:zoom(2):xy(0,-100)
-					:shadowlength(4)					
+					self:zoom(2):xy(0,-60)
+					:shadowlength(4)
 				end,
 				ScrollMessageCommand=function(self, params)
 					local direction = params.Direction
@@ -73,7 +68,9 @@ local t = Def.ActorFrame {
 		LoadBGCommand=function(self)
 			local Path = Song:GetBackgroundPath()
 			if Path and FILEMAN:DoesFileExist(Path) then
-				self:Load(Path):zoomto(FrameW2, FrameH2):y(125)
+				self:Load(Path)
+				self:y(125)
+				self:zoomtoheight_POI(FrameH2)
 				:linear(PreviewDelay):diffusealpha(1):diffuse(color("#ffffff"))
 			else
 				self:Load(Song:GetBannerPath()):zoomto(FrameW2, FrameH2):y(125)
@@ -84,7 +81,9 @@ local t = Def.ActorFrame {
 		LoadAnimatedCommand=function(self)
 			local Path = Song:GetPreviewVidPath()
 			if Path and FILEMAN:DoesFileExist(Path) then
-				self:Load(Path):zoomto(FrameW2, FrameH2):y(125)
+				self:Load(Path)
+				self:y(125)
+				self:zoomtoheight_POI(FrameH2)
 				:linear(PreviewDelay):diffusealpha(1):diffuse(color("#ffffff"))
 			else
 				self:queuecommand("LoadBG")

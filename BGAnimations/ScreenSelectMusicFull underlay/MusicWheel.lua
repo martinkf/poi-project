@@ -381,8 +381,8 @@ for i = 1, WheelSize do
 	t[#t+1] = Def.ActorFrame {
 		OnCommand=function(self)
 			-- Load banner
-			UpdateBanner(self:GetChild("BannerBG"), Songs[Targets[i]])
-			UpdateBannerTwo(self:GetChild("BannerTop"), Songs[Targets[i]])
+			UpdateBanner(self:GetChild("MusicWheelPicture"):GetChild("BannerBG"), Songs[Targets[i]])
+			UpdateBannerTwo(self:GetChild("MusicWheelPicture"):GetChild("BannerTop"), Songs[Targets[i]])
 
 			-- Set initial position, Direction = 0 means it won't tween
 			self:playcommand("Scroll", {Direction = 0})
@@ -390,8 +390,8 @@ for i = 1, WheelSize do
 		
 		ForceUpdateMessageCommand=function(self)
 			-- Load banner
-			UpdateBanner(self:GetChild("BannerBG"), Songs[Targets[i]])
-			UpdateBannerTwo(self:GetChild("BannerTop"), Songs[Targets[i]])
+			UpdateBanner(self:GetChild("MusicWheelPicture"):GetChild("BannerBG"), Songs[Targets[i]])
+			UpdateBannerTwo(self:GetChild("MusicWheelPicture"):GetChild("BannerTop"), Songs[Targets[i]])
 			
 			--SCREENMAN:SystemMessage(GroupsList[GroupIndex].Name)
 
@@ -415,8 +415,8 @@ for i = 1, WheelSize do
 
 			-- If it's an edge item, load a new banner.
 			if i == 1 or i == WheelSize then
-				UpdateBanner(self:GetChild("BannerBG"), Songs[Targets[i]])
-				UpdateBannerTwo(self:GetChild("BannerTop"), Songs[Targets[i]])
+				UpdateBanner(self:GetChild("MusicWheelPicture"):GetChild("BannerBG"), Songs[Targets[i]])
+				UpdateBannerTwo(self:GetChild("MusicWheelPicture"):GetChild("BannerTop"), Songs[Targets[i]])
 			end
 
 			-- calculate visibility based on whether settings uses a wheel or a strip
@@ -442,8 +442,6 @@ for i = 1, WheelSize do
 			self:GetChild("IndexIndicatorText"):playcommand("Refresh")
 
 			self:GetChild("BGFrame"):playcommand("Refresh")
-			self:GetChild("BannerBG"):playcommand("Refresh")
-			self:GetChild("BannerTop"):playcommand("Refresh")
 
 			self:GetChild("OriginLabel"):playcommand("Refresh")
 			self:GetChild("CategoryLabel"):playcommand("Refresh")
@@ -551,10 +549,21 @@ for i = 1, WheelSize do
 				end
 			end,
 		},
-		Def.Banner { Name="BannerBG",
+		Def.ActorFrame { Name="MusicWheelPicture",
 			RefreshCommand=function(self, param)
 				--donothing
 			end,
+			CurrentSongChangedMessageCommand=function(self)
+				local song = GAMESTATE:GetCurrentSong()
+				if song then
+					local bpms = song:GetDisplayBpms()
+					local bpm = bpms[1]
+					if bpm > 0 then
+						local period = 60 / bpm
+						self:effectperiod(period)
+					end
+				end
+    		end,
 			SongChosenMessageCommand=function(self)
 				if i == WheelCenter then
 					self:visible(true)
@@ -562,50 +571,38 @@ for i = 1, WheelSize do
 					self:visible(false)
 				end
 				self:stoptweening():easeoutexpo(0.5):y(228)
-			end,
-			SongUnchosenMessageCommand=function(self)
-				self:visible(true)
-				self:stoptweening():easeoutexpo(0.5):y(0)
-			end,
-		},
-		Def.Quad { Name="BannerFilter",
-			InitCommand=function(self)
-				self:y(-0.1)
-				self:zoomto(WheelItem.Width, WheelItem.Height)
-				self:diffuse(color("0,0,0,0.8"))
-			end,
-			RefreshCommand=function(self, param)
-				--donothing
-			end,
-			SongChosenMessageCommand=function(self)
-				if i == WheelCenter then
-					self:visible(true)
-				else
-					self:visible(false)
+				local song = GAMESTATE:GetCurrentSong()
+				if song then
+					local bpms = song:GetDisplayBpms()
+					local bpm = bpms[1]
+					if bpm > 0 then
+						local period = 60 / bpm
+						self:bob():effectperiod(period):effectmagnitude(0, 1, 0)
+					end
 				end
-				self:stoptweening():easeoutexpo(0.5):y(228)
 			end,
 			SongUnchosenMessageCommand=function(self)
 				self:visible(true)
 				self:stoptweening():easeoutexpo(0.5):y(0)
+				self:stopeffect()
 			end,
-		},
-		Def.Banner { Name="BannerTop",
-			RefreshCommand=function(self, param)
-				--donothing
-			end,
-			SongChosenMessageCommand=function(self)
-				if i == WheelCenter then
-					self:visible(true)
-				else
-					self:visible(false)
-				end
-				self:stoptweening():easeoutexpo(0.5):y(228)
-			end,
-			SongUnchosenMessageCommand=function(self)
-				self:visible(true)
-				self:stoptweening():easeoutexpo(0.5):y(0)
-			end,
+			Def.Banner { Name="BannerBG",
+				RefreshCommand=function(self, param)
+					--donothing
+				end,
+			},
+			Def.Quad { Name="BannerFilter",
+				InitCommand=function(self)
+					self:y(-0.1)
+					self:zoomto(WheelItem.Width, WheelItem.Height)
+					self:diffuse(color("0,0,0,0.8"))
+				end,
+			},
+			Def.Banner { Name="BannerTop",
+				RefreshCommand=function(self, param)
+					--donothing
+				end,
+			},
 		},
 		Def.BitmapText { Name="OriginLabel",
 			Font="Montserrat semibold 40px",
@@ -640,10 +637,10 @@ for i = 1, WheelSize do
 		Def.BitmapText { Name="CategoryLabel",
 			Font="Montserrat semibold 40px",
 			InitCommand=function(self)
-				self:addx(0):addy(0)
-				self:zoom(0.4)
-				:shadowlength(1)
-				self:align(0.5,0.5)
+				self:addx(-104):addy(-67)
+				self:zoom(0.2)
+				:shadowlength(0.5)
+				self:align(0,0)
 				self:maxwidth(832)
 			end,
 			

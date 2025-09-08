@@ -1035,8 +1035,6 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/310 - SHE LIKES PIZZA/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/311 - PUMPING UP/", Charts = { "3RD-HARD" } },
 				{ SongPath = "/Songs/POI-database/312 - DON'T BOTHER ME/", Charts = { "3RD-NORMAL", "EXTRA-HARD", "PREX3-CRAZY", "3RD-FREESTYLE" } },
-				{ SongPath = "/Songs/POI-database/313 - LOVE SONG/", Charts = { "3RD-NORMAL", "3RD-HARD", "3RD-FREESTYLE" } },
-				{ SongPath = "/Songs/POI-database/315 - TO THE TOP/", Charts = { "3RD-NORMAL", "3RD-HARD" } },
 				{ SongPath = "/Songs/POI-database/318 - WE ARE/", Charts = { "3RD-HARD", "PREX3-CRAZY", "3RD-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/202 - HATE/", Charts = { "2ND-NORMAL", "2ND-HARD", "2ND-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/203 - KOUL/", Charts = { "2ND-HARD", "PREX3-CRAZY", "2ND-FREESTYLE" } },
@@ -1044,10 +1042,8 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/205 - EXTRAVAGANZA/", Charts = { "2ND-HARD", "3RD-CRAZY", "2ND-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/208 - FIGHTING SPIRITS/", Charts = { "2ND-NORMAL", "2ND-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/212 - COM'BACK/", Charts = { "2ND-HARD", "PREX3-CRAZY" } },
-				{ SongPath = "/Songs/POI-database/213 - MOBIUS STRIP/", Charts = { "2ND-HARD", "2ND-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/101 - IGNITION STARTS/", Charts = { "1ST-HARD", "PREX3-CRAZY", "1ST-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/102 - HYPNOSIS/", Charts = { "1ST-HARD", "PREX3-CRAZY", "1ST-FREESTYLE", "PREX3-NIGHTMARE" } },
-				{ SongPath = "/Songs/POI-database/103 - FOREVER LOVE/", Charts = { "1ST-NORMAL" } },
 				{ SongPath = "/Songs/POI-database/104 - PASSION/", Charts = { "1ST-NORMAL", "1ST-HARD", "1ST-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/108 - COME TO ME/", Charts = { "1ST-NORMAL", "1ST-HARD", "PREX3-CRAZY", "1ST-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/109 - FUNKY TONIGHT/", Charts = { "1ST-HARD", "1ST-FREESTYLE" } },
@@ -1652,6 +1648,8 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/C41 - -REMIX- TRY TO B.P.M. - LIADZ/", },
 				{ SongPath = "/Songs/POI-database/C42 - -REMIX- ZERO K HIP-HOP MIX/", },
 				{ SongPath = "/Songs/POI-database/C43 - -REMIX- ZERO K HOUSE MIX/", },
+				{ SongPath = "/Songs/POI-database/D01 - WITCH DOCTOR #1/", },
+				{ SongPath = "/Songs/POI-database/D02 - ARCH OF DARKNESS/", },
 			},
 		},
 	}
@@ -1920,10 +1918,10 @@ function FetchFromSong(input_song, fetch_details)
 
 		local song_firstTag = FetchFromSong(input_song, "First Tag")
 		local song_secondTag = FetchFromSong(input_song, "Second Tag")
-		if song_firstTag == "SHORTCUT" then	output = "- SHORT CUT -"
-		elseif song_firstTag == "REMIX" then output = "- REMIX -"
-		elseif song_firstTag == "FULLSONG" then	output = "- FULL SONG -"
-		elseif song_secondTag == "ANOTHER" then	output = "- ANOTHER -"
+		if song_firstTag == "SHORTCUT" then	output = "[SHORT CUT]"
+		elseif song_firstTag == "REMIX" then output = "[REMIX]"
+		elseif song_firstTag == "FULLSONG" then	output = "[FULL SONG]"
+		elseif song_secondTag == "ANOTHER" then	output = "[ANOTHER]"
 		else output = ""
 		end
 
@@ -2228,6 +2226,8 @@ function SplitChartArray(input_chartArray, input_string, input_playlistNameAsStr
 	return output
 end
 
+-- helper function to use elsewhere in the theme.
+-- a Banner/Sprite can use this to zoom to a specific height and have it inserted with their original ratio preserved
 function Actor:zoomtoheight_POI(desiredH)
     -- only works for Sprites (they have textures with width/height)
     if self.GetWidth and self.GetHeight then

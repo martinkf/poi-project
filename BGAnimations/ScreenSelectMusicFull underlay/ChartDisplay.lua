@@ -1,5 +1,5 @@
 local ItemW = 52
-local ItemAmount = ...
+local ItemAmount = 24
 local ItemTotalW = ItemW * ((ItemAmount - 1) / 2)
 
 local FrameX = -ItemTotalW
@@ -253,14 +253,6 @@ local t = Def.ActorFrame {
 				self:x(ItemTotalW - ChartArrayW)
 			--end
 
-			if #ChartArray > ItemAmount then
-				self:GetChild("")[ItemAmount+1]:GetChild("MoreLeft"):visible(MainChartIndex + 1 > ItemAmount)
-				self:GetChild("")[ItemAmount+1]:GetChild("MoreRight"):visible(MainChartIndex + 1 < #ChartArray)
-			else
-				self:GetChild("")[ItemAmount+1]:GetChild("MoreLeft"):visible(false)
-				self:GetChild("")[ItemAmount+1]:GetChild("MoreRight"):visible(false)
-			end
-
 			for i=1,ItemAmount do
 				local CurrentSong = GAMESTATE:GetCurrentSong()
 				local Chart = ChartArray[ i + ListOffset ]
@@ -482,22 +474,6 @@ for i=1,ItemAmount do
 end
 
 t[#t+1] = Def.ActorFrame {
-	Def.Sprite {
-		Name="MoreLeft",
-		Texture=THEME:GetPathG("", "DifficultyDisplay/MoreLeft"),
-		InitCommand=function(self)
-			self:xy(FrameX - 16 - ItemW, 0):zoom(0.4):visible(false)
-			:bounce():effectmagnitude(16, 0, 0):effectclock("bgm")
-		end
-	},
-	Def.Sprite {
-		Name="MoreRight",
-		Texture=THEME:GetPathG("", "DifficultyDisplay/MoreRight"),
-		InitCommand=function(self)
-			self:xy(FrameX + 16 + ItemW * 12, 0):zoom(0.4):visible(false)
-			:bounce():effectmagnitude(-16, 0, 0):effectclock("bgm")
-		end
-	},
 	Def.Sound {
 		File=THEME:GetPathS("Common", "value"),
 		IsAction=true,
