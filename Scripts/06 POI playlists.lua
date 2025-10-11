@@ -1,4 +1,3 @@
--- Has hard-coded content!
 function Database_POI()
 	return {
 		{	Name = "Pump It Up The 1st Dance Floor",
@@ -1152,7 +1151,7 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/404 - SOLITARY/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "OBGSE-CRAZY", "OBGSE-FREESTYLE", "EXC2-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/405 - MR. LARPUS/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "OBGSE-CRAZY", "OBGSE-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/411 - A TRAP/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
-				{ SongPath = "/Songs/POI-database/413 - RUN!/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "EXC2-CRAZY", "OBGSE-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/413 - RUN!/", Charts = { "OBGSE-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "OBGSE-FREESTYLE", "EXC2-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/301 - FINAL AUDITION 2/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "EXC1-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/302 - NAISSANCE/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/303 - TURKEY MARCH/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "EXC1-NIGHTMARE" } },
@@ -1335,11 +1334,178 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/C43 - -REMIX- ZERO K HOUSE MIX/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE" } }, --nonstopremix 17
 			},
 		},
+		{	Name = "Pump It Up NX",
+			Banner = "Playlists/17-nx.png",
+			Description = "Description for -Pump It Up NX-",
+			AllowedSongs = {
+				{ SongPath = "/Songs/POI-database/D01 - WITCH DOCTOR #1/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D02 - ARCH OF DARKNESS/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D03 - CHIMERA/", Charts = { "NX-NORMAL", "NX-HARD", "NX-AHARD", "NX-CRAZY", "NX-FREESTYLE", "NX-AFREESTYLE", "NX-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D14 - 2006 LOVE SONG/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D15 - DO YOU KNOW THAT - OLD SCHOOL/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D16 - GUN ROCK/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-ACRAZY", "NX-FREESTYLE", "NX-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D17 - BULLFIGHTING'S SONG/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D18 - UGLY DEE/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D28 - FINAL AUDITION EPISODE 2-1/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-ACRAZY", "NX-FREESTYLE", "NX-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D30 - FINAL AUDITION EPISODE 2-2/", Charts = { "NX-NORMAL", "NX-HARD", "NX-AHARD", "NX-CRAZY", "NX-ACRAZY", "NX-FREESTYLE", "NX-AFREESTYLE", "NX-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D04 - GO BACK/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D05 - FLY/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D06 - ONE NIGHT/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D07 - U INSIDE MY DIM MEMORY/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-AFREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D08 - FREE!/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D09 - LOVELY/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D10 - TERMINAL DEPOSITORY/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D11 - FOR YOU/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-AFREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D12 - SNOW DREAM/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D13 - HANDSOME CHARACTER THAT PASS/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D19 - HYUN JIN YOUNG GO JIN YOUNG GO!/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D20 - MY BROTHER IS STREET SINGER/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D21 - SO/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D22 - HOLD THE LINE/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-TRAINING3", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D23 - IT'S THE HYBS/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D24 - THROW 'EM UP/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D25 - BUST BACK/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D26 - HALEY/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D27 - WE GOIN' FLY REMIX/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C01 - BEAT OF THE WAR 2/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C02 - MOONLIGHT/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C03 - WITCH DOCTOR/", Charts = { "ZERO-CRAZY", "ZERO-ACRAZY", "ZERO-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C04 - LOVE IS A DANGER ZONE 2/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/DC04 - LOVE IS A DANGER ZONE 2 (D&G VER.)/", Charts = { "ZERO-AHARD", "ZERO-ACRAZY", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C05 - PHANTOM/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C06 - PAPA GONZALES/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C08 - EMERGENCY/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C09 - MY FRIEND/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-AFREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C10 - WUTHERING HEIGHTS/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/C11 - DO IT YOURSELF/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C12 - WHAT'S GOIN' ON/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C14 - CHUNG HWA BAN JEOM/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C15 - MR. FIRE FIGHTER/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C16 - FOOTPRINTS/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C17 - OH MY!/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C18 - ENTER THE DRAGON/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C19 - STORM/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C20 - TURN AROUND/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C21 - I LOVE YOU BABY/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C22 - UP UP/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B17 - HI-BI/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "NX-ACRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B18 - SOLITARY 2/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "ZERO-ACRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B19 - CANON-D/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "ZERO-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B01 - GREENHORN/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B02 - HOT/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B06 - DEJA VU/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B05 - DRUNKEN IN MELODY/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "EXC2-NORMAL", "EXC2-HARD", "EXC2-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/B08 - SAJAHU (LION'S ROAR)/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B09 - TYPHOON/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B11 - FOXY LADY/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B12 - TOO LATE/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/B13 - I'LL GIVE YOU ALL MY LOVE/", Charts = { "NX-TRAINING1", "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "NX-TRAINING2", "NX-TRAINING3", "EXC2-FREESTYLE", "EXC2-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B14 - HUU YAH YEAH/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B15 - WE DON'T STOP/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B03 - PRAY/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B20 - LE CODE DE BONNE CONDUITE/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A01 - FINAL AUDITION 3 U.F/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A02 - NAISSANCE 2/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A03 - MONKEY FINGERS/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A04 - BLAZING/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A05 - PUMP ME AMADEUS/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A06 - X-TREAM/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A08 - DIGNITY/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A11 - WHAT DO U REALLY WANT/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "NX-ACRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A09 - SHAKE THAT BOOTIE/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A10 - VALENTI/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "NX-TRAINING3", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A12 - GO/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A19 - ONE LOVE/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A14 - KISS ME/", Charts = { "NX-TRAINING1", "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "NX-TRAINING2", "NX-TRAINING3", "EXC1-FREESTYLE", "EXC1-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A15 - ESSA MANEIRA/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A17 - LA CUBANITA/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "NX-TRAINING3", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A18 - SHAKE IT UP/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "NX-ACRAZY", "ZERO-FREESTYLE", "EXC1-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A20 - POWER OF DREAM/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A21 - WATCH OUT/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A22 - FIESTA/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A23 - SOCA MAKE YUH RAM RAM/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/826 - COME TO ME/", Charts = { "PREX3-NORMAL", "ZERO-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/802 - BEE/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "NX-ACRAZY", "PRM3-FREESTYLE", "NX-AFREESTYLE", "EXC1-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/820 - BEAT OF THE WAR/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "PRM3-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/805 - CLAP YOUR HANDS/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/806 - CONGA/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "PRM3-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/809 - ERES PARA MI/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "PRM3-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/818 - MEXI MEXI/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "PRM3-FREESTYLE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/814 - JOIN THE PARTY/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/735 - VOOK/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-FREESTYLE", "REB-HALFDOUBLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/736 - CSIKOS POST/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-FREESTYLE", "PREX3-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/701 - DR. M/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "NX-ACRAZY", "REB-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/704 - LOVE IS A DANGER ZONE/", Charts = { "REB-NORMAL", "REB-HARD", "EXC2-CRAZY", "REB-DIVWILD", "REB-FREESTYLE", "REB-HALFDOUBLE", "EXC2-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/708 - POINT BREAK/", Charts = { "REB-NORMAL", "REB-HARD", "EXC2-CRAZY","REB-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/711 - WINTER/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "REB-NORMAL", "REB-HARD", "REB-CRAZY", "NX-TRAINING3", "REB-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/712 - WILL O' THE WISP/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/922 - FINAL AUDITION EPISODE 1/", Charts = { "EXTRA-HARD", "NX-AHARD", "EXTRA-XXPERT", "EXTRA-FREESTYLE", "EXC1-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/902 - CIRCUS MAGIC/", Charts = { "PREX3-NORMAL", "EXTRA-HARD", "PREX3-CRAZY", "EXTRA-FREESTYLE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/906 - STARIAN/", Charts = { "EXTRA-HARD", "PREX3-CRAZY", "EXTRA-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/915 - LONER/", Charts = { "EXTRA-HARD", "EXTRA-XXPERT", "EXTRA-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/919 - LAZENCA, SAVE US/", Charts = { "EXTRA-NORMAL", "EXTRA-HARD", "EXTRA-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/909 - MISTAKE/", Charts = { "EXTRA-NORMAL", "EXTRA-HARD", "EXTRA-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/502 - N/", Charts = { "PERF-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/503 - ROLLING CHRISTMAS/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "NX-TRAINING3", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/505 - BEETHOVEN VIRUS/", Charts = { "PERF-NORMAL", "PERF-HARD", "PERF-CRAZY", "NX-ACRAZY", "PERF-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/516 - SLAM/", Charts = { "PERF-NORMAL", "PERF-HARD", "PERF-CRAZY", "PERF-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/507 - COME BACK TO ME/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/404 - SOLITARY/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "OBGSE-CRAZY", "OBGSE-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/405 - MR. LARPUS/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "OBGSE-CRAZY", "NX-ACRAZY", "OBGSE-FREESTYLE", "ZERO-ANIGHTMARE", "PREX3-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/413 - RUN!/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/301 - FINAL AUDITION 2/", Charts = { "3RD-HARD", "3RD-CRAZY", "ZERO-ACRAZY", "3RD-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/302 - NAISSANCE/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/303 - TURKEY MARCH/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/304 - WITH MY LOVER/", Charts = { "3RD-NORMAL", "ZERO-CRAZY", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/310 - SHE LIKES PIZZA/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "PREX3-NIGHTMARE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/312 - DON'T BOTHER ME/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "3RD-NORMAL", "EXTRA-HARD", "PREX3-CRAZY", "3RD-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/313 - LOVE SONG/", Charts = { "3RD-NORMAL", "3RD-HARD", "EXC2-CRAZY", "3RD-FREESTYLE", "EXC2-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/318 - WE ARE/", Charts = { "3RD-HARD", "PREX3-CRAZY", "3RD-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/204 - FINAL AUDITION/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "PERF-NORMAL", "2ND-HARD", "PREX3-CRAZY", "ZERO-ACRAZY", "NX-TRAINING3", "PREX3-FREESTYLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/205 - EXTRAVAGANZA/", Charts = { "3RD-HARD", "3RD-CRAZY", "ZERO-ACRAZY", "2ND-FREESTYLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/208 - FIGHTING SPIRITS/", Charts = { "2ND-NORMAL", "NX-ACRAZY", "2ND-FREESTYLE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/212 - COM'BACK/", Charts = { "2ND-HARD", "ZERO-CRAZY", "ZERO-NIGHTMARE", "PREX3-CRAZY" } },
+				{ SongPath = "/Songs/POI-database/213 - MOBIUS STRIP/", Charts = { "2ND-HARD", "ZERO-CRAZY", "2ND-FREESTYLE", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/103 - FOREVER LOVE/", Charts = { "1ST-NORMAL", "ZERO-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/109 - FUNKY TONIGHT/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "1ST-HARD", "ZERO-CRAZY", "NX-TRAINING3", "1ST-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "1ST-NORMAL", "1ST-HARD", "ZERO-CRAZY", "NX-TRAINING3", "3RD-FREESTYLE", "NX-AFREESTYLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				
+				{ SongPath = "/Songs/POI-database/D34 - -REMIX- WI-EX-DOC-VA/", Charts = { "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D35 - -REMIX- BEMERA/", Charts = { "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D36 - -REMIX- BANYA P CLASSIC MIX/", Charts = { "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D31 - -REMIX- K-POP DANCE/", Charts = { "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D32 - -REMIX- GROOVE PARTY/", Charts = { "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D33 - -REMIX- POP HOUSE MIX/", Charts = { "NX-HARD", "NX-CRAZY", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D37 - -REMIX- CHICAGO CLUB MIX/", Charts = { "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/C41 - -REMIX- TRY TO B.P.M. - LIADZ/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } }, --nonstopremix 15
+				{ SongPath = "/Songs/POI-database/C42 - -REMIX- ZERO K HIP-HOP MIX/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE" } }, --nonstopremix 16
+				{ SongPath = "/Songs/POI-database/C43 - -REMIX- ZERO K HOUSE MIX/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE" } }, --nonstopremix 17
+				{ SongPath = "/Songs/POI-database/B26 - -REMIX- NOVARASH REMIX/", Charts = { "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE" } }, --nonstopremix 01
+				{ SongPath = "/Songs/POI-database/B28 - -REMIX- TREAM-VOOK OF THE WAR/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } }, --nonstopremix 03
+				{ SongPath = "/Songs/POI-database/B29 - -REMIX- BANYA CLASSIC REMIX/", Charts = { "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } }, --nonstopremix 04
+				{ SongPath = "/Songs/POI-database/B30 - -REMIX- DEUX REMIX/", Charts = { "EXC2-HARD","EXC2-CRAZY", "EXC2-FREESTYLE" } }, --nonstopremix 05
+				{ SongPath = "/Songs/POI-database/B31 - -REMIX- DIVA REMIX/", Charts = { "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE" } }, --nonstopremix 06				
+				{ SongPath = "/Songs/POI-database/119 - -REMIX- TURBO REMIX/", Charts = { "1ST-HARD", "NX-CRAZY", "2ND-FREESTYLE" } }, --nonstopremix 10
+				{ SongPath = "/Songs/POI-database/225 - -REMIX- 2ND HIDDEN REMIX/", Charts = { "2ND-HARD", "3RD-CRAZY", "2ND-FREESTYLE", "EXC2-NIGHTMARE" } }, --nonstopremix 11
+				{ SongPath = "/Songs/POI-database/221 - -REMIX- DRUNKEN FAMILY REMIX/", Charts = { "2ND-HARD", "EXC2-CRAZY", "2ND-FREESTYLE" } }, --nonstopremix 12
+				{ SongPath = "/Songs/POI-database/324 - -REMIX- BANYA HIP-HOP REMIX/", Charts = { "3RD-HARD", "EXC2-CRAZY", "3RD-FREESTYLE" } }, --nonstopremix 13
+
+				{ SongPath = "/Songs/POI-database/D41 - LOVE IS A DANGER ZONE 2 -FULL SONG-/", Charts = { "NX-CRAZY", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D42 - BEAT OF THE WAR 2 -FULL SONG-/", Charts = { "NX-CRAZY", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D39 - FIRE GAME -FULL SONG-/", Charts = { "NX-CRAZY", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D38 - U INSIDE MY DIM MEMORY -FULL SONG-/", Charts = { "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D40 - LOVELY -FULL SONG-/", Charts = { "NX-HARD", "NX-FREESTYLE" } },
+				{ SongPath = "/Songs/POI-database/D43 - HOLD THE LINE -FULL SONG-/", Charts = { "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/B51 - DIGNITY -FULL SONG-/", Charts = { "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "NX-NIGHTMARE" } }, --nonstopremix 08
+				{ SongPath = "/Songs/POI-database/B57 - CANON-D -FULL SONG-/", Charts = { "NX-HARD", "EXC2-CRAZY" } }, --nonstopremix 14
+			},
+		},
 		{	Name = "Problematic songs",
 			Banner = "Playlists/Sub-PROBLEM.png",
 			Description = "Problematic songs because they have a IDK chart",
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/205 - EXTRAVAGANZA/", },
+				{ SongPath = "/Songs/POI-database/413 - RUN!/", },
 				{ SongPath = "/Songs/POI-database/414 - RUN TO YOU/", },
 				{ SongPath = "/Songs/POI-database/503 - ROLLING CHRISTMAS/", },
 				{ SongPath = "/Songs/POI-database/906 - STARIAN/", },
@@ -1650,596 +1816,48 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/C43 - -REMIX- ZERO K HOUSE MIX/", },
 				{ SongPath = "/Songs/POI-database/D01 - WITCH DOCTOR #1/", },
 				{ SongPath = "/Songs/POI-database/D02 - ARCH OF DARKNESS/", },
+				{ SongPath = "/Songs/POI-database/D03 - CHIMERA/", },
+				{ SongPath = "/Songs/POI-database/D14 - 2006 LOVE SONG/", },
+				{ SongPath = "/Songs/POI-database/D15 - DO YOU KNOW THAT -OLD SCHOOL/", },
+				{ SongPath = "/Songs/POI-database/D16 - GUN ROCK/", },
+				{ SongPath = "/Songs/POI-database/D17 - BULLFIGHTING'S SONG/", },
+				{ SongPath = "/Songs/POI-database/D18 - UGLY DEE/", },
+				{ SongPath = "/Songs/POI-database/D28 - FINAL AUDITION EPISODE 2-1/", },
+				{ SongPath = "/Songs/POI-database/D30 - FINAL AUDITION EPISODE 2-2/", },
+				{ SongPath = "/Songs/POI-database/D29 - FIRE GAME/", },
+				{ SongPath = "/Songs/POI-database/D39 - FIRE GAME -FULL SONG-/", },
+				{ SongPath = "/Songs/POI-database/D04 - GO BACK/", },
+				{ SongPath = "/Songs/POI-database/D05 - FLY/", },
+				{ SongPath = "/Songs/POI-database/D06 - ONE NIGHT/", },
+				{ SongPath = "/Songs/POI-database/D07 - U INSIDE MY DIM MEMORY/", },
+				{ SongPath = "/Songs/POI-database/D08 - FREE!/", },
+				{ SongPath = "/Songs/POI-database/D09 - LOVELY/", },
+				{ SongPath = "/Songs/POI-database/D10 - TERMINAL DEPOSITORY/", },
+				{ SongPath = "/Songs/POI-database/D11 - FOR YOU/", },
+				{ SongPath = "/Songs/POI-database/D12 - SNOW DREAM/", },
+				{ SongPath = "/Songs/POI-database/D13 - HANDSOME CHARACTER THAT PASS/", },
+				{ SongPath = "/Songs/POI-database/D19 - HYUN JIN YOUNG GO JIN YOUNG GO!/", },				
+				{ SongPath = "/Songs/POI-database/D20 - MY BROTHER IS STREET SINGER/", },
+				{ SongPath = "/Songs/POI-database/D21 - SO/", },
+				{ SongPath = "/Songs/POI-database/D22 - HOLD THE LINE/", },
+				{ SongPath = "/Songs/POI-database/D23 - IT'S THE HYBS/", },
+				{ SongPath = "/Songs/POI-database/D24 - THROW 'EM UP/", },
+				{ SongPath = "/Songs/POI-database/D25 - BUST BACK/", },
+				{ SongPath = "/Songs/POI-database/D26 - HALEY/", },
+				{ SongPath = "/Songs/POI-database/D27 - WE GOING' FLY REMIX/", },
+				{ SongPath = "/Songs/POI-database/D34 - -REMIX- WI-EX-DOC-VA/", },
+				{ SongPath = "/Songs/POI-database/D35 - -REMIX- BEMERA/", },
+				{ SongPath = "/Songs/POI-database/D36 - -REMIX- BANYA P CLASSIC MIX/", },
+				{ SongPath = "/Songs/POI-database/D31 - -REMIX- K-POP DANCE/", },
+				{ SongPath = "/Songs/POI-database/D32 - -REMIX- GROOVE PARTY/", },
+				{ SongPath = "/Songs/POI-database/D33 - -REMIX- POP HOUSE MIX/", },
+				{ SongPath = "/Songs/POI-database/D37 - -REMIX- CHICAGO CLUB MIX/", },
+				{ SongPath = "/Songs/POI-database/D41 - LOVE IS A DANGER ZONE 2 -FULL SONG-/", },
+				{ SongPath = "/Songs/POI-database/D42 - BEAT OF THE WAR 2 -FULL SONG-/", },
+				{ SongPath = "/Songs/POI-database/D38 - U INSIDE MY DIM MEMORY -FULL SONG-/", },
+				{ SongPath = "/Songs/POI-database/D40 - LOVELY -FULL SONG-/", },
+				{ SongPath = "/Songs/POI-database/D43 - HOLD THE LINE -FULL SONG-/", },
 			},
 		},
 	}
-end
-
--- Has hard-coded content!
-function GetColor_POI(inputString)
-	local colorMap = {
-		-- others
-		Black = color("#000000"),
-		Invisible  = Color.Invisible,
-
-		-- IDK or Placeholder charts
-		IDK = color("#FFFF00"),
-		Placeholder = color("#888888"),
-
-		-- chart stepstype
-		Single = color("#ff8811"),
-		Halfdouble = color("#11eeee"),
-		Double = color("#119922"),
-
-		-- song origins
-		["The 1st DF"] = color("#ff00ff"),
-		["The 2nd DF"] = color("#1144ff"),
-		["O.B.G The 3rd"] = color("#33bb00"),
-		["O.B.G Season Evo."] = color("#ffff00"),
-		["Perfect"] = color("#ff9900"),
-		["Extra"] = color("#ff0000"),
-		["Premiere"] = color("#ff00ff"),
-		["Rebirth"] = color("#1144ff"),
-		["Premiere 3"] = color("#33bb00"),
-		["Prex 3"] = color("#ffff00"),
-		["Exceed"] = color("#ff9900"),
-		["Exceed S.E"] = color("#ff9900"),
-		["Exceed 2"] = color("#ff0000"),
-		["Zero"] = color("#ff00ff"),
-		["NX"] = color("#1144ff"),
-		["NX 2"] = color("#33bb00"),
-		["NX Absolute"] = color("#ffff00"),
-		["Fiesta"] = color("#ff9900"),
-		["Fiesta EX"] = color("#ff0000"),
-		["Fiesta 2"] = color("#ff00ff"),
-		["Prime"] = color("#1144ff"),
-		["Prime 2"] = color("#33bb00"),
-		["XX"] = color("#ffff00"),
-		["M"] = color("#ff9900"),
-		["Phoenix"] = color("#ff0000"),
-		["Pro"] = color("#5a5a5a"),
-		["Pro Encore"] = color("#5a5a5a"),
-		["Pro 2"] = color("#888888"),
-		["Infinity"] = color("#aaaaaa"),
-
-		-- song genres
-		ORIGINAL = color("#1144ff"),
-		KPOP = color("#ffff00"),
-		WORLDMUSIC = color("#11eeee"),
-		JMUSIC = color("#ff0000"),
-		XROSS = color("#33bb00"),
-
-		-- song tags
-		ARCADE = color("#ffffff"),
-		ANOTHER = color("#ff0000"),
-		SHORTCUT = color("#ffff00"),
-		REMIX = color("#1144ff"),
-		FULLSONG = color("#33bb00"),
-
-		-- grades
-		GOLD = color("#ffcc33"),
-		SILVER = color("#aaaaaa"), -- not used
-		BRONZE = color("#dd7733"),
-		PASSED = color("#3399ff"),
-		FAILED = color("0,0,0,0.4"),
-		NOT_PLAYED = color("0,0,0,0.2"),
-	}
-
-	return colorMap[inputString] or colorMap["Black"]
-end
-
--- Reads the Database_POI table of elements to populate the Groups list
-function AssembleGroupSorting_POI()
-	if not (SONGMAN and GAMESTATE) then
-        Warn("SONGMAN or GAMESTATE were not ready! Aborting!")
-        return
-    end
-	
-	-- initialize/clean the global variables
-	MasterGroupsList = {}
-	GroupsList = {}
-
-	-- initialize local helper variables
-	local allSongs = SONGMAN:GetAllSongs()
-
-	-- for each playlist found in Database_POI,
-	for i, thisPlaylist in ipairs(Database_POI()) do
-
-		-- grab an array of strings which is the list of songs allowed in		
-		local listOfAllowedSongsAsString = {}
-		for _, song in ipairs(thisPlaylist.AllowedSongs) do
-			table.insert(listOfAllowedSongsAsString, song.SongPath)
-		end
-
-		-- grab an array of Song elements related to the list of songs allowed in		
-		local arrayOfAllowedSongs = {}
-		for _, listedDir in ipairs(listOfAllowedSongsAsString) do
-			for _, thisSong in ipairs(allSongs) do
-				if thisSong:GetSongDir() == listedDir then
-					table.insert(arrayOfAllowedSongs, thisSong)
-				end
-			end
-		end
-
-		-- adds everything to the global variable called MasterGroupsList
-		MasterGroupsList[#MasterGroupsList + 1] = {
-			Name = thisPlaylist.Name,
-			Banner = THEME:GetPathG("", thisPlaylist.Banner),
-			Description = thisPlaylist.Description,
-			AllowedSongs = thisPlaylist.AllowedSongs,
-			Songs = arrayOfAllowedSongs
-		}
-
-		-- trace
-		Trace("Playlist added: " .. MasterGroupsList[#MasterGroupsList].Name .. " - " .. #MasterGroupsList[#MasterGroupsList].Songs .. " songs")
-	end
-
-	--trace
-	Trace("POI Playlist sorting created!")
-end
-
--- Updates the Groups list as required
-function UpdateGroupSorting_POI()
-	Trace("Creating group list copy from master...")
-    GroupsList = deepcopy(MasterGroupsList)
-
-    Trace("Removing unplayable songs from list...")
-    for MainGroup in pairs(GroupsList) do
-		GroupsList[MainGroup].Songs = PlayableSongs(GroupsList[MainGroup].Songs)
-        if #GroupsList[MainGroup].Songs == 0 then
-        	table.remove(GroupsList, MainGroup)
-        end
-    end
-
-    MESSAGEMAN:Broadcast("UpdateChartDisplay")
-    Trace("POI Playlist sorting updated!")
-end
-
--- inputs:
--- 1) a string related to the name of the group, such as |"Pump It Up Exceed 2"|
--- 2) an integer, related to the index of a song, such as |3|
--- returns: an array of strings, as in this example:
--- { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" }
-function GetAllowedChartsAsString_POI(input_groupName, input_currentIndex)
-
-	local output = {}
-
-	for _, playlist in ipairs(Database_POI()) do
-		if playlist.Name == input_groupName then
-			local songEntry = playlist.AllowedSongs[input_currentIndex]
-			if songEntry then
-				output = songEntry.Charts
-			end
-		end
-	end
-	
-	return output
-end
-
--- inputs:
--- 1) an array of Chart objects
--- 2) an array of strings related to the charts you want to filter, such as { "EXC2-NORMAL", "EXC2-HARD", "EXC2-FREESTYLE" }
--- returns: an array of Chart objects, but filtered according to the second parameter
--- { [Object for a "EXC2-NORMAL" chart], [Object for a "EXC2-HARD" chart], [Object for a "EXC2-FREESTYLE" chart] }
-function CreateChartArrayBasedOnList_POI(input_chartArray, input_allowedCharts)
-	local output_ChartArray = {}
-
-    for _, chart in ipairs(input_chartArray) do
-        local description = chart:GetDescription()
-        
-        for _, allowedChart in ipairs(input_allowedCharts) do
-            if description == allowedChart then
-                table.insert(output_ChartArray, chart)
-                break  -- No need to continue checking if the chart has been added
-            end
-        end
-    end
-
-    return output_ChartArray
-end
-
--- inputs:
--- 1) an array of Chart objects
--- 2) a string related to the name of the group, such as |"Pump It Up Exceed 2"|
--- 3) an integer, related to the index of a song, such as |3|
--- returns: an array of Chart objects, as in this example:
--- { [Object for a "EXC2-NORMAL" chart], [Object for a "EXC2-HARD" chart], [Object for a "EXC2-CRAZY" chart] }
-function GetAllowedCharts_POI(input_chartArray, input_groupName, input_currentIndex)
-	local output = {}
-
-	if input_groupName == "Problematic songs" or input_groupName == "All Tunes" then
-		output = input_chartArray
-	else
-		local listOfAllowedChartsAsString = GetAllowedChartsAsString_POI(input_groupName, input_currentIndex)
-		output = CreateChartArrayBasedOnList_POI(input_chartArray, listOfAllowedChartsAsString)
-	end
-
-	if #output == 0 then
-		return {} -- this will make the function return an empty ChartArray, which will be handled, in some way, by whatever called this function
-	end
-
-	return output
-end
-
--- inputs:
--- 1) a song object
--- 2) a string detailing what you want, from this list:
--- "First Tag", "Second Tag", "Song Category", "Display-formatted Song Category", "Display-formatted Song Genre", "Minimalist Song Genre"
--- "Song Display BPMs"
--- "Song Origin Color", "Song Genre Color", "Song Category Color"
--- returns:
--- it actually depends on what you want, really
-function FetchFromSong(input_song, fetch_details)
-	
-	local output = ""
-
-	if fetch_details == "First Tag" then
-		-- returns a string
-		
-		local fullTagAttribute = input_song:GetTags()
-		if fullTagAttribute ~= "" then
-			local words = {} -- array of strings, one for each separate word
-			for thisWord in fullTagAttribute:gmatch("%S+") do
-				table.insert(words, thisWord)
-			end
-		output = words[1] -- gets the first word in that array
-		end
-	
-	elseif fetch_details == "Second Tag" then
-		-- returns a string
-		
-		local fullTagAttribute = input_song:GetTags()
-		if fullTagAttribute ~= "" then
-			local words = {} -- array of strings, one for each separate word
-			for thisWord in fullTagAttribute:gmatch("%S+") do
-				table.insert(words, thisWord)
-			end
-			
-			-- Check if the words table has more than one element
-			if #words >= 2 then
-				output = words[2] -- gets the second word in that array		
-			end
-		end
-	
-	elseif fetch_details == "Song Category" then
-		-- returns a string
-		
-		local song_firstTag = FetchFromSong(input_song, "First Tag")
-		local song_secondTag = FetchFromSong(input_song, "Second Tag")
-		if song_firstTag == "SHORTCUT" then	output = "SHORTCUT"
-		elseif song_firstTag == "REMIX" then output = "REMIX"
-		elseif song_firstTag == "FULLSONG" then	output = "FULLSONG"
-		elseif song_secondTag == "ANOTHER" then	output = "ANOTHER"
-		else output = "ARCADE"
-		end
-
-	elseif fetch_details == "Display-formatted Song Category" then
-		-- returns a string
-
-		local song_firstTag = FetchFromSong(input_song, "First Tag")
-		local song_secondTag = FetchFromSong(input_song, "Second Tag")
-		if song_firstTag == "SHORTCUT" then	output = "[SHORT CUT]"
-		elseif song_firstTag == "REMIX" then output = "[REMIX]"
-		elseif song_firstTag == "FULLSONG" then	output = "[FULL SONG]"
-		elseif song_secondTag == "ANOTHER" then	output = "[ANOTHER]"
-		else output = ""
-		end
-
-	elseif fetch_details == "Display-formatted Song Genre" then
-		-- returns a string
-
-		if input_song:GetGenre() == "KPOP" then output = "K-Pop"
-		elseif input_song:GetGenre() == "ORIGINAL" then output = "PIU Originals"
-		elseif input_song:GetGenre() == "WORLDMUSIC" then output = "World Music"
-		else output = input_song:GetGenre()
-		end
-
-	elseif fetch_details == "Minimalist Song Genre" then
-		-- returns a string
-
-		if input_song:GetGenre() == "KPOP" then output = "K"
-		elseif input_song:GetGenre() == "ORIGINAL" then output = "O"
-		elseif input_song:GetGenre() == "WORLDMUSIC" then output = "W"
-		else output = input_song:GetGenre()
-		end
-
-	elseif fetch_details == "Song Display BPMs" then
-		-- returns a string
-
-		local bpm_raw = input_song:GetDisplayBpms()
-		local bpm_low = math.ceil(bpm_raw[1])
-		local bpm_high = math.ceil(bpm_raw[2])
-		local bpm_display = (bpm_low == bpm_high and bpm_high or bpm_low .. "-" .. bpm_high)
-		output = bpm_display .. " BPM"
-
-	elseif fetch_details == "Song Origin Color" then
-		-- returns a color object, such to use inside a self:diffuse(x)
-
-		output = GetColor_POI(input_song:GetOrigin())
-	
-	elseif fetch_details == "Song Genre Color" then
-		-- returns a color object, such to use inside a self:diffuse(x)
-
-		output = GetColor_POI(input_song:GetGenre())
-	
-	elseif fetch_details == "Song Category Color" then
-		-- returns a color object, such to use inside a self:diffuse(x)
-		
-		local song_firstTag = FetchFromSong(input_song, "First Tag")
-		local song_secondTag = FetchFromSong(input_song, "Second Tag")
-		if song_firstTag == "SHORTCUT" or song_firstTag == "REMIX" or song_firstTag == "FULLSONG" then
-			output = GetColor_POI(song_firstTag)
-		elseif song_secondTag == "ANOTHER" then
-			output = GetColor_POI(song_secondTag)
-		else
-			output = GetColor_POI("ARCADE")
-		end
-	end
-
-	return output
-
-end
-
--- inputs:
--- 1) a chart object
--- 2) a string detailing what you want, from this list:
--- "Chart POI Name", "Chart Origin", "Chart Meter"
--- "Chart Stepstype Color"
--- returns:
--- it actually depends on what you want, really
-function FetchFromChart(input_chart, fetch_details)
-	
-	local output = ""
-
-	if fetch_details == "Chart POI Name" then
-		-- returns a string
-
-		local chartFullChartnameFromSSC = input_chart:GetChartName()
-		local openParen = chartFullChartnameFromSSC:find("%(")
-		output = chartFullChartnameFromSSC:sub(1, openParen - 2)
-	elseif fetch_details == "Chart Origin" then
-		-- returns a string
-
-		local chartFullChartnameFromSSC = input_chart:GetChartName()
-		local openParen = chartFullChartnameFromSSC:find("%(")
-		local closeParen = chartFullChartnameFromSSC:find("%)")
-		output = chartFullChartnameFromSSC:sub(openParen + 1, closeParen - 1)
-
-	elseif fetch_details == "Chart Meter" then
-		-- returns a string
-
-		local originalChartMeter = input_chart:GetMeter()
-		if originalChartMeter == 99 then output = "??"
-		else output = string.format("%02d", originalChartMeter)
-		end
-
-	elseif fetch_details == "Chart Author" then
-		-- returns a string
-		
-		if (input_chart:GetAuthorCredit() == "") then output = "Author is blank"
-		else output = input_chart:GetAuthorCredit() end
-
-	elseif fetch_details == "Chart Level" then
-		-- returns a string
-		
-		if input_chart:GetMeter() == 99 then output = "??"
-		else output = string.format("%02d", input_chart:GetMeter()) end
-
-	elseif fetch_details == "Chart Stepstype Color" then
-		-- returns a color object, such to use inside a self:diffuse(x)
-
-		if FetchFromChart(input_chart, "Chart POI Name"):sub(1, 3) == "IDK" then
-			output = GetColor_POI("IDK")
-		elseif input_chart:GetAuthorCredit() == "Placeholder" then
-			output = GetColor_POI("Placeholder")
-		else 
-			output = GetColor_POI(ToEnumShortString(ToEnumShortString(input_chart:GetStepsType())))
-		end
-
-	end
-
-	return output
-
-end
-
--- inputs:
--- 1) a string, related to a date
--- returns: a string too, but correctly formatted according to the rules below
-function FormatDate_POI(input_date_as_string)
-	local output = ""
-	
-	-- Split the input string based on the hyphen separator
-	local parts = string.split(input_date_as_string, "-")
-	
-	-- Assign each part to the corresponding variable
-	local YearAsString = parts[1] or ""
-	local MonthAsNumberString = parts[2] or ""
-	local DayAsNumberString = parts[3] or ""
-	
-	-- Format the month
-	local MonthAsString = ""
-	local monthMap = {
-		["01"] = "Jan", ["02"] = "Feb", ["03"] = "Mar", ["04"] = "Apr", ["05"] = "May", ["06"] = "Jun", 
-		["07"] = "Jul", ["08"] = "Aug", ["09"] = "Sep", ["10"] = "Oct", ["11"] = "Nov", ["12"] = "Dec"
-	}
-	MonthAsString = monthMap[MonthAsNumberString] or ""
-	
-	-- Creates output
-	output = YearAsString .. ", " .. DayAsNumberString .. " " .. MonthAsString
-	
-	return output
-end
-
--- inputs:
--- 1) a string, related to a grade
--- returns: a string too, but correctly formatted according to the rules below
-function FormatGradeFromScoreIndex_POI(input_scoreIndex_as_string)
-	local gradeMap = {
-		Pass3S = "SSS", Fail3S = "SSS",
-		Pass2S = "SS",  Fail2S = "SS",
-		PassS = "S",   FailS = "S",
-		PassA = "A",    FailA = "A",
-		PassB = "B",    FailB = "B",
-		PassC = "C",    FailC = "C",
-		PassD = "D",    FailD = "D",
-		PassF = "F",    FailF = "F",
-	}
-	return gradeMap[input_scoreIndex_as_string] or ""
-end
-
--- inputs:
--- 1) a string, related to a grade
--- returns: a string, related to the color of the associated grade
-function GetColorFromScoreIndex_POI(input_scoreIndex_as_string)
-	local gradeColorMap = {
-		Pass3S = "GOLD",
-		Pass2S = "BRONZE",
-		PassS = "BRONZE",
-
-		PassA = "PASSED", PassB = "PASSED", PassC = "PASSED",
-		PassD = "PASSED", PassF = "PASSED",
-
-		Fail3S = "FAILED", Fail2S = "FAILED", FailS = "FAILED",
-		FailA = "FAILED", FailB = "FAILED", FailC = "FAILED",
-		FailD = "FAILED", FailF = "FAILED"
-	}
-
-	local colorKey = gradeColorMap[input_scoreIndex_as_string]
-	if colorKey then
-		return GetColor_POI(colorKey)
-	else
-		return GetColor_POI("NOT_PLAYED")
-	end
-end
-
--- inputs:
--- 1) an array of Chart objects
--- 2) a string detailing what you want, from this list:
--- "Singles", "Not Singles",
--- "Easy Station", "Normal", "Hard", "Crazy", 
--- "Half-Double", "Freestyle", "Nightmare"
--- 3) a string representing the name of the playlist
--- 4) a string representing the name of the song
--- returns:
--- an array of Chart objects
-function SplitChartArray(input_chartArray, input_string, input_playlistNameAsString, input_songNameAsString)
-	
-	local PrevChartArray = ShallowCopy(input_chartArray)
-	local output = ShallowCopy(input_chartArray)
-
-	if input_string == "Singles" then
-		for i = #output, 1, -1 do
-			if output[i]:GetStepsType() ~= "StepsType_Pump_Single" then
-				table.remove(output, i)
-			end
-		end
-	elseif input_string == "Not Singles" then
-		for i = #output, 1, -1 do
-			if output[i]:GetStepsType() == "StepsType_Pump_Single" then
-				table.remove(output, i)
-			end
-		end
-	elseif input_string == "Easy Station" then
-		for i = #output, 1, -1 do
-			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-   			if not (chartPOIName == "EASY STATION" or chartPOIName == "EASY STATION i" or chartPOIName == "EASY STATION ii" or chartPOIName == "EASY STATION iii") then
-				table.remove(output, i)
-			end
-		end
-	elseif input_string == "Normal" then
-		for i = #output, 1, -1 do
-			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-   			if not (chartPOIName == "NORMAL" or chartPOIName == "NORMAL i" or chartPOIName == "NORMAL ii" or chartPOIName == "NORMAL iii"
-			or chartPOIName == "DIVISION ALL NORMAL") then
-				table.remove(output, i)
-			end
-		end
-	elseif input_string == "Hard" then
-		for i = #output, 1, -1 do
-			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-   			if not (chartPOIName == "HARD" or chartPOIName == "HARD i" or chartPOIName == "HARD ii" or chartPOIName == "HARD iii"
-			or chartPOIName == "DIVISION ALL GROOVE" or chartPOIName == "ANOTHER HARD") then
-				table.remove(output, i)
-			end
-		end
-	elseif input_string == "Crazy" then
-		for i = #output, 1, -1 do
-			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-   			if not (chartPOIName == "CRAZY" or chartPOIName == "CRAZY i" or chartPOIName == "CRAZY ii" or chartPOIName == "CRAZY iii"
-			or chartPOIName == "EXTRA EXPERT" or chartPOIName == "DIVISION ALL WILD" or chartPOIName == "DIVISION WILD STYLE ONE-W"
-			or chartPOIName == "DIVISION WILD STYLE TWO-WW" or chartPOIName == "ANOTHER CRAZY") then
-				table.remove(output, i)
-			end
-		end
-	elseif input_string == "Half-Double" then
-		for i = #output, 1, -1 do
-			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-   			if not (chartPOIName == "HALF-DOUBLE" or chartPOIName == "HALF-DOUBLE i" or chartPOIName == "HALF-DOUBLE ii" or chartPOIName == "HALF-DOUBLE iii") then
-				table.remove(output, i)
-			end
-		end
-	elseif input_string == "Freestyle" then
-		for i = #output, 1, -1 do
-			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-			if ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Chicken Wing"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Holiday"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Radetzky Can Can"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Chicken Wing"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Holiday"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Radetzky Can Can"))
-			or ((input_playlistNameAsString == "Pump It Up The Premiere 3") and (input_songNameAsString == "Chicken Wing")) then
-				-- these are exceptions to the rule
-				if not (chartPOIName == "EXTRA EXPERT DOUBLE") then
-					table.remove(output, i)
-				end
-			else
-				-- regular situation
-   				if not (chartPOIName == "FREESTYLE" or chartPOIName == "FREESTYLE i" or chartPOIName == "FREESTYLE ii" or chartPOIName == "FREESTYLE iii"
-				or chartPOIName == "ANOTHER FREESTYLE" or chartPOIName == "ANOTHER FREESTYLE i" or chartPOIName == "ANOTHER FREESTYLE ii") then
-					table.remove(output, i)
-				end
-			end
-		end
-	elseif input_string == "Nightmare" then
-		for i = #output, 1, -1 do
-			local chartPOIName = FetchFromChart(output[i],"Chart POI Name")
-			if ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Chicken Wing"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Holiday"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex") and (input_songNameAsString == "Radetzky Can Can"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Chicken Wing"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Holiday"))
-			or ((input_playlistNameAsString == "Pump It Up The Prex 2") and (input_songNameAsString == "Radetzky Can Can"))
-			or ((input_playlistNameAsString == "Pump It Up The Premiere 3") and (input_songNameAsString == "Chicken Wing")) then
-				-- these are exceptions to the rule
-				table.remove(output, i)
-			else
-				-- regular situation
-   				if not (chartPOIName == "NIGHTMARE" or chartPOIName == "NIGHTMARE i" or chartPOIName == "NIGHTMARE ii" or chartPOIName == "NIGHTMARE iii"
-				or chartPOIName == "EXTRA EXPERT DOUBLE" or chartPOIName == "ANOTHER NIGHTMARE" or chartPOIName == "ANOTHER NIGHTMARE i"
-				or chartPOIName == "ANOTHER NIGHTMARE ii" or chartPOIName == "STAFF ROLL") then
-					table.remove(output, i)
-				end
-			end
-		end
-	end
-
-	return output
-end
-
--- helper function to use elsewhere in the theme.
--- a Banner/Sprite can use this to zoom to a specific height and have it inserted with their original ratio preserved
-function Actor:zoomtoheight_POI(desiredH)
-    -- only works for Sprites (they have textures with width/height)
-    if self.GetWidth and self.GetHeight then
-        local nativeH = self:GetHeight()
-        if nativeH > 0 then
-            local zoom = desiredH / nativeH
-            self:zoom(zoom)
-        else
-            Warn("zoomtoheight: Sprite has no valid height yet.")
-        end
-    else
-        Warn("zoomtoheight: This actor doesn't support GetWidth/GetHeight.")
-    end
-    return self
 end
