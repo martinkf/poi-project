@@ -1,25 +1,21 @@
 -- levers
 local SongIsChosen = false
-local wholeGroup_Y = -433
-local backgroundQuads_Y = 0
 local levelQuads_Y = 0
-local levelQuads_X = 48
-local chartDesc_X = 94
-local chartDesc_Y = -2
+local levelQuads_X = 34
+local chartDesc_X = 70
+local chartDesc_Y = -1
 local chartOrigin_X = chartDesc_X
-local chartOrigin_Y = -30
+local chartOrigin_Y = -19
 local chartArtist_X = chartDesc_X
-local chartArtist_Y = 28
-
+local chartArtist_Y = 17
 
 --
-
 
 local t = Def.ActorFrame {}
 
 for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 	t[#t+1] = Def.ActorFrame {
-		InitCommand=function(self) self:y(wholeGroup_Y):queuecommand("Refresh") end,
+		InitCommand=function(self) self:y(0):queuecommand("Refresh") end,
 		
 		SongChosenMessageCommand=function(self) SongIsChosen = true self:playcommand("Refresh") end,
 		SongUnchosenMessageCommand=function(self) SongIsChosen = false end,
@@ -29,9 +25,9 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 			if GAMESTATE:GetCurrentSong() and GAMESTATE:GetCurrentSteps(pn) then
 				local Chart = GAMESTATE:GetCurrentSteps(pn)
 				
-				self:GetChild("ChartOrigin"):settext("Chart originally from "..FetchFromChart(Chart,"Chart Origin"))
-				self:GetChild("ChartName"):settext(FetchFromChart(Chart,"Chart POI Name"))
-				self:GetChild("ChartName"):diffuse(FetchFromChart(Chart, "Chart Stepstype Color"))
+				self:GetChild("ChartOrigin"):settext("Originally from "..FetchFromChart(Chart,"Chart Origin"))
+				self:GetChild("ChartName"):settext("Originally called · "..FetchFromChart(Chart,"Chart POI Name").." ·")
+				--self:GetChild("ChartName"):diffuse(FetchFromChart(Chart, "Chart Stepstype Color"))
 				self:GetChild("ChartAuthor"):settext("By "..FetchFromChart(Chart, "Chart Author"))
 				
 				self:GetChild("LevelBGQuad"):diffuse(FetchFromChart(Chart, "Chart Stepstype Color"))
@@ -52,8 +48,8 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 		Def.Quad {
 			InitCommand=function(self)
 				self:x(320 * (pn == PLAYER_2 and 1 or -1))
-				self:y(backgroundQuads_Y)
-				self:zoomto(632, 86)
+				self:y(levelQuads_Y)
+				self:zoomto(632, 60)
 				self:diffuse(color("0,0,0,0.4"))
 			end,
 			SongChosenMessageCommand=function(self)
@@ -69,7 +65,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 			InitCommand=function(self)
 				self:x(levelQuads_X * (pn == PLAYER_2 and 1 or -1))
 				self:y(levelQuads_Y)
-				self:zoomto(80, 80)
+				self:zoomto(57, 57)
 				self:diffuse(color("0,0,0,0.4"))
 			end,
 		},
@@ -78,7 +74,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 			InitCommand=function(self)
 				self:x(levelQuads_X * (pn == PLAYER_2 and 1 or -1))
 				self:y(levelQuads_Y)
-				self:zoomto(73, 73)
+				self:zoomto(53, 53)
 				self:diffuse(FetchFromChart(GAMESTATE:GetCurrentSteps(pn), "Chart Stepstype Color"))
 			end,
 		},
@@ -89,24 +85,10 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 			InitCommand=function(self)
 				self:x((levelQuads_X+1) * (pn == PLAYER_2 and 1 or -1))
 				self:y(levelQuads_Y)
-				self:zoom(1.2)
+				self:zoom(0.9)
 			end,
 		},
-
-		Def.BitmapText {
-			Font="Montserrat semibold 40px",
-			Name="ChartName",
-			InitCommand=function(self)
-				self:x(chartDesc_X * (pn == PLAYER_2 and 1 or -1))
-				self:y(chartDesc_Y)
-				self:zoom(1)
-				self:diffuse(color("0,0,0"))
-				self:halign(pn == PLAYER_2 and 0 or 1)
-				self:maxwidth(540)
-				self:shadowlength(1)
-			end
-		},
-		
+				
 		Def.BitmapText {
 			Font="Montserrat normal 20px",
 			Name="ChartOrigin",
@@ -116,6 +98,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 				self:zoom(0.7)
 				self:diffuse(color("0,0,0"))
 				self:halign(pn == PLAYER_2 and 0 or 1)
+				self:maxwidth(540)
+			end
+		},
+
+		Def.BitmapText {
+			Font="Montserrat normal 20px",
+			Name="ChartName",
+			InitCommand=function(self)
+				self:x(chartDesc_X * (pn == PLAYER_2 and 1 or -1))
+				self:y(chartDesc_Y)
+				self:zoom(0.7)
+				self:diffuse(color("0,0,0"))
+				self:halign(pn == PLAYER_2 and 0 or 1)
+				self:valign(0.5)
 				self:maxwidth(540)
 			end
 		},

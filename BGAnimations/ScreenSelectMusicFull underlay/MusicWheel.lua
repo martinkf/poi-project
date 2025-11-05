@@ -1,37 +1,29 @@
+-- GroupsList variables
 local Songs = {}
 local Targets = {}
 
-local ChartPreview = LoadModule("Config.Load.lua")("ChartPreview","Save/OutFoxPrefs.ini")
+-- MusicWheel levers
+local EntireScreen_x = -640
+local EntireScreen_y = -99
+local SongWheel_y = 182
 
-local WheelSize = 9
+local WheelSize = 11
+local WheelSizeHelper = 5
 local WheelCenter = math.ceil( WheelSize * 0.5 )
 local WheelItem = { Width = 208, Height = 117 }
-local WheelSpacing = 214
-local WheelRotation = 0 -- zeroing it out. default was 0.15
-local curvature = 0 -- zeroing it out. default was 65
-local fieldOfView = 0 -- zeroing it out. default was 90
 
-local EntireScreen_SelectingSongY = 502
-local EntireScreen_SelectingChartY = 502-720
-local SongWheel_Y = 182
+local curvature = 196
+local fieldOfView = 169
+local radius = 14630
+local theta_step = 0.0147
+local focalLength = 5000
+local verticalCurve = 0
+local maxVisibleAngle = math.pi * 0.6
 
-local ChartsListVisibility = false
-
-local arrayOfFilteredCharts
-local arrayOfFilteredChartsSingles
-local arrayOfFilteredChartsNotSingles
-
-local arrayOfFilteredChartsEasyStation
-local arrayOfFilteredChartsNormal
-local arrayOfFilteredChartsHard
-local arrayOfFilteredChartsCrazy
-local arrayOfFilteredChartsHalfdouble
-local arrayOfFilteredChartsFreestyle
-local arrayOfFilteredChartsNightmare
-
+local indexIndicator_y = -88
+local indexIndicator_range = 180
 
 --
-
 
 -- Not load anything if no group sorts are available (catastrophic event or no songs)
 if next(GroupsList) == nil then
@@ -87,74 +79,79 @@ end
 
 local function InputHandler(event)
 	local pn = event.PlayerNumber
-    if not pn then return end
-    
-    -- Don't want to move when releasing the button
-    if event.type == "InputEventType_Release" then return end
+	if not pn then return end
 
-    local button = event.GameButton
-    
-    -- If an unjoined player attempts to join and has enough credits, join them
-    if (button == "Center" or (not IsGame("pump") and button == "Start")) and 
-        not GAMESTATE:IsSideJoined(pn) and GAMESTATE:GetCoins() >= GAMESTATE:GetCoinsNeededToJoin() then
-        GAMESTATE:JoinPlayer(pn)
-        -- The command above does not deduct credits so we'll do it ourselves
-        GAMESTATE:InsertCoin(-(GAMESTATE:GetCoinsNeededToJoin()))
-        MESSAGEMAN:Broadcast("PlayerJoined", { Player = pn })
-    end
+	if event.type == "InputEventType_Release" then
+		HeldButton = nil
+		HoldStartTime = nil
+		return
+	end
 
-    -- To avoid control from a player that has not joined, filter the inputs out
-    if pn == PLAYER_1 and not GAMESTATE:IsPlayerEnabled(PLAYER_1) then return end
-    if pn == PLAYER_2 and not GAMESTATE:IsPlayerEnabled(PLAYER_2) then return end
+	local button = event.GameButton
 
-    if not IsBusy then
-        if button == "Left" or button == "MenuLeft" or button == "DownLeft" then
-			
+	if pn == PLAYER_1 and not GAMESTATE:IsPlayerEnabled(PLAYER_1) then return end
+	if pn == PLAYER_2 and not GAMESTATE:IsPlayerEnabled(PLAYER_2) then return end
+
+	-- Detectar se o botão está sendo segurado
+	if button == "Left" or button == "MenuLeft" or button == "DownLeft"
+	or button == "Right" or button == "MenuRight" or button == "DownRight" then
+		if not HoldStartTime or HeldButton ~= button then
+			HoldStartTime = GetTimeSinceStart()
+			HeldButton = button
+		end
+	end
+
+	if not IsBusy then
+		-- duração base e limites
+		local base_duration = 0.20
+		local min_duration = 0.0
+		local scroll_duration = base_duration
+
+		-- cálculo da aceleração
+		if HoldStartTime then
+			local held_time = GetTimeSinceStart() - HoldStartTime
+			if held_time >= 2 then
+				-- velocidade máxima
+				scroll_duration = min_duration
+			end
+		end
+
+		-- === Lógica de Scroll padrão ===
+		if button == "Left" or button == "MenuLeft" or button == "DownLeft" then
 			local poi_settings_songlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsSonglistIsWheel", "Save/OutFoxPrefs.ini") or false
+			if IsBusy then return end
 			if poi_settings_songlist_is_wheel then
 				SongIndex = SongIndex - 1
 				if SongIndex < 1 then SongIndex = #Songs end
-				GAMESTATE:SetCurrentSong(Songs[SongIndex])
-				UpdateItemTargets(SongIndex)
-				MESSAGEMAN:Broadcast("Scroll", { Direction = -1 })
 			else
-				if SongIndex > 1 then
-					SongIndex = SongIndex - 1
-					GAMESTATE:SetCurrentSong(Songs[SongIndex])
-					UpdateItemTargets(SongIndex)
-					MESSAGEMAN:Broadcast("Scroll", { Direction = -1 })
-				end
+				if SongIndex > 1 then SongIndex = SongIndex - 1 end
 			end
+			GAMESTATE:SetCurrentSong(Songs[SongIndex])
+			MESSAGEMAN:Broadcast("Scroll", { Direction = -1, OffsetFrom = 0, OffsetTo = -1, Duration = scroll_duration })
+			IsBusy = true
 
-        elseif button == "Right" or button == "MenuRight" or button == "DownRight" then
-			
+		elseif button == "Right" or button == "MenuRight" or button == "DownRight" then
 			local poi_settings_songlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsSonglistIsWheel", "Save/OutFoxPrefs.ini") or false
+			if IsBusy then return end
 			if poi_settings_songlist_is_wheel then
 				SongIndex = SongIndex + 1
 				if SongIndex > #Songs then SongIndex = 1 end
-				GAMESTATE:SetCurrentSong(Songs[SongIndex])
-				UpdateItemTargets(SongIndex)
-				MESSAGEMAN:Broadcast("Scroll", { Direction = 1 })
 			else
-				if SongIndex < #Songs then
-					SongIndex = SongIndex + 1
-					GAMESTATE:SetCurrentSong(Songs[SongIndex])
-					UpdateItemTargets(SongIndex)
-					MESSAGEMAN:Broadcast("Scroll", { Direction = 1 })
-				end
+				if SongIndex < #Songs then SongIndex = SongIndex + 1 end
 			end
-            
-        elseif button == "Start" or button == "MenuStart" or button == "Center" then
-            -- Save this for later
-            LastSongIndex = SongIndex
-            LoadModule("Config.Save.lua")("SongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
-            
-            MESSAGEMAN:Broadcast("MusicWheelStart")
+			GAMESTATE:SetCurrentSong(Songs[SongIndex])
+			MESSAGEMAN:Broadcast("Scroll", { Direction = 1, OffsetFrom = 0, OffsetTo = 1, Duration = scroll_duration })
+			IsBusy = true
 
-        elseif button == "Back" then
-            SCREENMAN:GetTopScreen():Cancel()
-        end
-    end
+		elseif button == "Start" or button == "MenuStart" or button == "Center" then
+			LastSongIndex = SongIndex
+			LoadModule("Config.Save.lua")("SongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+			MESSAGEMAN:Broadcast("MusicWheelStart")
+
+		elseif button == "Back" then
+			SCREENMAN:GetTopScreen():Cancel()
+		end
+	end
 
 	MESSAGEMAN:Broadcast("UpdateMusic")
 end
@@ -177,9 +174,9 @@ end
 
 local t = Def.ActorFrame {
 	InitCommand=function(self)
-		self:y(EntireScreen_SelectingSongY)
+		self:xy(EntireScreen_x,EntireScreen_y)
 		self:fov(fieldOfView)
-		self:SetDrawByZPosition(true)
+		self:SetDrawByZPosition(false)
 		self:vanishpoint(SCREEN_CENTER_X, SCREEN_BOTTOM - 150 + curvature)
 		UpdateItemTargets(SongIndex)
 	end,
@@ -195,14 +192,12 @@ local t = Def.ActorFrame {
 	MusicWheelStartMessageCommand=function(self) self:sleep(0.01):queuecommand("Confirm") end,
 	ConfirmCommand=function(self) MESSAGEMAN:Broadcast("SongChosen") end,
 
-	-- everything goes up and down when selecting songs or selecting charts!
+	-- busy when choosing charts instead of songs
 	SongChosenMessageCommand=function(self)
-		self:stoptweening():easeoutexpo(1):y(EntireScreen_SelectingChartY)
-		:playcommand("Busy")
+		self:stoptweening():easeoutexpo(1):playcommand("Busy")
 	end,
-	SongUnchosenMessageCommand=function(self)			
-		self:stoptweening():easeoutexpo(0.5):y(EntireScreen_SelectingSongY)
-		:playcommand("NotBusy")
+	SongUnchosenMessageCommand=function(self)
+		self:stoptweening():easeoutexpo(0.5):playcommand("NotBusy")
 	end,
 
 	-- logic related to the GroupSelect overlay
@@ -220,7 +215,29 @@ local t = Def.ActorFrame {
 		MESSAGEMAN:Broadcast("ForceUpdate")
 		self:sleep(0.01):queuecommand("NotBusy")
 	end,
-	
+
+	-- Root: recebe o Scroll, agenda finalização (swap lógico Targets -> agora que a animação terminou)
+	ScrollMessageCommand=function(self,param)
+		-- se não tiver duration, finaliza imediatamente
+		local dur = (param and param.Duration) or 0
+		-- se já houver uma finalização pendente, cancela a anterior e agenda a nova
+		self:stoptweening()
+		if dur > 0 then
+			-- aguarda o tempo da animação, depois finaliza
+			self:sleep(dur):queuecommand("FinalizeScroll")
+		else
+			self:queuecommand("FinalizeScroll")
+		end
+	end,
+
+	FinalizeScrollCommand=function(self)
+		-- Agora que a animação visual terminou: atualizar mapeamento lógico dos slots
+		UpdateItemTargets(SongIndex)
+		-- Forçar cada slot a recarregar banners e posicionar com Offset 0 (jump final)
+		MESSAGEMAN:Broadcast("ForceUpdate", { Duration = 0 })
+		-- liberar input
+		IsBusy = false
+	end,
 
 	-- drawing: sounds
 	-- Play song preview (thanks Luizsan)
@@ -233,16 +250,8 @@ local t = Def.ActorFrame {
 		PlayMusicCommand=function(self)
 			local Song = GAMESTATE:GetCurrentSong()
 			if Song then
-				if ChartPreview then
-					local StepList = Song:GetAllSteps()
-					local FirstStep = StepList[1]
-					local Duration = FirstStep:GetChartLength()
-					SOUND:PlayMusicPart(Song:GetMusicPath(), Song:GetSampleStart(), 
-					(Duration - Song:GetSampleStart()), 0, 1, false, false, false, Song:GetTimingData())
-				else
-					SOUND:PlayMusicPart(Song:GetMusicPath(), Song:GetSampleStart(), 
-					Song:GetSampleLength(), 0, 1, false, false, false, Song:GetTimingData())
-				end
+				SOUND:PlayMusicPart(Song:GetMusicPath(), Song:GetSampleStart(),
+				Song:GetSampleLength(), 0, 1, false, false, false, Song:GetTimingData())
 			end
 		end
 	},
@@ -260,210 +269,108 @@ local t = Def.ActorFrame {
 		MusicWheelStartMessageCommand=function(self) self:play() end
 	},
 
-
-	-- drawing: visual elements	
-	Def.Quad { Name="Highlight", -- the background highlight of the song currently being hovered on
-		InitCommand=function(self)
-			self:x(SCREEN_CENTER_X)
-			self:y(SongWheel_Y-82)
-			self:zoomto(1280, 158)
-			self:align(0.5, 0)
-			self:diffuse(color("1,1,1,0.6"))
-		end,
-		SongChosenMessageCommand=function(self)
-			self:visible(false)
-		end,
-		SongUnchosenMessageCommand=function(self)
-			self:visible(true)
-		end,
-	},
-
-	Def.ActorFrame { -- instructions for Song Selection and Modifiers menu opening
-		SongChosenMessageCommand=function(self)
-			self:stoptweening():easeoutexpo(1):y(0+720)
-		end,
-		SongUnchosenMessageCommand=function(self)
-			self:stoptweening():easeoutexpo(0.5):y(0)
-		end,
-		Def.Quad {
-			Name="InstructionsRowBgQuad",
-			InitCommand=function(self)
-				self:x(SCREEN_CENTER_X)
-				self:y(SongWheel_Y+80)
-				self:zoomto(1272, 42)
-				self:align(0.5,0)
-				self:diffuse(color("0,0,0,0.4"))
-			end,
-		},
-		Def.ActorFrame { Name="SongSelectInstructionsRowTexts",
-			InitCommand=function(self)
-				self:x(SCREEN_CENTER_X)
-				self:y(SongWheel_Y+90)
-			end,
-			Def.Sprite {
-				Texture=THEME:GetPathG("", "CornerArrows/ShiftDL"),
-				InitCommand=function(self)
-					self:zoom(0.07):x(-82)
-				end,
-			},
-			Def.Sprite {
-				Texture=THEME:GetPathG("", "CornerArrows/ShiftDR"),
-				InitCommand=function(self)
-					self:zoom(0.07):x(-40)
-				end,
-			},
-			Def.BitmapText {
-				Font="Montserrat semibold 40px",
-				InitCommand=function(self)
-					self:zoom(0.4)
-					self:shadowlength(1)
-					self:settext("or      to select song")
-					self:x(10)
-				end,
-			},
-		},
-		Def.ActorFrame { Name="OptionListInstructionsRowTexts",
-			InitCommand=function(self)
-				self:x(SCREEN_CENTER_X)
-				self:y(SongWheel_Y+110)
-			end,
-			Def.Sprite {
-				Texture=THEME:GetPathG("", "CornerArrows/ShiftDL"),
-				InitCommand=function(self)
-					self:zoom(0.07):x(-159)
-				end,
-			},
-			Def.Sprite {
-				Texture=THEME:GetPathG("", "CornerArrows/ShiftDR"),
-				InitCommand=function(self)
-					self:zoom(0.07):x(-139)
-				end,
-			},
-			Def.Sprite {
-				Texture=THEME:GetPathG("", "CornerArrows/ShiftDL"),
-				InitCommand=function(self)
-					self:zoom(0.07):x(-119)
-				end,
-			},
-			Def.Sprite {
-				Texture=THEME:GetPathG("", "CornerArrows/ShiftDR"),
-				InitCommand=function(self)
-					self:zoom(0.07):x(-99)
-				end,
-			},
-			Def.Sprite {
-				Texture=THEME:GetPathG("", "CornerArrows/ShiftDL"),
-				InitCommand=function(self)
-					self:zoom(0.07):x(-79)
-				end,
-			},
-			Def.Sprite {
-				Texture=THEME:GetPathG("", "CornerArrows/ShiftDR"),
-				InitCommand=function(self)
-					self:zoom(0.07):x(-59)
-				end,
-			},
-			Def.BitmapText {
-				Font="Montserrat semibold 40px",
-				InitCommand=function(self)
-					self:zoom(0.4)
-					self:shadowlength(1)
-					self:settext("to open the Modifiers menu")
-					self:x(70)
-				end,
-			},
-		},
-	},
 }
 
--- The Wheel: originally made by Luizsan
 for i = 1, WheelSize do
-	t[#t+1] = Def.ActorFrame {
-		OnCommand=function(self)
-			-- Load banner
-			UpdateBanner(self:GetChild("MusicWheelPicture"):GetChild("BannerBG"), Songs[Targets[i]])
-			UpdateBannerTwo(self:GetChild("MusicWheelPicture"):GetChild("BannerTop"), Songs[Targets[i]])
+    local slot = i  -- capture the slot index (important!)
+    t[#t+1] = Def.ActorFrame {
+        OnCommand=function(self)
+            -- Load banner for this slot (use Targets[slot])
+            UpdateBanner(self:GetChild("MusicWheelPicture"):GetChild("BannerBG"), Songs[Targets[slot]])
+            UpdateBannerTwo(self:GetChild("MusicWheelPicture"):GetChild("BannerTop"), Songs[Targets[slot]])
 
-			-- Set initial position, Direction = 0 means it won't tween
-			self:playcommand("Scroll", {Direction = 0})
-		end,
-		
-		ForceUpdateMessageCommand=function(self)
-			-- Load banner
-			UpdateBanner(self:GetChild("MusicWheelPicture"):GetChild("BannerBG"), Songs[Targets[i]])
-			UpdateBannerTwo(self:GetChild("MusicWheelPicture"):GetChild("BannerTop"), Songs[Targets[i]])
-			
-			--SCREENMAN:SystemMessage(GroupsList[GroupIndex].Name)
+            -- Set initial position, Direction = 0 means it won't tween
+            self:playcommand("Scroll", {Direction = 0})
+        end,
+        
+        ForceUpdateMessageCommand=function(self)
+            -- Load banner for this slot
+            UpdateBanner(self:GetChild("MusicWheelPicture"):GetChild("BannerBG"), Songs[Targets[slot]])
+            UpdateBannerTwo(self:GetChild("MusicWheelPicture"):GetChild("BannerTop"), Songs[Targets[slot]])
 
-			-- Set initial position, Direction = 0 means it won't tween
-			self:playcommand("Scroll", {Direction = 0})
-		end,
-		
-		ScrollMessageCommand=function(self,param)
+            -- Set initial position, Direction = 0 means it won't tween
+            self:playcommand("Scroll", {Direction = 0})
+        end,
+        
+        ScrollMessageCommand=function(self,param)
 			self:stoptweening()
 
-			-- Calculate position
-			local xpos = SCREEN_CENTER_X + (i - WheelCenter) * WheelSpacing
+			-- parâmetros que já existem no topo; mantive nomes compatíveis
+			local dur = (param and param.Duration) or 0
+			local offsetFrom = (param and param.OffsetFrom) or 0
+			local offsetTo = (param and param.OffsetTo) or 0
 
-			-- Calculate displacement based on input
-			local displace = -param.Direction * WheelSpacing
-			
-			-- Adjust and wrap actor index
-			i = i - param.Direction
-			while i > WheelSize do i = i - WheelSize end
-			while i < 1 do i = i + WheelSize end
+			local idx = slot
+			-- calcula ângulo relativo aplicando offset visual
+			local angle_from = (idx - WheelCenter - offsetFrom) * theta_step
+			local angle_to   = (idx - WheelCenter - offsetTo)   * theta_step
 
-			-- If it's an edge item, load a new banner.
-			if i == 1 or i == WheelSize then
-				UpdateBanner(self:GetChild("MusicWheelPicture"):GetChild("BannerBG"), Songs[Targets[i]])
-				UpdateBannerTwo(self:GetChild("MusicWheelPicture"):GetChild("BannerTop"), Songs[Targets[i]])
+			-- função helper que retorna geometria para um ângulo
+			local function geom(angle)
+				local x_on_cyl = radius * math.sin(angle)
+				local z_on_cyl = radius * (1 - math.cos(angle))
+				local scale = 1 / (1 + (z_on_cyl / focalLength))
+				if scale < 0.15 then scale = 0.15 end
+				local rotY = -math.deg(angle)
+				local y_off = -math.cos(angle) * verticalCurve
+				local visible = math.abs(angle) <= maxVisibleAngle
+				return { x = SCREEN_CENTER_X + x_on_cyl, y = SongWheel_y + y_off, z = -z_on_cyl, zoom = scale, rotY = rotY, visible = visible }
 			end
 
-			-- calculate visibility based on whether settings uses a wheel or a strip
-			local poi_settings_songlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsSonglistIsWheel", "Save/OutFoxPrefs.ini") or false
-			if poi_settings_songlist_is_wheel then
-				-- literally do nothing
-			else
-				if Targets[i] > 0 and Targets[i] <= #Songs then
-					self:visible(true)
-				else
-					self:visible(false)
-				end
+			local g_from = geom(angle_from)
+			local g_to   = geom(angle_to)
+
+			-- mantemos o banner atual visível DURANTE a animação; quando root finalizar, UpdateItemTargets irá trocar as fontes
+			UpdateBanner(self:GetChild("MusicWheelPicture"):GetChild("BannerBG"), Songs[Targets[slot]])
+			UpdateBannerTwo(self:GetChild("MusicWheelPicture"):GetChild("BannerTop"), Songs[Targets[slot]])
+
+			-- aplica estado inicial para que a animação seja visível
+			self:x(g_from.x):y(g_from.y):z(g_from.z):zoom(g_from.zoom):rotationy(g_from.rotY)
+			self:visible(g_from.visible)
+
+			-- sem duração: pula direto pro final
+			if dur <= 0 then
+				self:x(g_to.x):y(g_to.y):z(g_to.z):zoom(g_to.zoom):rotationy(g_to.rotY)
+				self:visible(g_to.visible)
+				-- atualiza textos/children imediatamente
+				self:GetChild("IndexIndicator"):playcommand("Refresh")
+				self:GetChild("IndexIndicatorText"):playcommand("Refresh")
+				self:GetChild("BGFrame"):playcommand("Refresh")
+				self:GetChild("OriginLabel"):playcommand("Refresh")
+				self:GetChild("CategoryLabel"):playcommand("Refresh")
+				self:GetChild("NameLabel"):playcommand("Refresh")
+				self:GetChild("ArtistLabel"):playcommand("Refresh")
+				return
 			end
 
-			-- Animate!
-			self:y(SongWheel_Y)
-			self:rotationy((SCREEN_CENTER_X - xpos - displace) * -WheelRotation)
-			self:x(xpos + displace)
-			--self:z(-math.abs(SCREEN_CENTER_Y - xpos - displace) * 0.25) -- not sure what this does
+			-- realiza tween à geometria final
+			self:decelerate(dur)
+				:x(g_to.x):y(g_to.y):z(g_to.z):zoom(g_to.zoom):rotationy(g_to.rotY)
 
-			-- refresh the children frames
+			-- depois do tween atualiza filhos (sleep ligeiramente maior para garantir estado final)
+			self:sleep(dur + 0.001):queuecommand("RefreshAfterTween")
+		end,
+
+		RefreshAfterTweenCommand=function(self)
 			self:GetChild("IndexIndicator"):playcommand("Refresh")
 			self:GetChild("IndexIndicatorText"):playcommand("Refresh")
-
 			self:GetChild("BGFrame"):playcommand("Refresh")
-
 			self:GetChild("OriginLabel"):playcommand("Refresh")
 			self:GetChild("CategoryLabel"):playcommand("Refresh")
 			self:GetChild("NameLabel"):playcommand("Refresh")
 			self:GetChild("ArtistLabel"):playcommand("Refresh")
-			
-			self:GetChild("ChartsList"):playcommand("Refresh")
-
-			self:GetChild("DifficultyLabels"):playcommand("Refresh")
 		end,
-		
 
 		Def.Quad { Name="IndexIndicator",
 			InitCommand=function(self)
-				self:y(68)
+				self:y(indexIndicator_y)
 				self:align(0.5,0.5)
 				self:diffuse(color("0,0,0,0.4"))
 			end,
 			RefreshCommand=function(self, param)
 				-- alters its width depending on the number of songs in the group
 				local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
-				local calculatedWidth = 1252 / totalSongsFromGroup
+				local calculatedWidth = indexIndicator_range / totalSongsFromGroup
 				local usedWidth
 				if calculatedWidth < 30 then
 					usedWidth = 30
@@ -482,17 +389,11 @@ for i = 1, WheelSize do
 					self:visible(false)
 				end
 			end,
-			SongChosenMessageCommand=function(self)
-				self:visible(false)
-			end,
-			SongUnchosenMessageCommand=function(self)
-				self:playcommand("Refresh")
-			end,
 		},
 		Def.BitmapText { Name="IndexIndicatorText",
 			Font="Montserrat semibold 40px",
 			InitCommand=function(self)
-				self:addx(0):addy(68)
+				self:addx(0):addy(indexIndicator_y)
 				self:zoom(0.3)
 				self:align(0.5,0.5)
 				self:diffuse(color("1,1,1,0.8"))
@@ -501,7 +402,7 @@ for i = 1, WheelSize do
 			RefreshCommand=function(self,param)
 				-- alters some necessary variables depending on the number of songs in the group
 				local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
-				local calculatedWidth = 1252 / totalSongsFromGroup
+				local calculatedWidth = indexIndicator_range / totalSongsFromGroup
 
 				-- alters its text depending on the current i
 				self:settext(Targets[i])
@@ -516,12 +417,6 @@ for i = 1, WheelSize do
 					self:visible(false)
 				end
 			end,
-			SongChosenMessageCommand=function(self)
-				self:visible(false)
-			end,
-			SongUnchosenMessageCommand=function(self)
-				self:playcommand("Refresh")
-			end,
 		},
 
 		Def.Quad { Name="BGFrame",
@@ -531,18 +426,7 @@ for i = 1, WheelSize do
 				self:diffuse(color("0,0,0,0.4"))
 			end,
 			RefreshCommand=function(self, param)
-				if i > WheelCenter+3 or i < WheelCenter-3 then
-					self:visible(false)
-				else
-					self:visible(true)
-				end
-			end,
-			SongChosenMessageCommand=function(self)
-				--self:visible(i == WheelCenter)
-				self:visible(false)
-			end,
-			SongUnchosenMessageCommand=function(self)
-				if i > WheelCenter+3 or i < WheelCenter-3 then
+				if i >  WheelCenter+WheelSizeHelper or i <  WheelCenter-WheelSizeHelper then
 					self:visible(false)
 				else
 					self:visible(true)
@@ -552,39 +436,6 @@ for i = 1, WheelSize do
 		Def.ActorFrame { Name="MusicWheelPicture",
 			RefreshCommand=function(self, param)
 				--donothing
-			end,
-			CurrentSongChangedMessageCommand=function(self)
-				local song = GAMESTATE:GetCurrentSong()
-				if song then
-					local bpms = song:GetDisplayBpms()
-					local bpm = bpms[1]
-					if bpm > 0 then
-						local period = 60 / bpm
-						self:effectperiod(period)
-					end
-				end
-    		end,
-			SongChosenMessageCommand=function(self)
-				if i == WheelCenter then
-					self:visible(true)
-				else
-					self:visible(false)
-				end
-				self:stoptweening():easeoutexpo(0.5):y(228)
-				local song = GAMESTATE:GetCurrentSong()
-				if song then
-					local bpms = song:GetDisplayBpms()
-					local bpm = bpms[1]
-					if bpm > 0 then
-						local period = 60 / bpm
-						self:bob():effectperiod(period):effectmagnitude(0, 1, 0)
-					end
-				end
-			end,
-			SongUnchosenMessageCommand=function(self)
-				self:visible(true)
-				self:stoptweening():easeoutexpo(0.5):y(0)
-				self:stopeffect()
 			end,
 			Def.Banner { Name="BannerBG",
 				RefreshCommand=function(self, param)
@@ -596,6 +447,9 @@ for i = 1, WheelSize do
 					self:y(-0.1)
 					self:zoomto(WheelItem.Width, WheelItem.Height)
 					self:diffuse(color("0,0,0,0.8"))
+				end,
+				RefreshCommand=function(self, param)
+					--donothing
 				end,
 			},
 			Def.Banner { Name="BannerTop",
@@ -617,17 +471,7 @@ for i = 1, WheelSize do
 				self:diffuse(FetchFromSong(Songs[Targets[i]], "Song Origin Color"))
 				self:settext(Songs[Targets[i]]:GetOrigin())
 
-				if i > WheelCenter+3 or i < WheelCenter-3 then
-					self:visible(false)
-				else
-					self:visible(true)
-				end
-			end,
-			SongChosenMessageCommand=function(self)
-				self:visible(false)
-			end,
-			SongUnchosenMessageCommand=function(self)
-				if i > WheelCenter+3 or i < WheelCenter-3 then
+				if i >  WheelCenter+WheelSizeHelper or i <  WheelCenter-WheelSizeHelper then
 					self:visible(false)
 				else
 					self:visible(true)
@@ -648,18 +492,7 @@ for i = 1, WheelSize do
 				self:settext(FetchFromSong(Songs[Targets[i]], "Display-formatted Song Category"))
 				self:diffuse(FetchFromSong(Songs[Targets[i]], "Song Category Color"))
 
-				if i > WheelCenter+3 or i < WheelCenter-3 then
-					self:visible(false)
-				else
-					self:visible(true)
-				end
-			end,
-			SongChosenMessageCommand=function(self)
-				--self:visible(i == WheelCenter)
-				self:visible(false)
-			end,
-			SongUnchosenMessageCommand=function(self)
-				if i > WheelCenter+3 or i < WheelCenter-3 then
+				if i >  WheelCenter+WheelSizeHelper or i <  WheelCenter-WheelSizeHelper then
 					self:visible(false)
 				else
 					self:visible(true)
@@ -669,7 +502,7 @@ for i = 1, WheelSize do
 		Def.BitmapText { Name="NameLabel",
 			Font="Montserrat semibold 40px",
 			InitCommand=function(self)
-				self:y(SongWheel_Y+32)
+				self:y(SongWheel_y+32)
 				self:zoom(0.6)
 				self:align(0.5,0.5)
 				self:maxwidth(832)
@@ -695,19 +528,7 @@ for i = 1, WheelSize do
 				end
 				self:visible(false) --disabling
 			end,
-			
-			SongChosenMessageCommand=function(self)
-				self:visible(i == WheelCenter)
-				self:visible(false) --disabling
-			end,
-			SongUnchosenMessageCommand=function(self)
-				if i > WheelCenter+0 or i < WheelCenter-0 then
-					self:visible(false)
-				else
-					self:visible(true)
-				end
-				self:visible(false) --disabling
-			end,
+						
 			LoopToWhiteThenBackCommand=function(self)
 				self:easeoutexpo(0.5):diffuse(Color.White)
 				self:queuecommand("SpecialColorLoop")
@@ -721,7 +542,7 @@ for i = 1, WheelSize do
 		Def.BitmapText { Name="ArtistLabel",
 			Font="Montserrat normal 20px",
 			InitCommand=function(self)
-				self:y(SongWheel_Y+42)
+				self:y(SongWheel_y+42)
 				self:zoom(0.8)
 				self:align(0.5,0.5)
 				self:maxwidth(832)
@@ -747,19 +568,7 @@ for i = 1, WheelSize do
 				end
 				self:visible(false) --disabling
 			end,
-
-			SongChosenMessageCommand=function(self)
-				self:visible(i == WheelCenter)
-				self:visible(false) --disabling
-			end,
-			SongUnchosenMessageCommand=function(self)
-				if i > WheelCenter+0 or i < WheelCenter-0 then
-					self:visible(false)
-				else
-					self:visible(true)
-				end
-				self:visible(false) --disabling
-			end,
+			
 			LoopToWhiteThenBackCommand=function(self)
 				self:easeoutexpo(0.5):diffuse(Color.White)
 				self:queuecommand("SpecialColorLoop")
@@ -770,1297 +579,6 @@ for i = 1, WheelSize do
 			end,
 
 		},
-
-		Def.ActorFrame { Name="ChartsList",
-			InitCommand=function(self)
-				self:xy(-60,-477)
-			end,
-			RefreshCommand=function(self,param)
-
-				-- updates arrayOfFilteredCharts variables for the children to use
-				local currentNameOfPlaylist = GroupsList[GroupIndex].Name
-				local currentSongName = Songs[Targets[i]]:GetDisplayMainTitle()
-
-				arrayOfFilteredCharts = GetAllowedCharts_POI(SongUtil.GetPlayableSteps(Songs[Targets[i]]), currentNameOfPlaylist, Targets[i])
-				table.sort(arrayOfFilteredCharts, SortCharts)
-				
-				arrayOfFilteredChartsSingles = SplitChartArray(arrayOfFilteredCharts, "Singles", currentNameOfPlaylist, currentSongName)
-				arrayOfFilteredChartsNotSingles = SplitChartArray(arrayOfFilteredCharts, "Not Singles", currentNameOfPlaylist, currentSongName)
-				arrayOfFilteredChartsEasyStation = SplitChartArray(arrayOfFilteredCharts, "Easy Station", currentNameOfPlaylist, currentSongName)
-				arrayOfFilteredChartsNormal = SplitChartArray(arrayOfFilteredCharts, "Normal", currentNameOfPlaylist, currentSongName)
-				arrayOfFilteredChartsHard = SplitChartArray(arrayOfFilteredCharts, "Hard", currentNameOfPlaylist, currentSongName)
-				arrayOfFilteredChartsCrazy = SplitChartArray(arrayOfFilteredCharts, "Crazy", currentNameOfPlaylist, currentSongName)
-				arrayOfFilteredChartsHalfdouble = SplitChartArray(arrayOfFilteredCharts, "Half-Double", currentNameOfPlaylist, currentSongName)
-				arrayOfFilteredChartsFreestyle = SplitChartArray(arrayOfFilteredCharts, "Freestyle", currentNameOfPlaylist, currentSongName)
-				arrayOfFilteredChartsNightmare = SplitChartArray(arrayOfFilteredCharts, "Nightmare", currentNameOfPlaylist, currentSongName)
-
-				-- hide everything if outside the wheel boundaries
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						self:visible(false)
-					else
-						self:visible(true)
-					end
-
-				-- runs the refresh command in ALL of this ActorFrame's children elements
-				for _, child in ipairs(self:GetChildren()) do
-					child:playcommand("Refresh", param)
-				end
-				
-				-- global toggle for developers
-				self:visible(ChartsListVisibility)
-			end,
-			SongChosenMessageCommand=function(self)
-				self:visible(false)
-			end,
-			SongUnchosenMessageCommand=function(self)
-				self:playcommand("Refresh")
-			end,
-
-			Def.ActorFrame {
-				Name="ChartItem-EasyStation01",
-				InitCommand=function(self)
-					self:x((01-1) * 40)
-					self:y(0)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsEasyStation < 1 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsEasyStation[1])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsEasyStation[1], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-EasyStation02",
-				InitCommand=function(self)
-					self:x((02-1) * 40)
-					self:y(0)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsEasyStation < 2 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsEasyStation[2])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsEasyStation[2], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Normal01",
-				InitCommand=function(self)
-					self:x((01-1) * 40)
-					self:y(01*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsNormal < 1 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsNormal[1])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsNormal[1], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Normal02",
-				InitCommand=function(self)
-					self:x((02-1) * 40)
-					self:y(01*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsNormal < 2 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsNormal[2])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsNormal[2], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Hard01",
-				InitCommand=function(self)
-					self:x((01-1) * 40)
-					self:y(02*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsHard < 1 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsHard[1])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsHard[1], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Hard02",
-				InitCommand=function(self)
-					self:x((02-1) * 40)
-					self:y(02*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsHard < 2 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsHard[2])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsHard[2], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Crazy01",
-				InitCommand=function(self)
-					self:x((01-1) * 40)
-					self:y(03*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsCrazy < 1 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsCrazy[1])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsCrazy[1], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Crazy02",
-				InitCommand=function(self)
-					self:x((02-1) * 40)
-					self:y(03*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsCrazy < 2 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsCrazy[2])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsCrazy[2], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Crazy03",
-				InitCommand=function(self)
-					self:x((03-1) * 40)
-					self:y(03*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsCrazy < 3 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsCrazy[3])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsCrazy[3], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Crazy04",
-				InitCommand=function(self)
-					self:x((04-1) * 40)
-					self:y(03*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsCrazy < 4 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsCrazy[4])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsCrazy[4], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-HalfDouble01",
-				InitCommand=function(self)
-					self:x((01-1) * 40)
-					self:y(04*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsHalfdouble < 1 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsHalfdouble[1])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsHalfdouble[1], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-HalfDouble02",
-				InitCommand=function(self)
-					self:x((02-1) * 40)
-					self:y(04*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsHalfdouble < 2 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsHalfdouble[2])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsHalfdouble[2], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Freestyle01",
-				InitCommand=function(self)
-					self:x((01-1) * 40)
-					self:y(05*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsFreestyle < 1 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsFreestyle[1])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsFreestyle[1], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Freestyle02",
-				InitCommand=function(self)
-					self:x((02-1) * 40)
-					self:y(05*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsFreestyle < 2 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsFreestyle[2])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsFreestyle[2], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Nightmare01",
-				InitCommand=function(self)
-					self:x((01-1) * 40)
-					self:y(06*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsNightmare < 1 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsNightmare[1])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsNightmare[1], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-			Def.ActorFrame {
-				Name="ChartItem-Nightmare02",
-				InitCommand=function(self)
-					self:x((02-1) * 40)
-					self:y(06*60)
-				end,
-
-				RefreshCommand=function(self, param)
-					local quad = self:GetChild("Quad")
-					local text = self:GetChild("Text")
-
-					-- boundary visibility
-					if i > WheelCenter+3 or i < WheelCenter-3 then
-						quad:visible(false)
-						text:visible(false)
-						return
-					else
-						quad:visible(true)
-						text:visible(true)
-					end
-
-					-- quad diffusion
-					if #arrayOfFilteredChartsNightmare < 2 then
-						quad:diffuse(color("0,0,0,0"))
-						text:diffuse(Color.Invisible)
-					else
-						local scoreIndex = nil
-						local profile = PROFILEMAN:GetProfile(GAMESTATE:GetEnabledPlayers()[1])
-						local scoreList = profile:GetHighScoreList(Songs[Targets[i]], arrayOfFilteredChartsNightmare[2])
-						if scoreList then
-							local scores = scoreList:GetHighScores()
-							if scores and #scores > 0 then
-								scoreIndex = LoadModule("PIU/Score.Grading.lua")(scores[1])
-							end
-						end
-						quad:diffuse(GetColorFromScoreIndex_POI(scoreIndex))
-
-						text:settext(FetchFromChart(arrayOfFilteredChartsNightmare[2], "Chart Meter"))
-						text:diffuse(Color.White)
-					end
-				end,
-
-				Def.Quad {
-					Name="Quad",
-					InitCommand=function(self)
-						self:zoomto(38, 38)
-						self:diffuse(color("0,0,0,0.2"))
-					end,
-				},
-
-				Def.BitmapText {
-					Name="Text",
-					Font="Montserrat numbers 40px",
-					InitCommand=function(self)
-						self:zoom(0.5)
-					end,
-				},
-			},
-		},
-
-		Def.ActorFrame { Name="DifficultyLabels",
-			InitCommand=function(self)
-				self:xy(0, -552)
-			end,
-
-			RefreshCommand=function(self, param)
-				-- visibility, since this element technically gets cloned for each wheel element
-				if i == WheelCenter then
-					self:visible(true)
-				else
-					self:visible(false)
-				end
-
-				-- populates some useful local variables
-				local currentPlaylist = GroupsList[GroupIndex].Name
-
-				-- availability: Easy Station
-				if currentPlaylist == "Pump It Up Zero" then
-					self:GetChild("DifficultyLabel-EasyStation"):visible(true)
-					self:GetChild("DifficultyText-EasyStation"):visible(true)
-				else
-					self:GetChild("DifficultyLabel-EasyStation"):visible(false)
-					self:GetChild("DifficultyText-EasyStation"):visible(false)
-				end
-				-- availability: Crazy
-				if currentPlaylist == "Pump It Up The 1st Dance Floor"
-				or currentPlaylist == "Pump It Up The 2nd Dance Floor" then
-					self:GetChild("DifficultyLabel-Crazy"):visible(false)
-					self:GetChild("DifficultyText-Crazy"):visible(false)
-				else
-					self:GetChild("DifficultyLabel-Crazy"):visible(true)
-					self:GetChild("DifficultyText-Crazy"):visible(true)
-				end
-				-- availability: Half-Double
-				if currentPlaylist == "Pump It Up The Rebirth"
-				or currentPlaylist == "Pump It Up The Premiere 2"
-				or currentPlaylist == "Pump It Up The Premiere 3"
-				or currentPlaylist == "Pump It Up The Prex 3" then
-					self:GetChild("DifficultyLabel-HalfDouble"):visible(true)
-					self:GetChild("DifficultyText-HalfDouble"):visible(true)
-				else
-					self:GetChild("DifficultyLabel-HalfDouble"):visible(false)
-					self:GetChild("DifficultyText-HalfDouble"):visible(false)
-				end
-				-- availability: Nightmare
-				if currentPlaylist == "Pump It Up Extra"
-				or currentPlaylist == "Pump It Up The Prex 3"
-				or currentPlaylist == "Pump It Up Exceed"
-				or currentPlaylist == "Pump It Up Exceed 2"
-				or currentPlaylist == "Pump It Up Zero" then
-					self:GetChild("DifficultyLabel-Nightmare"):visible(true)
-					self:GetChild("DifficultyText-Nightmare"):visible(true)
-				else
-					self:GetChild("DifficultyLabel-Nightmare"):visible(false)
-					self:GetChild("DifficultyText-Nightmare"):visible(false)
-				end
-
-				-- coloring: Easy Station
-				if #arrayOfFilteredChartsEasyStation < 1 then
-					self:GetChild("DifficultyText-EasyStation"):diffuse(color("#aaaaaa"))
-					self:GetChild("DifficultyText-EasyStation"):diffusealpha(0.4)
-				else
-					self:GetChild("DifficultyText-EasyStation"):diffuse(color("#ff77aa"))
-					self:GetChild("DifficultyText-EasyStation"):diffusealpha(1)
-				end
-				-- coloring: Normal
-				if #arrayOfFilteredChartsNormal < 1 then
-					self:GetChild("DifficultyText-Normal"):diffuse(color("#aaaaaa"))
-					self:GetChild("DifficultyText-Normal"):diffusealpha(0.4)
-				else
-					self:GetChild("DifficultyText-Normal"):diffuse(color("#ffbb33"))
-					self:GetChild("DifficultyText-Normal"):diffusealpha(1)
-				end
-				-- coloring: Hard
-				if #arrayOfFilteredChartsHard < 1 then
-					self:GetChild("DifficultyText-Hard"):diffuse(color("#aaaaaa"))
-					self:GetChild("DifficultyText-Hard"):diffusealpha(0.4)
-				else
-					self:GetChild("DifficultyText-Hard"):diffuse(color("#ff9900"))
-					self:GetChild("DifficultyText-Hard"):diffusealpha(1)
-				end
-				-- coloring: Crazy
-				if #arrayOfFilteredChartsCrazy < 1 then
-					self:GetChild("DifficultyText-Crazy"):diffuse(color("#aaaaaa"))
-					self:GetChild("DifficultyText-Crazy"):diffusealpha(0.4)
-				else
-					self:GetChild("DifficultyText-Crazy"):diffuse(color("#ff6600"))
-					self:GetChild("DifficultyText-Crazy"):diffusealpha(1)
-				end
-				-- coloring: Half-Double
-				if #arrayOfFilteredChartsHalfdouble < 1 then
-					self:GetChild("DifficultyText-HalfDouble"):diffuse(color("#aaaaaa"))
-					self:GetChild("DifficultyText-HalfDouble"):diffusealpha(0.4)
-				else
-					self:GetChild("DifficultyText-HalfDouble"):diffuse(color("#99ccee"))
-					self:GetChild("DifficultyText-HalfDouble"):diffusealpha(1)
-				end
-				-- coloring: Freestyle
-				if #arrayOfFilteredChartsFreestyle < 1 then
-					self:GetChild("DifficultyText-FreeStyle"):diffuse(color("#aaaaaa"))
-					self:GetChild("DifficultyText-FreeStyle"):diffusealpha(0.4)
-				else
-					self:GetChild("DifficultyText-FreeStyle"):diffuse(color("#00ee66"))
-					self:GetChild("DifficultyText-FreeStyle"):diffusealpha(1)
-				end
-				-- coloring: Nightmare
-				if #arrayOfFilteredChartsNightmare < 1 then
-					self:GetChild("DifficultyText-Nightmare"):diffuse(color("#aaaaaa"))
-					self:GetChild("DifficultyText-Nightmare"):diffusealpha(0.4)
-				else
-					self:GetChild("DifficultyText-Nightmare"):diffuse(color("#00cc55"))
-					self:GetChild("DifficultyText-Nightmare"):diffusealpha(1)
-				end
-
-				-- renaming: Normal > Easy
-				if currentPlaylist == "Pump It Up The 1st Dance Floor"
-				or currentPlaylist == "Pump It Up The 2nd Dance Floor"
-				or currentPlaylist == "Pump It Up The O.B.G. The 3rd Dance Floor"
-				or currentPlaylist == "Pump It Up The Rebirth"
-				or currentPlaylist == "Pump It Up The Premiere 2" then
-					self:GetChild("DifficultyText-Normal"):settext("EASY")
-				else
-					self:GetChild("DifficultyText-Normal"):settext("NORMAL")
-				end
-
-				-- renaming: Crazy > Extra Expert
-				if currentPlaylist == "Pump It Up Extra" then
-					self:GetChild("DifficultyText-Crazy"):settext("EXTRA EXPERT")
-				else
-					self:GetChild("DifficultyText-Crazy"):settext("CRAZY")
-				end
-
-				-- renaming: Freestyle > Double
-				-- renaming: Freestyle > Full-Double
-				if currentPlaylist == "Pump It Up The 1st Dance Floor"
-				or currentPlaylist == "Pump It Up The 2nd Dance Floor"
-				or currentPlaylist == "Pump It Up The O.B.G. The 3rd Dance Floor"
-				or currentPlaylist == "Pump It Up The O.B.G. The Season Evolution Dance Floor"
-				or currentPlaylist == "Pump It Up Perfect Collection"
-				or currentPlaylist == "Pump It Up Extra"
-				or currentPlaylist == "Pump It Up The Premiere"
-				or currentPlaylist == "Pump It Up The Prex"
-				or currentPlaylist == "Pump It Up The Prex 2" then
-					self:GetChild("DifficultyText-FreeStyle"):settext("DOUBLE")
-				elseif currentPlaylist == "Pump It Up The Rebirth"
-				or currentPlaylist == "Pump It Up The Premiere 2"
-				or currentPlaylist == "Pump It Up The Premiere 3" then
-					self:GetChild("DifficultyText-FreeStyle"):settext("FULL-DOUBLE")
-				else
-					self:GetChild("DifficultyText-FreeStyle"):settext("FREESTYLE")
-				end
-
-				-- renaming: Nightmare > Extra Expert Double
-				if currentPlaylist == "Pump It Up Extra" then
-					self:GetChild("DifficultyText-Nightmare"):settext("EXTRA EXPERT DOUBLE")
-				else
-					self:GetChild("DifficultyText-Nightmare"):settext("NIGHTMARE")
-				end
-
-				-- global toggle for developers
-				self:visible(ChartsListVisibility)
-			end,
-			RefreshVisibilityCommand=function(self, param)
-				-- visibility, since this element technically gets cloned for each wheel element
-				if i == WheelCenter then
-					self:visible(true)
-				else
-					self:visible(false)
-				end
-
-				-- global toggle for developers
-				self:visible(ChartsListVisibility)
-			end,
-			SongChosenMessageCommand=function(self)
-				self:visible(false)
-			end,
-			SongUnchosenMessageCommand=function(self)
-				self:playcommand("RefreshVisibility")
-			end,
-
-			Def.Quad { Name="DifficultyLabel-EasyStation",
-				InitCommand=function(self)
-					self:y(36)
-					self:zoomto(1272, 20)
-					self:align(0.5, 0)
-					self:diffuse(color("0,0,0,0.2"))
-				end,
-			},
-			Def.BitmapText { Name="DifficultyText-EasyStation",
-				Font="Montserrat semibold 40px",
-				InitCommand=function(self)
-					self:y(45)
-					self:zoom(0.4)
-					self:shadowlength(1)
-					self:align(0.5,0.5)
-					self:settext("EASY STATION")
-					self:diffuse(color("#ff77aa"))
-				end,
-			},
-			Def.Quad { Name="DifficultyLabel-Normal",
-				InitCommand=function(self)
-					self:y((1*60)+36)
-					self:zoomto(1272, 20)
-					self:align(0.5, 0)
-					self:diffuse(color("0,0,0,0.2"))
-				end,
-			},
-			Def.BitmapText { Name="DifficultyText-Normal",
-				Font="Montserrat semibold 40px",
-				InitCommand=function(self)
-					self:y((1*60)+45)
-					self:zoom(0.4)
-					self:shadowlength(1)
-					self:align(0.5,0.5)
-					self:settext("NORMAL")
-					self:diffuse(color("#ffbb33"))
-				end,
-			},
-			Def.Quad { Name="DifficultyLabel-Hard",
-				InitCommand=function(self)
-					self:y((2*60)+36)
-					self:zoomto(1272, 20)
-					self:align(0.5, 0)
-					self:diffuse(color("0,0,0,0.2"))
-				end,
-			},
-			Def.BitmapText { Name="DifficultyText-Hard",
-				Font="Montserrat semibold 40px",
-				InitCommand=function(self)
-					self:y((2*60)+45)
-					self:zoom(0.4)
-					self:shadowlength(1)
-					self:align(0.5,0.5)
-					self:settext("HARD")
-					self:diffuse(color("#ff9900"))
-				end,
-			},
-			Def.Quad { Name="DifficultyLabel-Crazy",
-				InitCommand=function(self)
-					self:y((3*60)+36)
-					self:zoomto(1272, 20)
-					self:align(0.5, 0)
-					self:diffuse(color("0,0,0,0.2"))
-				end,
-			},
-			Def.BitmapText { Name="DifficultyText-Crazy",
-				Font="Montserrat semibold 40px",
-				InitCommand=function(self)
-					self:y((3*60)+45)
-					self:zoom(0.4)
-					self:shadowlength(1)
-					self:align(0.5,0.5)
-					self:settext("CRAZY")
-					self:diffuse(color("#ff6600"))
-				end,
-			},
-			Def.Quad { Name="DifficultyLabel-HalfDouble",
-				InitCommand=function(self)
-					self:y((4*60)+36)
-					self:zoomto(1272, 20)
-					self:align(0.5, 0)
-					self:diffuse(color("0,0,0,0.2"))
-				end,
-			},
-			Def.BitmapText { Name="DifficultyText-HalfDouble",
-				Font="Montserrat semibold 40px",
-				InitCommand=function(self)
-					self:y((4*60)+45)
-					self:zoom(0.4)
-					self:shadowlength(1)
-					self:align(0.5,0.5)
-					self:settext("HALF-DOUBLE")
-					self:diffuse(color("#99ccee"))
-				end,
-			},
-			Def.Quad { Name="DifficultyLabel-FreeStyle",
-				InitCommand=function(self)
-					self:y((5*60)+36)
-					self:zoomto(1272, 20)
-					self:align(0.5, 0)
-					self:diffuse(color("0,0,0,0.2"))
-				end,
-			},
-			Def.BitmapText { Name="DifficultyText-FreeStyle",
-				Font="Montserrat semibold 40px",
-				InitCommand=function(self)
-					self:y((5*60)+45)
-					self:zoom(0.4)
-					self:shadowlength(1)
-					self:align(0.5,0.5)
-					self:settext("FREESTYLE")
-					self:diffuse(color("#00ee66"))
-				end,
-			},
-			Def.Quad { Name="DifficultyLabel-Nightmare",
-				InitCommand=function(self)
-					self:y((6*60)+36)
-					self:zoomto(1272, 20)
-					self:align(0.5, 0)
-					self:diffuse(color("0,0,0,0.2"))
-				end,
-			},
-			Def.BitmapText { Name="DifficultyText-Nightmare",
-				Font="Montserrat semibold 40px",
-				InitCommand=function(self)
-					self:y((6*60)+45)
-					self:zoom(0.4)
-					self:shadowlength(1)
-					self:align(0.5,0.5)
-					self:settext("NIGHTMARE")
-					self:diffuse(color("#00cc55"))
-				end,
-			},
-		},
-
 	}
 end
 

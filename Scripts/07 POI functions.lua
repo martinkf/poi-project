@@ -326,7 +326,7 @@ end
 -- 1) a chart object
 -- 2) a string detailing what you want, from this list:
 -- "Chart POI Name", "Chart Origin", "Chart Meter"
--- "Chart Stepstype Color"
+-- "Chart Author", "Chart Level", "Chart Stepstype Color"
 -- returns:
 -- it actually depends on what you want, really
 function FetchFromChart(input_chart, fetch_details)
@@ -339,6 +339,7 @@ function FetchFromChart(input_chart, fetch_details)
 		local chartFullChartnameFromSSC = input_chart:GetChartName()
 		local openParen = chartFullChartnameFromSSC:find("%(")
 		output = chartFullChartnameFromSSC:sub(1, openParen - 2)
+
 	elseif fetch_details == "Chart Origin" then
 		-- returns a string
 
@@ -413,6 +414,86 @@ function FormatDate_POI(input_date_as_string)
 end
 
 -- inputs:
+-- 1) a string, related to the "POI Name" of a chart, which is based on its original difficulty name
+-- returns: a string too, but correctly sanitized as to adjust to the difficulty name only
+function FormatDifficultyFromPOIName_POI(input_playlistName, input_poiName_as_string)
+	local difficultyMap_Prex = {
+		["NORMAL i"] = "NORMAL",
+		["HARD i"] = "HARD",
+		["CRAZY i"] = "CRAZY",
+		["EXTRA EXPERT"] = "CRAZY",
+		["FREESTYLE"] = "DOUBLE",
+		["FREESTYLE i"] = "DOUBLE",
+		["FREESTYLE ii"] = "DOUBLE",
+		["EXTRA EXPERT DOUBLE"] = "DOUBLE",
+	}
+	local difficultyMap_Premiere2 = {
+		["NORMAL"] = "EASY",
+		["NORMAL i"] = "EASY",
+		["HARD i"] = "HARD",
+		["CRAZY i"] = "CRAZY",
+		["FREESTYLE"] = "FULL-DOUBLE",
+		["FREESTYLE i"] = "FULL-DOUBLE",
+		["FREESTYLE ii"] = "FULL-DOUBLE",
+	}
+	local difficultyMap_Premiere3 = {
+		["NORMAL i"] = "NORMAL",
+		["HARD i"] = "HARD",
+		["CRAZY i"] = "CRAZY",
+		["EXTRA EXPERT"] = "CRAZY",
+		["FREESTYLE"] = "FULL-DOUBLE",
+		["FREESTYLE i"] = "FULL-DOUBLE",
+		["FREESTYLE ii"] = "FULL-DOUBLE",
+		["EXTRA EXPERT DOUBLE"] = "FULL-DOUBLE",
+	}
+	local difficultyMap_Freevolt = {
+		["NORMAL i"] = "NORMAL",
+		["NORMAL ii"] = "NORMAL",
+		["NORMAL iii"] = "NORMAL",
+		["HARD i"] = "HARD",
+		["HARD ii"] = "HARD",
+		["HARD iii"] = "HARD",
+		["CRAZY i"] = "CRAZY",
+		["CRAZY ii"] = "CRAZY",
+		["CRAZY iii"] = "CRAZY",
+		["EXTRA EXPERT"] = "CRAZY",
+		["FREESTYLE i"] = "FREESTYLE",
+		["FREESTYLE ii"] = "FREESTYLE",
+		["NIGHTMARE i"] = "NIGHTMARE",
+		["NIGHTMARE ii"] = "NIGHTMARE",
+		["EXTRA EXPERT DOUBLE"] = "NIGHTMARE",
+		["ANOTHER HARD"] = "A. HARD",
+		["ANOTHER CRAZY"] = "A. CRAZY",
+		["ANOTHER CRAZY i"] = "A. CRAZY",
+		["ANOTHER FREESTYLE"] = "A. FREESTYLE",
+		["ANOTHER NIGHTMARE"] = "A. NIGHTMARE",
+		["ANOTHER NIGHTMARE i"] = "A. NIGHTMARE",
+		["ANOTHER NIGHTMARE ii"] = "A. NIGHTMARE",
+		-- If Vook and (PIU Zero or PIU NX), then HALF-DOUBLE >> A. FREESTYLE
+		-- If Love is a Danger Zone and (PIU Zero or PIU NX), then HALF-DOUBLE >> A. FREESTYLE
+		-- If Love is a Danger Zone and PIU NX, then DIVISION ALL WILD >> A. CRAZY
+		-- If Mr. Larpus and PIU NX, then A. NIGHTMARE i >> A. FREESTYLE
+	}
+
+	if input_playlistName == "Pump It Up The Prex" then
+		return difficultyMap_Prex[input_poiName_as_string] or input_poiName_as_string
+	elseif input_playlistName == "Pump It Up The Premiere 2" then
+		return difficultyMap_Premiere2[input_poiName_as_string] or input_poiName_as_string
+	elseif input_playlistName == "Pump It Up The Premiere 3" then
+		return difficultyMap_Premiere3[input_poiName_as_string] or input_poiName_as_string
+	elseif input_playlistName == "Pump It Up The Prex 3" or
+	       input_playlistName == "Pump It Up Exceed" or
+		   input_playlistName == "Pump It Up Exceed 2" or
+		   input_playlistName == "Pump It Up Zero" or
+		   input_playlistName == "Pump It Up NX" then
+		return difficultyMap_Freevolt[input_poiName_as_string] or input_poiName_as_string
+	else
+		return input_poiName_as_string
+	end
+	
+end
+
+-- inputs:
 -- 1) a string, related to a grade
 -- returns: a string too, but correctly formatted according to the rules below
 function FormatGradeFromScoreIndex_POI(input_scoreIndex_as_string)
@@ -435,7 +516,7 @@ end
 function GetColorFromScoreIndex_POI(input_scoreIndex_as_string)
 	local gradeColorMap = {
 		Pass3S = "GOLD",
-		Pass2S = "BRONZE",
+		Pass2S = "SILVER",
 		PassS = "BRONZE",
 
 		PassA = "PASSED", PassB = "PASSED", PassC = "PASSED",

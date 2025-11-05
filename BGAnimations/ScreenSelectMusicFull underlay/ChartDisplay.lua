@@ -1,4 +1,4 @@
-local ItemW = 52
+local ItemW = 122
 local ItemAmount = 24
 local ItemTotalW = ItemW * ((ItemAmount - 1) / 2)
 
@@ -11,13 +11,12 @@ local ConfirmStart = { PlayerNumber_P1 = false, PlayerNumber_P2 = false }
 
 local ChartArray = nil
 local SongIsChosen = false
-local PreviewDelay = THEME:GetMetric("ScreenSelectMusic", "SampleMusicDelay")
 local CenterList = LoadModule("Config.Load.lua")("CenterChartList", "Save/OutFoxPrefs.ini")
 local CanWrap = LoadModule("Config.Load.lua")("WrapChartScroll", "Save/OutFoxPrefs.ini")
 
+local CurGroupName
 
 --
-
 
 -- http://lua-users.org/wiki/CopyTable
 function ShallowCopy(orig)
@@ -41,19 +40,6 @@ function SortCharts(a, b)
         return a:GetStepsType() > b:GetStepsType()
     end
 end
-
---[[ let's not implement the Label element just yet
-local ChartLabels = {
-    "NEW",
-    "ANOTHER",
-    "PRO",
-    "TRAIN",
-    "QUEST",
-    "UCS",
-    "HIDDEN",
-    "INFINITY",
-    "JUMP",
-}]]--
 
 local function InputHandler(event)
     local pn = event.PlayerNumber
@@ -115,8 +101,7 @@ end
 
 --
 
-
-local t = Def.ActorFrame {    
+local t = Def.ActorFrame {
 	OnCommand=function(self)
 		SCREENMAN:GetTopScreen():AddInputCallback(InputHandler)
 		self:playcommand("Refresh"):y(156)
@@ -163,7 +148,7 @@ local t = Def.ActorFrame {
 			ChartArray = SongUtil.GetPlayableSteps(CurrentSong)
 			
 			-- Filter out unwanted charts recursively
-			local CurGroupName = GroupsList[LastGroupMainIndex] ~= nil and GroupsList[LastGroupMainIndex].Name or ""
+			CurGroupName = GroupsList[LastGroupMainIndex] ~= nil and GroupsList[LastGroupMainIndex].Name or ""
 			
 			local ShowFilters = {"ShowUCSCharts", "ShowQuestCharts", "ShowHiddenCharts" }
 			local ChartFilters = {"UCS", "QUEST", "HIDDEN" }
@@ -275,7 +260,7 @@ local t = Def.ActorFrame {
 
 					-- Update the PersonalRecord sprite visibility and texture accordingly						
 					if scoreIndex then
-						self:GetChild("")[j]:GetChild("PersonalRecord"):visible(false) -- disabling it for now, maybe we won't use this anymore
+						self:GetChild("")[j]:GetChild("PersonalRecord"):visible(true)
 						self:GetChild("")[j]:GetChild("PersonalRecord"):settext(scoreIndex)
 						self:GetChild("")[j]:GetChild("PersonalRecord"):diffuse(color("#ffffff"))
 						self:GetChild("")[j]:GetChild("PersonalRecord"):settext(FormatGradeFromScoreIndex_POI(scoreIndex))
@@ -296,6 +281,12 @@ local t = Def.ActorFrame {
 					
 					self:GetChild("")[i]:GetChild("ColoredQuad"):visible(true):diffuse(FetchFromChart(Chart, "Chart Stepstype Color"))
 					self:GetChild("")[i]:GetChild("BGQuad"):visible(true)
+					self:GetChild("")[i]:GetChild("TopDivider"):visible(true)
+					self:GetChild("")[i]:GetChild("BotDivider1"):visible(true)
+					self:GetChild("")[i]:GetChild("BotDivider2"):visible(true)
+					self:GetChild("")[i]:GetChild("ChartOrigin"):visible(false):settext(FetchFromChart(Chart, "Chart Origin")) -- disabling it for now
+					self:GetChild("")[i]:GetChild("DifficultyName"):visible(true):settext(FormatDifficultyFromPOIName_POI(CurGroupName,FetchFromChart(Chart,"Chart POI Name")))
+					--self:GetChild("")[i]:GetChild("DifficultyName"):visible(true):settext("TRAINING STATION")
 					self:GetChild("")[i]:GetChild("Level"):visible(true):settext(ChartMeter)
 					
 					local soloShouldShow = false
@@ -326,21 +317,6 @@ local t = Def.ActorFrame {
 						and
 						GAMESTATE:IsHumanPlayer(PLAYER_1)
 					)
-
-					
-					--[[ let's not implement the Label element just yet
-					local ChartLabelIndex = 0
-					for Index, String in pairs(ChartLabels) do
-						if string.find(ToUpper(ChartDescription), String) then
-							ChartLabelIndex = Index
-						end
-					end
-					if ChartLabelIndex ~= 0 then
-						self:GetChild("")[i]:GetChild("Label"):visible(true):setstate(ChartLabelIndex - 1)
-					else
-						self:GetChild("")[i]:GetChild("Label"):visible(false)
-					end
-					]]--
 					
 				else
 					if not CenterList then
@@ -350,8 +326,12 @@ local t = Def.ActorFrame {
 						self:GetChild("")[i]:GetChild("BGQuad"):visible(false)
 						self:GetChild("")[i]:GetChild("ColoredQuad"):visible(false)
 					end
+					self:GetChild("")[i]:GetChild("TopDivider"):visible(false)
+					self:GetChild("")[i]:GetChild("BotDivider1"):visible(false)
+					self:GetChild("")[i]:GetChild("BotDivider2"):visible(false)
+					self:GetChild("")[i]:GetChild("ChartOrigin"):visible(false)
+					self:GetChild("")[i]:GetChild("DifficultyName"):visible(false)
 					self:GetChild("")[i]:GetChild("Level"):visible(false)
-					--self:GetChild("")[i]:GetChild("Label"):visible(false) --let's not implement the Label element just yet
 					self:GetChild("")[i]:GetChild("PersonalRecord"):visible(false)
 					self:GetChild("")[i]:GetChild("HighlightSolo"):visible(false)
 					self:GetChild("")[i]:GetChild("HighlightP1"):visible(false)
@@ -362,8 +342,12 @@ local t = Def.ActorFrame {
 			for i=1,ItemAmount do
 				self:GetChild("")[i]:GetChild("BGQuad"):visible(false)
 				self:GetChild("")[i]:GetChild("ColoredQuad"):visible(false)
+				self:GetChild("")[i]:GetChild("TopDivider"):visible(false)
+				self:GetChild("")[i]:GetChild("BotDivider1"):visible(false)
+				self:GetChild("")[i]:GetChild("BotDivider2"):visible(false)
+				self:GetChild("")[i]:GetChild("ChartOrigin"):visible(false)
+				self:GetChild("")[i]:GetChild("DifficultyName"):visible(false)
 				self:GetChild("")[i]:GetChild("Level"):visible(false)
-				--self:GetChild("")[i]:GetChild("Label"):visible(false) --let's not implement the Label element just yet
 				self:GetChild("")[i]:GetChild("PersonalRecord"):visible(false)
 				self:GetChild("")[i]:GetChild("HighlightSolo"):visible(false)
 				self:GetChild("")[i]:GetChild("HighlightP1"):visible(false)
@@ -372,23 +356,6 @@ local t = Def.ActorFrame {
 		end
 	end,
 
-	--[[ -- disabling the default background bar
-	Def.Sprite {
-		Name="BackgroundBar",
-		Texture=THEME:GetPathG("", "DifficultyDisplay/Bar"),
-		InitCommand=function(self)
-			self:zoom(1.2)
-			self:y(0)
-			self:diffusealpha(0.4)
-		end,
-		SongChosenMessageCommand=function(self)
-			self:stoptweening():easeoutexpo(1):diffusealpha(0.7) 
-		end,
-		SongUnchosenMessageCommand=function(self) 
-			self:stoptweening():easeoutexpo(0.5):diffusealpha(0.4) 
-		end,
-	},
-	]]--
 }
 
 for i=1,ItemAmount do
@@ -397,7 +364,7 @@ for i=1,ItemAmount do
 			Name="BGQuad",
 			InitCommand=function(self)
 				self:xy(FrameX + ItemW * (i - 1), 0)
-				self:zoomto(49, 80)
+				self:zoomto(120, 70)
 				self:diffuse(color("0,0,0,0.4"))
 			end,
 		},
@@ -406,7 +373,7 @@ for i=1,ItemAmount do
 			Name="HighlightSolo",
 			InitCommand=function(self)
 				self:xy(FrameX + ItemW * (i - 1), 0)
-				self:zoomto(49, 80)
+				self:zoomto(120, 70)
 				self:diffuse(color("1,1,0,0.8"))
 				self:visible(false)
 			end
@@ -414,18 +381,18 @@ for i=1,ItemAmount do
 		Def.Quad {
 			Name="HighlightP1",
 			InitCommand=function(self)
-				self:xy(FrameX + ItemW * (i - 1), -20)
-				self:zoomto(49, 40)
-				self:diffuse(color("1,0,1,0.8"))
+				self:xy((FrameX + ItemW * (i - 1)) - 30, 0)
+				self:zoomto(60, 71)
+				self:diffuse(color("1,0,0,0.8"))
 				self:visible(false)
 			end
 		},
 		Def.Quad {
 			Name="HighlightP2",
 			InitCommand=function(self)
-				self:xy(FrameX + ItemW * (i - 1), 20)
-				self:zoomto(49, 40)
-				self:diffuse(color("0,1,1,0.8"))
+				self:xy((FrameX + ItemW * (i - 1)) + 30, 0)
+				self:zoomto(60, 71)
+				self:diffuse(color("0,1,0,0.8"))
 				self:visible(false)
 			end
 		},
@@ -434,38 +401,83 @@ for i=1,ItemAmount do
 			Name="ColoredQuad",
 			InitCommand=function(self)
 				self:xy(FrameX + ItemW * (i - 1), 0)
-				self:zoomto(43, 73)
+				self:zoomto(116, 66)
 			end,
+		},
+
+		Def.Quad {
+			Name="TopDivider",
+			InitCommand=function(self)
+				self:xy(FrameX + ItemW * (i - 1), -16)
+				self:zoomto(116, 1)
+				self:diffuse(color("0,0,0,0.05"))
+			end,
+		},
+
+		Def.Quad {
+			Name="BotDivider1",
+			InitCommand=function(self)
+				self:xy(FrameX + ItemW * (i - 1), 16)
+				self:zoomto(116, 1)
+				self:diffuse(color("0,0,0,0.05"))
+			end,
+		},
+		Def.Quad {
+			Name="BotDivider2",
+			InitCommand=function(self)
+				self:xy(FrameX + ItemW * (i - 1), 25)
+				self:zoomto(2, 16)
+				self:diffuse(color("0,0,0,0.05"))
+			end,
+		},
+
+		Def.BitmapText {
+			Name="ChartOrigin",
+			Font="Montserrat normal 20px",
+			InitCommand=function(self)
+				self:x(FrameX + ItemW * (i - 1))
+				self:y(-30)
+				self:zoom(0.6)
+				self:maxwidth(180)
+				self:shadowlength(0.5)
+				self:visible(false) -- disabling it for now
+			end
+		},
+
+		Def.BitmapText {
+			Name="DifficultyName",
+			Font="Montserrat semibold 40px",
+			InitCommand=function(self)
+				self:x(FrameX + ItemW * (i - 1))
+				self:y(-26)
+				self:zoom(0.4)
+				self:maxwidth(276)
+				self:shadowlength(1)
+			end
 		},
 
 		Def.BitmapText {
 			Name="Level",
 			Font="Montserrat numbers 40px",
 			InitCommand=function(self)
-				self:xy(FrameX + ItemW * (i - 1), 0):zoom(0.7):maxwidth(75)
+				self:x(FrameX + ItemW * (i - 1))
+				self:y(-1)
+				self:zoom(0.9)
+				self:maxwidth(75)
 			end
 		},
-
-		--[[ let's not implement the Label element just yet
-		Def.Sprite {
-			Name="Label",
-			Texture=THEME:GetPathG("", "DifficultyDisplay/Labels"),
-			InitCommand=function(self)
-				self:xy(FrameX + ItemW * (i - 1), 16):animate(false)
-			end
-		},]]--
 		
 		Def.BitmapText {
 			Name="PersonalRecord",
 			Font="Montserrat extrabold 40px",
 			InitCommand=function(self)
-				self:xy(FrameX + ItemW * (i - 1), (GAMESTATE:IsPlayerEnabled(PLAYER_2) and 24 or -24))
-				self:zoomx(0.5)
-				self:zoomy(0.6)
-				self:maxwidth(75)
+				self:x(GAMESTATE:IsPlayerEnabled(PLAYER_2) and (FrameX + ItemW * (i - 1) + 30) or (FrameX + ItemW * (i - 1) - 30))
+				self:y(24)
+				self:zoomx(0.35)
+				self:zoomy(0.4)
+				self:maxwidth(175)
 				self:align(0.5,0.5)
 				self:shadowlength(1)
-				self:visible(false) --disabling it for now, I don't think we need it nowadays tbh
 			end
 		},
 
@@ -485,6 +497,5 @@ t[#t+1] = Def.ActorFrame {
 		StepsChosenMessageCommand=function(self) self:play() end
 	}
 }
-
 
 return t

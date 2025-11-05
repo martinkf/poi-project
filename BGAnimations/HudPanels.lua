@@ -1,20 +1,12 @@
 local topPanel_Y = -8
-local screenName_Y = 12
 local amountLivesLeft_X = -88
 local amountLivesLeft_Y = 40
-local amountLivesRight_X = 0 - amountLivesLeft_X
-local amountLivesRight_Y = amountLivesLeft_Y
-local bottomPanel_Y = 762
 local credits_Y = SCREEN_TOP + 8
 local credits_size = 0.4
 local profileNameBG_X = 572
 local profileNameBG_Y = 668+53
 local profileNameText_X = 522
 local profileNameText_Y = 711
-local profileLevelBG_X = profileNameBG_X
-local profileLevelBG_Y = 640
-local profileLevelText_X = 510-120
-local profileLevelText_Y = profileNameText_Y
 local profilePic_X = 600+4
 local profilePic_Y = 637+43+4
 local modIcons_X = 96
@@ -28,7 +20,6 @@ local t = Def.ActorFrame {
 		OnCommand=function(self)
 			self:easeoutexpo(0.5):xy(SCREEN_CENTER_X, 0)
 		end,
-		--OffCommand=function(self) self:easeoutexpo(0.5):xy(SCREEN_CENTER_X, -128) end,
 		OffCommand=function(self) end,
 		
 		-- Top panel graphic art (small, black)
@@ -38,30 +29,7 @@ local t = Def.ActorFrame {
 			end
 		},
 		
-		-- quad for alignment (temporary)
-		Def.Quad {			
-			InitCommand=function(self)				
-				self:xy(0, topPanel_Y):setsize(1280, 163):diffuse(color("0,0,0,0.25")):queuecommand('Refresh')
-			end,
-			
-			ScreenChangedMessageCommand=function(self) self:playcommand('Refresh') end,
-			
-			RefreshCommand=function(self)
-				local currentScreenName = SCREENMAN:GetTopScreen():GetName()
-								
-				if 
-				currentScreenName == "ScreenTitleMenu" or 
-				currentScreenName == "ScreenTitleJoin" or
-				currentScreenName == "ScreenLogo" or
-				currentScreenName == "ScreenSelectProfile" then
-					self:visible(false)
-				else
-					self:visible(false) --disabling it
-				end
-			end
-		},
-		
-		-- game mode / number of credits
+		-- game mode / number of credits / current stage indicator
 		Def.BitmapText {
 			Font="Montserrat semibold 40px",
 			InitCommand=function(self)
@@ -77,116 +45,125 @@ local t = Def.ActorFrame {
 			RefreshCommand=function(self)
 				local CoinMode = GAMESTATE:GetCoinMode()
 				local EventMode = GAMESTATE:IsEventMode()
-								
-				if CoinMode == "CoinMode_Home" then
-					self:visible(true):settext("HOME MODE")
-				elseif EventMode then
-					self:visible(true):settext("EVENT MODE")
+					
+				if EventMode then
+					self:visible(true)
+					self:stoptweening()
+					self:queuecommand("EventModeThenEventModeExplanation")
+				elseif CoinMode == "CoinMode_Home" then
+					self:visible(true)
+					self:stoptweening()
+					if
+					SCREENMAN:GetTopScreen():GetName() == "ScreenTitleMenu" or
+					SCREENMAN:GetTopScreen():GetName() == "ScreenTitleJoin" or
+					SCREENMAN:GetTopScreen():GetName() == "ScreenLogo" or
+					SCREENMAN:GetTopScreen():GetName() == "ScreenSelectProfile" then
+						self:settext("HOME MODE")
+					else
+					-- like "ScreenSelectMusicFull" for example
+					-- like "ScreenGameplay" for example
+					-- like "ScreenEvaluationNormal" for example
+						self:queuecommand("HomeModeThenNumberOfStages")
+					end
 				elseif CoinMode == 'CoinMode_Free' then
-					self:visible(true):settext("FREE PLAY")
+					self:visible(true)
+					self:stoptweening()
+					if
+					SCREENMAN:GetTopScreen():GetName() == "ScreenTitleMenu" or
+					SCREENMAN:GetTopScreen():GetName() == "ScreenTitleJoin" or
+					SCREENMAN:GetTopScreen():GetName() == "ScreenLogo" or
+					SCREENMAN:GetTopScreen():GetName() == "ScreenSelectProfile" then
+						self:settext("FREE PLAY")
+					else
+					-- like "ScreenSelectMusicFull" for example
+					-- like "ScreenGameplay" for example
+					-- like "ScreenEvaluationNormal" for example
+						self:queuecommand("FreePlayThenNumberOfStages")
+					end
 				elseif CoinMode == 'CoinMode_Pay' then
-					local numberofcredits = GAMESTATE:GetCoins()
-					local suffix = ""
-					if numberofcredits == 1 then suffix = " CREDIT" else suffix = " CREDITS" end
-					local CreditText = numberofcredits .. suffix
-					self:visible(true):settext(CreditText)
-				end
-			end
-		},
-	
-		-- StageCount BG UI art
-		Def.Quad {
-			InitCommand=function(self)
-				self:setsize(92, 46):diffuse(color("0,0,0,0.4")):xy(0,45+143):queuecommand('Refresh')
-			end,
-			
-			ScreenChangedMessageCommand=function(self) self:playcommand('Refresh') end,
-			
-			RefreshCommand=function(self)
-				local currentScreenName = SCREENMAN:GetTopScreen():GetName()
-								
-				if
-				currentScreenName == "ScreenTitleMenu" or
-				currentScreenName == "ScreenTitleJoin" or
-				currentScreenName == "ScreenLogo" or
-				currentScreenName == "ScreenSelectProfile" then
-					self:visible(false)
-				else
 					self:visible(true)
-				end
-				
-				if (GAMESTATE:GetCurrentStyle():GetStyleType() == "StyleType_OnePlayerTwoSides") and (SCREENMAN:GetTopScreen():GetName() == "ScreenGameplay") then
-					self:x(-430)
-				else
-					self:x(0)
-				end
-			end
-		},
-		
-		-- StageCount label
-		Def.BitmapText {
-			Font="Montserrat semibold 40px",			
-			InitCommand=function(self)
-				self:y(31+143):zoom(0.4):shadowlength(1)
-				:settext("STAGE"):queuecommand('Refresh')
-			end,
-			
-			ScreenChangedMessageCommand=function(self) self:playcommand('Refresh') end,
-			
-			RefreshCommand=function(self)
-				local currentScreenName = SCREENMAN:GetTopScreen():GetName()
-								
-				if 
-				currentScreenName == "ScreenTitleMenu" or 
-				currentScreenName == "ScreenTitleJoin" or
-				currentScreenName == "ScreenLogo" or
-				currentScreenName == "ScreenSelectProfile" then
-					self:visible(false)
-				else
-					self:visible(true)
-				end
-				
-				if (GAMESTATE:GetCurrentStyle():GetStyleType() == "StyleType_OnePlayerTwoSides") and (SCREENMAN:GetTopScreen():GetName() == "ScreenGameplay") then
-					self:x(-430)
-				else
-					self:x(0)
+					self:stoptweening()
+					if
+					SCREENMAN:GetTopScreen():GetName() == "ScreenTitleMenu" or
+					SCREENMAN:GetTopScreen():GetName() == "ScreenTitleJoin" or
+					SCREENMAN:GetTopScreen():GetName() == "ScreenLogo" or
+					SCREENMAN:GetTopScreen():GetName() == "ScreenSelectProfile" then
+						local numberofcredits = GAMESTATE:GetCoins()
+						local suffix = ""
+						if numberofcredits == 1 then suffix = " CREDIT" else suffix = " CREDITS" end
+						local CreditText = numberofcredits .. suffix
+						self:settext(CreditText)
+					else
+					-- like "ScreenSelectMusicFull" for example
+					-- like "ScreenGameplay" for example
+					-- like "ScreenEvaluationNormal" for example
+						self:queuecommand("PayModeThenNumberOfStages")
+					end
 				end
 			end,
-		},
-		
-		-- StageCount text
-		Def.BitmapText {
-			Font="Montserrat semibold 40px",			
-			InitCommand=function(self)
-				self:y(52+143):zoom(0.7):shadowlength(1):queuecommand('Refresh')
+
+			EventModeThenEventModeExplanationCommand=function(self)
+				self:settext("EVENT MODE")
+				self:sleep(2):queuecommand("EventModeExplanationThenEventMode")
 			end,
-			
-			ScreenChangedMessageCommand=function(self) self:playcommand('Refresh') end,
-			
-			RefreshCommand=function(self)
-				local currentScreenName = SCREENMAN:GetTopScreen():GetName()
-								
-				if 
-				currentScreenName == "ScreenTitleMenu" or 
-				currentScreenName == "ScreenTitleJoin" or
-				currentScreenName == "ScreenLogo" or
-				currentScreenName == "ScreenSelectProfile" then
-					self:visible(false)
+			EventModeExplanationThenEventModeCommand=function(self)
+				self:settext("UNLIMITED STAGES, NO PROFILE RECORD-KEEPING")
+				self:sleep(2):queuecommand("EventModeThenEventModeExplanation")
+			end,
+
+			HomeModeThenNumberOfStagesCommand=function(self)
+				self:settext("HOME MODE")
+				self:sleep(2):queuecommand("NumberOfStagesThenHomeMode")
+			end,
+			NumberOfStagesThenHomeModeCommand=function(self)
+				local stageNumber = 1
+				if SCREENMAN:GetTopScreen():GetName() == "ScreenEvaluationNormal" then
+					stageNumber = GAMESTATE:GetCurrentStageIndex()
 				else
-					self:visible(true)
+					stageNumber = GAMESTATE:GetCurrentStageIndex() + 1
 				end
-				
-				if currentScreenName == "ScreenEvaluationNormal" then
-					self:settext(string.format("%02d", GAMESTATE:GetCurrentStageIndex()))
+				stageNumber = string.format("%02d", stageNumber)
+
+				self:settext("STAGE "..stageNumber)
+				self:sleep(2):queuecommand("HomeModeThenNumberOfStages")
+			end,
+
+			FreePlayThenNumberOfStagesCommand=function(self)
+				self:settext("FREE PLAY")
+				self:sleep(2):queuecommand("NumberOfStagesThenFreePlay")
+			end,
+			NumberOfStagesThenFreePlayCommand=function(self)
+				local stageNumber = 1
+				if SCREENMAN:GetTopScreen():GetName() == "ScreenEvaluationNormal" then
+					stageNumber = GAMESTATE:GetCurrentStageIndex()
 				else
-					self:settext(string.format("%02d", GAMESTATE:GetCurrentStageIndex() + 1))
+					stageNumber = GAMESTATE:GetCurrentStageIndex() + 1
 				end
-				
-				if (GAMESTATE:GetCurrentStyle():GetStyleType() == "StyleType_OnePlayerTwoSides") and (SCREENMAN:GetTopScreen():GetName() == "ScreenGameplay") then
-					self:x(-430)
+				stageNumber = string.format("%02d", stageNumber)
+
+				self:settext("STAGE "..stageNumber)
+				self:sleep(2):queuecommand("FreePlayThenNumberOfStages")
+			end,
+
+			PayModeThenNumberOfStagesCommand=function(self)
+				local numberofcredits = GAMESTATE:GetCoins()
+				local suffix = ""
+				if numberofcredits == 1 then suffix = " CREDIT" else suffix = " CREDITS" end
+				local CreditText = numberofcredits .. suffix
+				self:settext(CreditText)
+				self:sleep(2):queuecommand("NumberOfStagesThenPayMode")
+			end,
+			NumberOfStagesThenPayModeCommand=function(self)
+				local stageNumber = 1
+				if SCREENMAN:GetTopScreen():GetName() == "ScreenEvaluationNormal" then
+					stageNumber = GAMESTATE:GetCurrentStageIndex()
 				else
-					self:x(0)
+					stageNumber = GAMESTATE:GetCurrentStageIndex() + 1
 				end
+				stageNumber = string.format("%02d", stageNumber)
+
+				self:settext("STAGE "..stageNumber)
+				self:sleep(2):queuecommand("PayModeThenNumberOfStages")
 			end,
 		},
 	}
@@ -195,22 +172,11 @@ local t = Def.ActorFrame {
 -- Profile info (clones for every active player)
 for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 	if PROFILEMAN:GetProfile(pn) and (PROFILEMAN:IsPersistentProfile(pn) or PROFILEMAN:ProfileWasLoadedFromMemoryCard(pn)) then
-		t[#t+1] = Def.ActorFrame {            
+		t[#t+1] = Def.ActorFrame {
 			Def.ActorFrame {
 				InitCommand=function(self) self:y(-128) end,
 				OnCommand=function(self) self:easeoutexpo(0.5):y(0) end,
-				--OffCommand=function(self) self:easeoutexpo(0.5):y(128) end,
 				OffCommand=function(self) end,
-
-				-- profile name BG graphic
-				Def.Sprite {
-					Texture=THEME:GetPathG("", "UI/NameTag" .. ToEnumShortString(pn)),
-					InitCommand=function(self)
-						self:xy(SCREEN_CENTER_X + (pn == PLAYER_2 and profileNameBG_X or -profileNameBG_X), SCREEN_BOTTOM - profileNameBG_Y)
-						:halign(pn == PLAYER_2 and 0 or 1):valign(1):rotationz(180):zoomx(2)
-						:visible(false) --disabling
-					end
-				},
 				
 				-- profile name (text)
 				Def.BitmapText {
@@ -226,34 +192,6 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					end
 				},
 				
-				--[[
-				-- player level BGgraphic
-				Def.Sprite {
-					Texture=THEME:GetPathG("", "UI/NameTag" .. ToEnumShortString(pn)),
-					InitCommand=function(self)
-						self:xy(SCREEN_CENTER_X + (pn == PLAYER_2 and profileLevelBG_X or -profileLevelBG_X), SCREEN_BOTTOM - profileLevelBG_Y)
-						:halign(pn == PLAYER_2 and 0 or 1):valign(1):rotationz(180)
-					end
-				},
-				]]--
-				
-				--[[
-				-- player level (text) (disabled)
-				Def.BitmapText {
-					Font="Montserrat semibold 20px",
-					-- This ingenious level system was made up at 4am
-					InitCommand=function(self)
-						self:xy(SCREEN_CENTER_X + (pn == PLAYER_2 and profileLevelText_X or -profileLevelText_X), SCREEN_BOTTOM - profileLevelText_Y):zoom(0.9)
-						:maxwidth(96 / self:GetZoom()):skewx(-0.2):shadowlength(1)
-						lvl = math.floor(math.sqrt(PROFILEMAN:GetProfile(pn):GetTotalDancePoints() / 500)) + 1
-						-- You can check if a number is "nan" by comparing it to itself
-						-- because "nan" is not equal to anything, not even itself
-						if (lvl < 0) or (lvl ~= lvl) then lvl = 0 end
-						self:settext(THEME:GetString("ProfileStats", "Level") .. " " .. lvl)
-					end
-				},
-				]]--
-				
 				-- player profile pic
 				Def.Sprite {
 					Texture=LoadModule("Options.GetProfileData.lua")(pn)["Image"],
@@ -263,7 +201,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					end
 				},
 				
-				-- mod icons (horizontal)
+				-- mod icons (horizontal - doesn't show up when ScreenGameplay)
 				LoadActor("ModIcons.lua", pn) .. {
 					InitCommand=function(self)
 						self:xy(pn == PLAYER_2 and modIcons_X * 2 or modIcons_X * -2, modIcons_Y)
@@ -278,7 +216,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					end,
 				},
 				
-				-- mod icons (vertical)
+				-- mod icons (vertical - only shows up when ScreenGameplay)
 				LoadActor("ModIconsVertical.lua", pn) .. {
 					InitCommand=function(self)						
 						self:xy(pn == PLAYER_2 and (modIcons_X * 2) or (modIcons_X * -2), modIcons_Y+50)
@@ -292,10 +230,28 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						end
 					end,
 				},
+
+				-- instructions panel (only shows up when ScreenSelectMusicFull)
+				Def.ActorFrame {
+					InitCommand=function(self)
+						self:xy(pn == PLAYER_2 and (4+864) or (4),72)
+						self:visible(false)
+						self:queuecommand('Refresh')
+					end,
+
+					RefreshCommand=function(self)
+						if SCREENMAN:GetTopScreen():GetName() == "ScreenSelectMusicFull" then
+							self:visible(true)
+						else
+							self:visible(false)
+						end
+					end,
+					
+					LoadActor("InstructionsOverlay.lua")
+				},
 			}
 		}
 	end
 end
-
 
 return t

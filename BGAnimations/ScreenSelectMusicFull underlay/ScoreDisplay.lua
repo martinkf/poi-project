@@ -2,9 +2,6 @@ local Scoring = LoadModule("Config.Load.lua")("ScoringSystem", "Save/OutFoxPrefs
 local ClassicGrades = LoadModule("Config.Load.lua")("ClassicGrades", "Save/OutFoxPrefs.ini") and Scoring == "Old"
 local SongIsChosen = false
 
-local wholeThing_X = 0
-local wholeThing_Y = -368
-
 local gradesZoom = 0.16
 local gradesAlpha = 0.6
 
@@ -15,9 +12,9 @@ local machineScoreAnchor_X = 334
 local machineNameAnchor_X = 440
 local machineDateAnchor_X = 630
 
-local personalGradeAnchor_X = 330+60
-local personalScoreAnchor_X = 330+60
-local PersonalDateAnchor_X = 390+60
+local personalGradeAnchor_X = 330+60-330
+local personalScoreAnchor_X = 330+60-330
+local PersonalDateAnchor_X = 390+60-330
 
 local records_Yspacing = 42
 local row1Anchor_Y = 20
@@ -30,33 +27,53 @@ local row7Anchor_Y = row6Anchor_Y + records_Yspacing
 local row8Anchor_Y = row7Anchor_Y + records_Yspacing
 local row9Anchor_Y = row8Anchor_Y + records_Yspacing
 local row10Anchor_Y = row9Anchor_Y + records_Yspacing
-local rowPer1Anchor_Y = 405
+local rowPer1Anchor_Y = 20
 local rowPer2Anchor_Y = rowPer1Anchor_Y + records_Yspacing
 local rowPer3Anchor_Y = rowPer2Anchor_Y + records_Yspacing
 
-local t = Def.ActorFrame {}
+local t = Def.ActorFrame {
+
+	-- DRAWING
+
+	-- entire quad background
+	Def.Quad {
+		InitCommand=function(self)
+			self:xy(0, 0)
+			self:zoomto(1272, 353)
+			self:align(0.5, 0)
+			self:diffuse(color("0,0,0,0.4"))
+		end,
+	},
+
+	-- a line to separate the players
+	Def.Quad {
+		InitCommand=function(self)
+			self:xy(0, 4)
+			self:zoomto(3, 345)
+			self:align(0.5, 0)
+			self:diffuse(color("0.2,0.2,0.2,0.5"))
+		end,
+	},
+
+}
+
 for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 	-- Player 2's panel is slightly adjusted, so we need to correct
 	-- the positioning of actors so that they fit in properly
-	
-	
 	t[#t+1] = Def.ActorFrame {
 		Def.ActorFrame {
 			CurrentChartChangedMessageCommand=function(self, params) if SongIsChosen and params.Player == pn then self:playcommand("Refresh") end end,
 			InitCommand=function(self)
-				self:x(wholeThing_X * (pn == PLAYER_2 and 1 or -1))
+				self:x(0)
+				self:y(0)
 			end,
 			
 			SongChosenMessageCommand=function(self)
 				SongIsChosen = true
-				self:stoptweening():easeoutexpo(1)
-				:y(wholeThing_Y)
 				self:playcommand("Refresh")
 			end,
 			SongUnchosenMessageCommand=function(self)
 				SongIsChosen = false
-				self:stoptweening():easeoutexpo(0.5)
-				:y(wholeThing_Y-wholeThing_Y)
 			end,
 
 			RefreshCommand=function(self)
@@ -125,40 +142,71 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 			
 			-- DRAWING
 			
-			-- Machine Records label
-			Def.Quad {
-				InitCommand=function(self)
-					self:zoomto(320, 20):diffuse(Color.White):diffusealpha(0.4):y(0):x(466 * (pn == PLAYER_2 and 1 or -1))
-				end
-			},
-			Def.BitmapText {
-				Font="Montserrat normal 20px",
-				Name="MachineRec-label",
-				Text="MACHINE RECORDS",
-				InitCommand=function(self)
-					self:x(466 * (pn == PLAYER_2 and 1 or -1)):y(0):zoom(0.7)
-					:halign(0.5):maxwidth(300):shadowlength(2):skewx(-0.2)
-				end
-			},
-			
-			-- Personal Records label
-			Def.Quad {
-				InitCommand=function(self)
-					self:zoomto(320, 20):diffuse(Color.White):diffusealpha(0.4):y(365):x(466 * (pn == PLAYER_2 and 1 or -1))
-				end
-			},
-			Def.BitmapText {
-				Font="Montserrat normal 20px",
-				Name="PersonalRec-label",
-				Text="PERSONAL RECORDS",
-				InitCommand=function(self)
-					self:x(466 * (pn == PLAYER_2 and 1 or -1)):y(365):zoom(0.7)
-					:halign(0.5):maxwidth(300):shadowlength(2):skewx(-0.2)
-				end
-			},
 			
 			
+
+			Def.ActorFrame { Name="MachineRecords_module",
+				InitCommand=function(self)
+					self:x(466 * (pn == PLAYER_2 and 1 or -1))
+					self:y(14)
+				end,
+				
+				Def.Quad { Name="MachineRecords_labelBg",
+					InitCommand=function(self)
+						self:zoomto(320, 20)
+						self:diffuse(Color.White)
+						self:diffusealpha(0.4)
+					end
+				},
+				Def.BitmapText { Name="MachineRecords_labelText",
+					Font="Montserrat normal 20px",
+					Text="MACHINE RECORDS",
+					InitCommand=function(self)
+						self:zoom(0.7):halign(0.5):maxwidth(300):shadowlength(2):skewx(-0.2)
+					end
+				},
+			},
+
+			Def.ActorFrame { Name="PersonalRecords_module",
+				InitCommand=function(self)
+					self:x(166 * (pn == PLAYER_2 and 1 or -1))
+					self:y(14)
+				end,
+						
+				Def.Quad { Name="PersonalRecords_labelBg",
+					InitCommand=function(self)
+						self:zoomto(320, 20)
+						self:diffuse(Color.White)
+						self:diffusealpha(0.4)
+					end
+				},
+
+				Def.BitmapText { Name="PersonalRecords_labelText",
+					Font="Montserrat normal 20px",
+					Text="PERSONAL RECORDS",
+					InitCommand=function(self)
+						self:zoom(0.7):halign(0.5):maxwidth(300):shadowlength(2):skewx(-0.2)
+					end
+				},
+			},
 			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			
 						
 

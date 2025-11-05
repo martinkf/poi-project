@@ -1,3 +1,7 @@
+--levers
+
+local VCR_Effect_y = -40
+
 local FrameW2 = 1600
 local FrameH2 = 900
 local PreviewDelay = THEME:GetMetric("ScreenSelectMusic", "SampleMusicDelay")
@@ -25,7 +29,7 @@ local t = Def.ActorFrame {
 				Font="VCR OSD Mono 40px",
 				Text="",
 				InitCommand=function(self)
-					self:zoom(2):xy(0,-60)
+					self:zoom(2):xy(0,VCR_Effect_y)
 					:shadowlength(4)
 				end,
 				ScrollMessageCommand=function(self, params)
