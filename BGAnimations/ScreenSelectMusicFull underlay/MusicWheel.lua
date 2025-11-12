@@ -1,10 +1,15 @@
--- GroupsList variables
-Songs = {}
-Targets = {}
+-- SAFECHECK - GENERATES A GLOBAL VARIABLE GroupsList IF IT DOESN'T EXIST ALREADY
+if next(GroupsList) == nil then
+	AssembleGroupSorting_POI()
+    UpdateGroupSorting_POI()
 
--- MusicWheel levers
-local EntireScreen_x = -640
-local EntireScreen_y = -99
+    if next(GroupsList) == nil then
+        Warn("Groups list is currently inaccessible, halting music wheel!")
+        return Def.Actor {}
+    end
+end
+
+-- DECLARING SOME LEVERS AND VARIABLES
 local SongWheel_y = 182
 
 local WheelSize = 11
@@ -23,45 +28,27 @@ local maxVisibleAngle = math.pi * 0.6
 local indexIndicator_y = -88
 local indexIndicator_range = 180
 
---
-
--- Not load anything if no group sorts are available (catastrophic event or no songs)
-if next(GroupsList) == nil then
-	AssembleGroupSorting_POI()
-    UpdateGroupSorting_POI()
-    
-    if next(GroupsList) == nil then
-        Warn("Groups list is currently inaccessible, halting music wheel!")
-        return Def.Actor {}
-    end
-end
-
--- Grab from .ini what the last Group and SongIndex were
-LastGroupMainIndex = tonumber(LoadModule("Config.Load.lua")("GroupMainIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
-LastSongIndex = tonumber(LoadModule("Config.Load.lua")("SongIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
-
--- Reset LastGroup/Song if they were deleted since last session to avoid "attempt to index nil" crashes
-if GroupsList[LastGroupMainIndex] == nil then
-    LastGroupMainIndex = 1
-    LastSongIndex = 1
-    Warn("ScreenSelectMusicFull underlay / MusicWheel.lua: LastGroupMainIndex no longer present, reset performed")
-elseif GroupsList[LastGroupMainIndex].Songs[LastSongIndex] == nil then
-    LastSongIndex = 1
-    Warn("ScreenSelectMusicFull underlay / MusicWheel.lua: LastSongIndex no longer present, reset performed")
-end
-
--- Initializes local variables
-SongIndex = LastSongIndex > 0 and LastSongIndex or 1
-local GroupMainIndex = LastGroupMainIndex > 0 and LastGroupMainIndex or 1
 local IsBusy = false
 
--- Default is to start at All for now
+-- DECLARING MORE VARIABLES - WE WANT THE MUSICWHEEL TO ALWAYS START AT PIU NX AT WITCH DOCTOR #1 IN STAGE 1
+if GAMESTATE:GetCurrentStageIndex() == 0 then --this means this is stage 1, we just came from the select profile screen
+	LastGroupMainIndex = 12
+	LastSongIndex = 103
+else --this means a song has been played and we're back to the select song screen
+	LastGroupMainIndex = tonumber(LoadModule("Config.Load.lua")("GroupMainIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
+	LastSongIndex = tonumber(LoadModule("Config.Load.lua")("SongIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
+end
+CurPlaylistIndex = LastGroupMainIndex
+GroupIndex = LastGroupMainIndex
+local GroupMainIndex = LastGroupMainIndex
+SongIndex = LastSongIndex
+
+-- DECLARING MORE VARIABLES - DEFAULT IS TO START AT ALL FOR NOW
+Songs = {}
+Targets = {}
 Songs = GroupsList[GroupMainIndex].Songs
 
--- Default is to initialize this variable here I guess
-GroupIndex = 1
-
--- Update Songs item targets
+-- DECLARING USEFUL FUNCTIONS
 local function UpdateItemTargets(val)
     for i = 1, WheelSize do
         Targets[i] = val + i - WheelCenter
@@ -95,6 +82,7 @@ function MusicWheelGoesTo(input_index)
 
 	-- Apply the new index logically
 	SongIndex = input_index
+	LastSongIndex = SongIndex
 
 	-- Update current song (no animation)
 	local song = Songs[SongIndex]
@@ -108,6 +96,19 @@ function MusicWheelGoesTo(input_index)
 	MESSAGEMAN:Broadcast("ForceUpdate", { Duration = 0 })
 end
 
+local function UpdateBanner(self, Song)
+    self:LoadFromSongBanner(Song):scaletoclipped(WheelItem.Width, WheelItem.Height)
+end
+
+local function UpdateBannerTwo(self, Song)
+    self:LoadFromSongBanner(Song):zoomtoheight_POI(WheelItem.Height)
+end
+
+function GetCurrentSongIndex()
+    return SongIndex
+end
+
+-- DECLARING INPUT HANDLER
 local function InputHandler(event)
 	local pn = event.PlayerNumber
 	if not pn then return end
@@ -187,25 +188,9 @@ local function InputHandler(event)
 	MESSAGEMAN:Broadcast("UpdateMusic")
 end
 
--- Manages banner on sprite
-local function UpdateBanner(self, Song)
-    self:LoadFromSongBanner(Song):scaletoclipped(WheelItem.Width, WheelItem.Height)
-end
-local function UpdateBannerTwo(self, Song)
-    self:LoadFromSongBanner(Song):zoomtoheight_POI(WheelItem.Height)
-end
-
-
---
-
-
-function GetCurrentSongIndex()
-    return SongIndex
-end
-
+-- OPERATIONS
 local t = Def.ActorFrame {
 	InitCommand=function(self)
-		self:xy(EntireScreen_x,EntireScreen_y)
 		self:fov(fieldOfView)
 		self:SetDrawByZPosition(false)
 		self:vanishpoint(SCREEN_CENTER_X, SCREEN_BOTTOM - 150 + curvature)
@@ -238,10 +223,13 @@ local t = Def.ActorFrame {
 			-- Grab the new list of songs from the selected group
 			Songs = GroupsList[GroupIndex].Songs
 
-			-- Reset back to the first song of the list
-			SongIndex = 1
-			GAMESTATE:SetCurrentSong(Songs[SongIndex])
+			-- Fetches what the "StartingPoint" of this playlist should be
+			local thisStartingPoint = tonumber(GroupsList[GroupIndex].StartingPoint)
+						
+			-- Sets the song in GAMESTATE so everything else can work when ForceUpdate
+			GAMESTATE:SetCurrentSong(Songs[thisStartingPoint])
 		end
+
 		-- Update wheel yada yada
 		UpdateItemTargets(SongIndex)
 		MESSAGEMAN:Broadcast("ForceUpdate")

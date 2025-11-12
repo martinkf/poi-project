@@ -79,9 +79,8 @@ end
 t[#t+1] = Def.ActorFrame {
 
 	LoadActor("GroupSelect") .. {
-		-- Zoom doesn't center things so we need to recenter them
 		InitCommand=function(self)
-			--self:zoom(1.25):xy(-SCREEN_WIDTH / 8, -SCREEN_HEIGHT / 8)
+			self:y(306)
 		end
 	},
 

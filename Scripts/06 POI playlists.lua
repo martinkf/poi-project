@@ -3,7 +3,7 @@ function Database_POI()
 		{	Name = "Legacy Korean exclusives",
 			Banner = "Playlists/001-legacykor.png",
 			Description = "Description for -Legacy Korean exclusives-",
-			StartingPoint = "1",
+			StartingPoint = 1,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "3RD-NORMAL", "3RD-HARD", "2ND-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/205 - EXTRAVAGANZA/", Charts = { "3RD-FREESTYLE" } },
@@ -14,12 +14,12 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/405 - MR. LARPUS/", Charts = { "EXTRA-XXDOUBLE" } },				
 				{ SongPath = "/Songs/POI-database/505 - BEETHOVEN VIRUS/", Charts = { "EXTRA-XXDOUBLE" } },
 				{ SongPath = "/Songs/POI-database/511 - UNFORGETTABLE MEMORY/", Charts = { "EXTRA-XXDOUBLE" } },
-				{ SongPath = "/Songs/POI-database/516 - SLAM/", Charts = { "EXTRA-XXDOUBLE" } },
-				{ SongPath = "/Songs/POI-database/923 - FIRST LOVE (TECHNO MIX)/", Charts = { "EXTRA-XXPERT", "EXTRA-XXDOUBLE" } },
+				{ SongPath = "/Songs/POI-database/516 - SLAM/", Charts = { "EXTRA-XXDOUBLE" } },				
 				{ SongPath = "/Songs/POI-database/922 - FINAL AUDITION EPISODE 1/", Charts = { "EXTRA-XXDOUBLE" } },
 				{ SongPath = "/Songs/POI-database/915 - LONER/", Charts = { "EXTRA-XXDOUBLE" } },
 				{ SongPath = "/Songs/POI-database/916 - MONKEY MAGIC/", Charts = { "EXTRA-XXDOUBLE" } },
 				{ SongPath = "/Songs/POI-database/904 - TRASH MAN/", Charts = { "EXTRA-XXDOUBLE" } },
+				{ SongPath = "/Songs/POI-database/923 - FIRST LOVE (TECHNO MIX)/", Charts = { "EXTRA-XXPERT", "EXTRA-XXDOUBLE" } },
 
 				{ SongPath = "/Songs/POI-database/116 - -REMIX- 1ST DIVA REMIX/", Charts = { "1ST-HARD" } },
 				{ SongPath = "/Songs/POI-database/117 - -REMIX- 1ST DISCO REMIX/", Charts = { "1ST-HARD" } },
@@ -43,7 +43,7 @@ function Database_POI()
 		{	Name = "Premiere Brazil exclusives",
 			Banner = "Playlists/002-premierebr.png",
 			Description = "Description for -Premiere Brazil exclusives-",
-			StartingPoint = "1",
+			StartingPoint = 1,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/611 - A CERCA/", Charts = { "PRM1-NORMAL", "PRM1-HARD", "PRM1-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/612 - DE VOLTA AO PLANETA/", Charts = { "PRM1-NORMAL", "PRM1-HARD", "PRM1-FREESTYLE" } },
@@ -58,7 +58,7 @@ function Database_POI()
 		{	Name = "Exceed S.E exclusives",
 			Banner = "Playlists/003-exceedse.png",
 			Description = "Description for -Exceed S.E exclusives-",
-			StartingPoint = "1",
+			StartingPoint = 1,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/AE01 - A LITTLE LESS CONVERSATION/", Charts = { "EXCSE-NORMAL", "EXCSE-HARD", "EXCSE-CRAZY", "EXCSE-FREESTYLE", "EXCSE-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/AE03 - LET'S GROOVE/", Charts = { "EXCSE-NORMAL", "EXCSE-HARD", "EXCSE-CRAZY", "EXCSE-FREESTYLE", "EXCSE-NIGHTMARE" } },
@@ -70,7 +70,7 @@ function Database_POI()
 		{	Name = "Cutting room floor",
 			Banner = "Playlists/004-cuttingroom.png",
 			Description = "Description for -Cutting room floor-",
-			StartingPoint = "1",
+			StartingPoint = 1,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/828 - MASTER OF PUPPETS/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-HALFDOUBLE", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/822 - JUST A GIRL/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-HALFDOUBLE", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
@@ -82,7 +82,7 @@ function Database_POI()
 		{	Name = "Pump It Up The Prex",
 			Banner = "Playlists/08-prex.png",
 			Description = "Description for -Pump It Up The Prex-\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris\nnisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in\nreprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-			StartingPoint = "104",
+			StartingPoint = 104,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/103 - FOREVER LOVE/", Charts = { "1ST-NORMAL" } },
 				{ SongPath = "/Songs/POI-database/104 - PASSION/", Charts = { "1ST-NORMAL", "1ST-HARD", "1ST-FREESTYLE" } },
@@ -205,7 +205,7 @@ function Database_POI()
 		{	Name = "Pump It Up The Premiere 2",
 			Banner = "Playlists/10-premiere2.png",
 			Description = "Description for -Pump It Up The Premiere 2-",
-			StartingPoint = "88",
+			StartingPoint = 88,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/104 - PASSION/", Charts = { "1ST-NORMAL", "1ST-HARD", "1ST-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/105 - BLACK CAT/", Charts = { "1ST-HARD", "1ST-FREESTYLE" } },
@@ -319,7 +319,7 @@ function Database_POI()
 		{	Name = "Pump It Up The Premiere 3",
 			Banner = "Playlists/12-premiere3.png",
 			Description = "Description for -Pump It Up The Premiere 3-",
-			StartingPoint = "43",
+			StartingPoint = 43,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/108 - COME TO ME/", Charts = { "1ST-NORMAL", "1ST-HARD", "1ST-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/109 - FUNKY TONIGHT/", Charts = { "1ST-HARD", "1ST-FREESTYLE" } },
@@ -390,7 +390,7 @@ function Database_POI()
 		{	Name = "Pump It Up The Prex 3",
 			Banner = "Playlists/13-prex3.png",
 			Description = "Description for -Pump It Up The Prex 3-",
-			StartingPoint = "70",
+			StartingPoint = 70,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/101 - IGNITION STARTS/", Charts = { "1ST-HARD", "PREX3-CRAZY", "1ST-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/102 - HYPNOSIS/", Charts = { "1ST-HARD", "PREX3-CRAZY", "1ST-FREESTYLE", "PREX3-NIGHTMARE" } },
@@ -478,7 +478,7 @@ function Database_POI()
 		{	Name = "Pump It Up Exceed",
 			Banner = "Playlists/14-exceed.png",
 			Description = "Description for -Pump It Up Exceed-",
-			StartingPoint = "94",
+			StartingPoint = 94,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/101 - IGNITION STARTS/", Charts = { "1ST-HARD", "PREX3-CRAZY", "1ST-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/102 - HYPNOSIS/", Charts = { "1ST-HARD", "PREX3-CRAZY", "1ST-FREESTYLE", "PREX3-NIGHTMARE" } },
@@ -599,7 +599,7 @@ function Database_POI()
 		{	Name = "Pump It Up Exceed 2",
 			Banner = "Playlists/15-exceed2.png",
 			Description = "Description for -Pump It Up Exceed 2-",
-			StartingPoint = "108",
+			StartingPoint = 108,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/101 - IGNITION STARTS/", Charts = { "1ST-HARD", "PREX3-CRAZY", "1ST-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/102 - HYPNOSIS/", Charts = { "1ST-HARD", "PREX3-CRAZY", "1ST-FREESTYLE", "PREX3-NIGHTMARE" } },
@@ -758,7 +758,7 @@ function Database_POI()
 		{	Name = "Pump It Up Zero",
 			Banner = "Playlists/16-zero.png",
 			Description = "Description for -Pump It Up Zero-",
-			StartingPoint = "95",
+			StartingPoint = 95,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/103 - FOREVER LOVE/", Charts = { "ZERO-EASYSTATION", "1ST-NORMAL", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/108 - COME TO ME/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
@@ -909,7 +909,7 @@ function Database_POI()
 		{	Name = "Pump It Up NX",
 			Banner = "Playlists/17-nx.png",
 			Description = "Description for -Pump It Up NX-",
-			StartingPoint = "103",
+			StartingPoint = 103,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/103 - FOREVER LOVE/", Charts = { "1ST-NORMAL", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/109 - FUNKY TONIGHT/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "1ST-HARD", "ZERO-CRAZY", "NX-TRAINING3", "1ST-FREESTYLE" } },
@@ -1089,7 +1089,7 @@ function Database_POI()
 		{	Name = "Problematic songs",
 			Banner = "Playlists/998-problem.png",
 			Description = "Problematic songs because they have a IDK chart",
-			StartingPoint = "1",
+			StartingPoint = 1,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/205 - EXTRAVAGANZA/", },
 				{ SongPath = "/Songs/POI-database/414 - RUN TO YOU/", },
@@ -1103,7 +1103,7 @@ function Database_POI()
 		{	Name = "All Tunes",
 			Banner = "Playlists/999-alltunes.png",
 			Description = "This lists all songs, without any filtering",
-			StartingPoint = "1",
+			StartingPoint = 1,
 			AllowedSongs = {
 				{ SongPath = "/Songs/POI-database/101 - IGNITION STARTS/", },
 				{ SongPath = "/Songs/POI-database/102 - HYPNOSIS/", },

@@ -24,8 +24,8 @@ t[#t+1] = Def.ActorFrame {
 	Def.ActorFrame {
 		InitCommand=function(self)
 			self:diffusealpha(1)
-			self:x(SCREEN_CENTER_X)
-			self:y(445)
+			self:x(0)
+			self:y(344)
 		end,
 		SongChosenMessageCommand=function(self)
 			self:stoptweening():easeoutexpo(0.25):diffusealpha(0)
@@ -34,9 +34,10 @@ t[#t+1] = Def.ActorFrame {
 			self:stoptweening():sleep(0.25):easeoutexpo(0.5):diffusealpha(1)
 		end,
 
-		Def.ActorMultiVertex{
+		Def.ActorMultiVertex {
 			InitCommand=function(self)
-				self:y(268)
+				self:x(640)
+				self:y(368)
 				self:SetDrawState{Mode="DrawMode_Fan"}
 				self:SetVertices((function()
 					local verts = {}

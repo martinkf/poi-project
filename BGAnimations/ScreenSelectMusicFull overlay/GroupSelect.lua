@@ -1,56 +1,34 @@
-local MainWheelSize = 70
-local MainWheelCenter = math.ceil( MainWheelSize * 0.5 )
-local MainWheelSpacing = 180 + 280
-local WheelItem = { Width = 212, Height = 120 }
-
---
-
--- Not load anything if no group sorts are available (catastrophic event or no songs)
+-- SAFECHECK - GENERATES A GLOBAL VARIABLE GroupsList IF IT DOESN'T EXIST ALREADY
 if next(GroupsList) == nil then
 	AssembleGroupSorting_POI()
     UpdateGroupSorting_POI()
-    
+
     if next(GroupsList) == nil then
         Warn("Groups list is currently inaccessible, halting music wheel!")
         return Def.Actor {}
     end
 end
 
--- So that we can grab the Cur screen and use it outside an actor
-local ScreenSelectMusic
+-- SAFECHECK - IF NO SONGS DON'T LOAD ANYTHING
+if SONGMAN:GetNumSongs() == 0 then
+    return Def.Actor {}
+end
 
--- Used for quitting the game
-local IsHome = GAMESTATE:GetCoinMode() == "CoinMode_Home"
-local IsEvent = GAMESTATE:IsEventMode()
-local TickCount = 0 -- Used for InputEventType_Repeat
+-- DECLARING SOME LEVERS AND VARIABLES
+local MainWheelSize = 70
+local MainWheelCenter = math.ceil( MainWheelSize * 0.5 )
+local MainWheelSpacing = 180 + 280
+local WheelItem = { Width = 212, Height = 120 }
+
+local ScreenSelectMusic
 
 local IsOptionsList = { PLAYER_1 = false, PLAYER_2 = false }
 local IsSelectingGroup = false
 local IsBusy = false
 
-LastGroupMainIndex = tonumber(LoadModule("Config.Load.lua")("GroupMainIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 0
-LastSongIndex = tonumber(LoadModule("Config.Load.lua")("SongIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 0
---reset LastGroup/Song if they were deleted since last session to avoid "attempt to index nil" crashes
-if GroupsList[LastGroupMainIndex] == nil then
-    LastGroupMainIndex = 1
-    LastSongIndex = 1
-    Warn("ScreenSelectMusicFull overlay / GroupSelect.lua: LastGroupMainIndex no longer present, reset performed")
-end
-if GroupsList[LastGroupMainIndex].Songs == nil then
-    LastSongIndex = 1
-    Warn("ScreenSelectMusicFull overlay / GroupSelect.lua: LastSongIndex no longer present, reset performed")
-end
-
--- Create the variables necessary for both wheels
-CurPlaylistIndex = LastGroupMainIndex > 0 and LastGroupMainIndex or 1
 local MainTargets = {}
 
--- If no songs don't load anything
-if SONGMAN:GetNumSongs() == 0 then
-    return Def.Actor {}
-end
-
--- Update Group item targets
+-- DECLARING USEFUL FUNCTIONS
 local function UpdateMainItemTargets(val)
 	for i = 1, MainWheelSize do
 		MainTargets[i] = val + i - MainWheelCenter
@@ -66,19 +44,18 @@ local function UpdateMainItemTargets(val)
 	end
 end
 
--- Manages banner on sprite
 function UpdateBanner(self, Banner)
 	if Banner == "" then Banner = THEME:GetPathG("Common fallback", "banner") end
 	self:Load(Banner):scaletofit(-WheelItem.Width / 2, -WheelItem.Height / 2, WheelItem.Width / 2, WheelItem.Height / 2)
 end
 
+-- DECLARING INPUT HANDLER
 local function InputHandler(event)
 	local pn = event.PlayerNumber
 	if not pn then return end
 	
 	-- Don't want to move when releasing the button
 	if event.type == "InputEventType_Release" then
-		TickCount = 0
 		MESSAGEMAN:Broadcast("ExitTickDown")
 		return
 	end
@@ -98,13 +75,11 @@ local function InputHandler(event)
 				if CurPlaylistIndex < 1 then CurPlaylistIndex = #GroupsList end
 				UpdateMainItemTargets(CurPlaylistIndex)
 				MESSAGEMAN:Broadcast("ScrollMain", { Direction = -1 })
-				MESSAGEMAN:Broadcast("RefreshSub")
 			else
 				if CurPlaylistIndex > 1 then
 					CurPlaylistIndex = CurPlaylistIndex - 1
 					UpdateMainItemTargets(CurPlaylistIndex)
 					MESSAGEMAN:Broadcast("ScrollMain", { Direction = -1 })
-					MESSAGEMAN:Broadcast("RefreshSub")
 				end
 			end
 			
@@ -116,13 +91,11 @@ local function InputHandler(event)
 				if CurPlaylistIndex > #GroupsList then CurPlaylistIndex = 1 end
 				UpdateMainItemTargets(CurPlaylistIndex)
 				MESSAGEMAN:Broadcast("ScrollMain", { Direction = 1 })
-				MESSAGEMAN:Broadcast("RefreshSub")
 			else
 				if CurPlaylistIndex < #GroupsList then
 					CurPlaylistIndex = CurPlaylistIndex + 1
 					UpdateMainItemTargets(CurPlaylistIndex)
 					MESSAGEMAN:Broadcast("ScrollMain", { Direction = 1 })
-					MESSAGEMAN:Broadcast("RefreshSub")
 				end
 			end
 			
@@ -130,13 +103,14 @@ local function InputHandler(event)
 			
 			if CurPlaylistIndex == LastGroupMainIndex then
 				MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = true })
-			else
+			else -- this means, if the group was actually changed, instead of just selected the same as previously
 				GroupIndex = CurPlaylistIndex
-				
-				-- Save this for later
 				LastGroupMainIndex = CurPlaylistIndex
-				
 				LoadModule("Config.Save.lua")("GroupMainIndex", LastGroupMainIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+				
+				SongIndex = GroupsList[CurPlaylistIndex].StartingPoint
+				LastSongIndex = GroupsList[CurPlaylistIndex].StartingPoint
+				LoadModule("Config.Save.lua")("SongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
 				
 				MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = false })
 			end
@@ -147,14 +121,9 @@ local function InputHandler(event)
 	end
 end
 
-
---
-
-
-
+-- OPERATIONS
 local t = Def.ActorFrame {
 	InitCommand=function(self)
-		self:y(306)
 		self:fov(90)
 		self:SetDrawByZPosition(true)
 		self:vanishpoint(SCREEN_CENTER_X, SCREEN_CENTER_Y + 40)
@@ -212,12 +181,6 @@ local t = Def.ActorFrame {
 		self:stoptweening():easeoutexpo(1):diffusealpha(0)
 
 		IsSelectingGroup = false
-
-		if params.Silent == false then
-			-- The built in wheel needs to be told the group has been changed
-			ScreenSelectMusic:PostScreenMessage("SM_SongChanged", 0 )
-			MESSAGEMAN:Broadcast("StartSelectingSong")
-		end
 	end,
 
 	-- sounds
