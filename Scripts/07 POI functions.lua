@@ -108,6 +108,7 @@ function AssembleGroupSorting_POI()
 			Name = thisPlaylist.Name,
 			Banner = THEME:GetPathG("", thisPlaylist.Banner),
 			Description = thisPlaylist.Description,
+			StartingPoint = thisPlaylist.StartingPoint,
 			AllowedSongs = thisPlaylist.AllowedSongs,
 			Songs = arrayOfAllowedSongs
 		}

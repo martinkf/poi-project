@@ -1,6 +1,6 @@
 -- GroupsList variables
-local Songs = {}
-local Targets = {}
+Songs = {}
+Targets = {}
 
 -- MusicWheel levers
 local EntireScreen_x = -640
@@ -51,7 +51,7 @@ elseif GroupsList[LastGroupMainIndex].Songs[LastSongIndex] == nil then
 end
 
 -- Initializes local variables
-local SongIndex = LastSongIndex > 0 and LastSongIndex or 1
+SongIndex = LastSongIndex > 0 and LastSongIndex or 1
 local GroupMainIndex = LastGroupMainIndex > 0 and LastGroupMainIndex or 1
 local IsBusy = false
 
@@ -75,6 +75,37 @@ local function UpdateItemTargets(val)
 		end
 		
     end
+end
+
+function MusicWheelGoesTo(input_index)
+	-- Clamp or wrap around index to valid range
+	if not Songs or #Songs == 0 then return end
+
+	local poi_settings_songlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsSonglistIsWheel", "Save/OutFoxPrefs.ini") or false
+
+	if poi_settings_songlist_is_wheel then
+		-- wrap around behavior
+		while input_index > #Songs do input_index = input_index - #Songs end
+		while input_index < 1 do input_index = input_index + #Songs end
+	else
+		-- clamp behavior
+		if input_index > #Songs then input_index = #Songs end
+		if input_index < 1 then input_index = 1 end
+	end
+
+	-- Apply the new index logically
+	SongIndex = input_index
+
+	-- Update current song (no animation)
+	local song = Songs[SongIndex]
+	if song then
+		GAMESTATE:SetCurrentSong(song)
+		MESSAGEMAN:Broadcast("CurrentSongChanged")
+	end
+
+	-- Update mapping and visuals instantly
+	UpdateItemTargets(SongIndex)
+	MESSAGEMAN:Broadcast("ForceUpdate", { Duration = 0 })
 end
 
 local function InputHandler(event)
@@ -206,6 +237,7 @@ local t = Def.ActorFrame {
 		if params.Silent == false then
 			-- Grab the new list of songs from the selected group
 			Songs = GroupsList[GroupIndex].Songs
+
 			-- Reset back to the first song of the list
 			SongIndex = 1
 			GAMESTATE:SetCurrentSong(Songs[SongIndex])

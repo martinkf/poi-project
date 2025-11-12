@@ -6,7 +6,7 @@ local t = Def.ActorFrame {
 	end,
 	CurrentSongChangedMessageCommand=function(self) self:playcommand("Refresh") end,
 
-	LoadActor("../ScreenEvaluation underlay/EvalSongInfo") .. {
+	LoadActor("../ScreenEvaluation underlay/EvalSongInfo.lua") .. {
 		InitCommand=function(self)
 			self:xy(SCREEN_CENTER_X, SCREEN_CENTER_Y)
 		end,

@@ -29,12 +29,10 @@ local IsSelectingGroup = false
 local IsBusy = false
 
 LastGroupMainIndex = tonumber(LoadModule("Config.Load.lua")("GroupMainIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 0
-LastGroupSubIndex = tonumber(LoadModule("Config.Load.lua")("GroupSubIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 0
 LastSongIndex = tonumber(LoadModule("Config.Load.lua")("SongIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 0
---reset LastGroup/Sub/Song if they were deleted since last session to avoid "attempt to index nil" crashes
+--reset LastGroup/Song if they were deleted since last session to avoid "attempt to index nil" crashes
 if GroupsList[LastGroupMainIndex] == nil then
     LastGroupMainIndex = 1
-    LastGroupSubIndex = 1
     LastSongIndex = 1
     Warn("ScreenSelectMusicFull overlay / GroupSelect.lua: LastGroupMainIndex no longer present, reset performed")
 end
@@ -44,7 +42,7 @@ if GroupsList[LastGroupMainIndex].Songs == nil then
 end
 
 -- Create the variables necessary for both wheels
-local CurMainIndex = LastGroupMainIndex > 0 and LastGroupMainIndex or 1
+CurPlaylistIndex = LastGroupMainIndex > 0 and LastGroupMainIndex or 1
 local MainTargets = {}
 
 -- If no songs don't load anything
@@ -96,15 +94,15 @@ local function InputHandler(event)
 
 			local poi_settings_playlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsPlaylistIsWheel", "Save/OutFoxPrefs.ini") or false
 			if poi_settings_playlist_is_wheel then
-				CurMainIndex = CurMainIndex - 1
-				if CurMainIndex < 1 then CurMainIndex = #GroupsList end
-				UpdateMainItemTargets(CurMainIndex)
+				CurPlaylistIndex = CurPlaylistIndex - 1
+				if CurPlaylistIndex < 1 then CurPlaylistIndex = #GroupsList end
+				UpdateMainItemTargets(CurPlaylistIndex)
 				MESSAGEMAN:Broadcast("ScrollMain", { Direction = -1 })
 				MESSAGEMAN:Broadcast("RefreshSub")
 			else
-				if CurMainIndex > 1 then
-					CurMainIndex = CurMainIndex - 1
-					UpdateMainItemTargets(CurMainIndex)
+				if CurPlaylistIndex > 1 then
+					CurPlaylistIndex = CurPlaylistIndex - 1
+					UpdateMainItemTargets(CurPlaylistIndex)
 					MESSAGEMAN:Broadcast("ScrollMain", { Direction = -1 })
 					MESSAGEMAN:Broadcast("RefreshSub")
 				end
@@ -114,15 +112,15 @@ local function InputHandler(event)
 
 			local poi_settings_playlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsPlaylistIsWheel", "Save/OutFoxPrefs.ini") or false
 			if poi_settings_playlist_is_wheel then
-				CurMainIndex = CurMainIndex + 1
-				if CurMainIndex > #GroupsList then CurMainIndex = 1 end
-				UpdateMainItemTargets(CurMainIndex)
+				CurPlaylistIndex = CurPlaylistIndex + 1
+				if CurPlaylistIndex > #GroupsList then CurPlaylistIndex = 1 end
+				UpdateMainItemTargets(CurPlaylistIndex)
 				MESSAGEMAN:Broadcast("ScrollMain", { Direction = 1 })
 				MESSAGEMAN:Broadcast("RefreshSub")
 			else
-				if CurMainIndex < #GroupsList then
-					CurMainIndex = CurMainIndex + 1
-					UpdateMainItemTargets(CurMainIndex)
+				if CurPlaylistIndex < #GroupsList then
+					CurPlaylistIndex = CurPlaylistIndex + 1
+					UpdateMainItemTargets(CurPlaylistIndex)
 					MESSAGEMAN:Broadcast("ScrollMain", { Direction = 1 })
 					MESSAGEMAN:Broadcast("RefreshSub")
 				end
@@ -130,20 +128,20 @@ local function InputHandler(event)
 			
 		elseif button == "Start" or button == "MenuStart" or button == "Center" then
 			
-			if CurMainIndex == LastGroupMainIndex then
+			if CurPlaylistIndex == LastGroupMainIndex then
 				MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = true })
 			else
-				GroupIndex = CurMainIndex
+				GroupIndex = CurPlaylistIndex
 				
 				-- Save this for later
-				LastGroupMainIndex = CurMainIndex
+				LastGroupMainIndex = CurPlaylistIndex
 				
 				LoadModule("Config.Save.lua")("GroupMainIndex", LastGroupMainIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
 				
 				MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = false })
 			end
 			
-		elseif button == "UpRight" or button == "UpLeft" or button == "Up" or button == "MenuUp" then				
+		elseif button == "UpRight" or button == "UpLeft" or button == "Up" or button == "MenuUp" then
 			MESSAGEMAN:Broadcast("RefreshHighlight")
 		end
 	end
@@ -162,7 +160,7 @@ local t = Def.ActorFrame {
 		self:vanishpoint(SCREEN_CENTER_X, SCREEN_CENTER_Y + 40)
 		self:diffusealpha(0)
 
-		UpdateMainItemTargets(CurMainIndex)
+		UpdateMainItemTargets(CurPlaylistIndex)
 	end,
 
 	OnCommand=function(self)
@@ -342,14 +340,14 @@ for i = 1, MainWheelSize do
 				self:zoom(1.2)
 				self:shadowlength(2)
 				self:skewx(-0)
-				self:settext(GroupsList[CurMainIndex].Name)
+				self:settext(GroupsList[CurPlaylistIndex].Name)
 				self:queuecommand('Refresh')
 			end,
 			ScrollMainMessageCommand=function(self)
 				self:queuecommand('Refresh')
 			end,
 			RefreshCommand=function(self)
-				self:settext(GroupsList[CurMainIndex].Name)
+				self:settext(GroupsList[CurPlaylistIndex].Name)
 			end
 		},
 
@@ -361,14 +359,14 @@ for i = 1, MainWheelSize do
 				self:shadowlength(1)
 				self:align(0.5,0)
 				self:maxwidth(1262)
-				self:settext(GroupsList[CurMainIndex].Description)
+				self:settext(GroupsList[CurPlaylistIndex].Description)
 				self:queuecommand('Refresh')
 			end,
 			ScrollMainMessageCommand=function(self)
 				self:queuecommand('Refresh')
 			end,
 			RefreshCommand=function(self)
-				self:settext(GroupsList[CurMainIndex].Description)
+				self:settext(GroupsList[CurPlaylistIndex].Description)
 			end
 		},
 	}

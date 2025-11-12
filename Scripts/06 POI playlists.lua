@@ -67,6 +67,18 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/AE06 - WALKIE TALKIE MAN/", Charts = { "EXCSE-NORMAL", "EXCSE-HARD", "EXCSE-CRAZY", "EXCSE-FREESTYLE", "EXCSE-NIGHTMARE" } },
 			},
 		},
+		{	Name = "Cutting room floor",
+			Banner = "Playlists/004-cuttingroom.png",
+			Description = "Description for -Cutting room floor-",
+			StartingPoint = "1",
+			AllowedSongs = {
+				{ SongPath = "/Songs/POI-database/828 - MASTER OF PUPPETS/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-HALFDOUBLE", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/822 - JUST A GIRL/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-HALFDOUBLE", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/824 - OBJECTION/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-HALFDOUBLE", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/825 - IT'S MY PARTY/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-HALFDOUBLE", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/827 - MUSIC/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-HALFDOUBLE", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
+			},
+		},
 		{	Name = "Pump It Up The Prex",
 			Banner = "Playlists/08-prex.png",
 			Description = "Description for -Pump It Up The Prex-\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris\nnisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in\nreprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
@@ -675,7 +687,7 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/826 - COME TO ME/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/821 - EMPIRE OF THE SUN/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
 
-				{ SongPath = "/Songs/POI-database/A01 - FINAL AUDITION 3 U.F/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A01 - FINAL AUDITION 3 U.F/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC2-FREESTYLE", "EXC1-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A02 - NAISSANCE 2/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC2-FREESTYLE", "EXC1-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A03 - MONKEY FINGERS/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A04 - BLAZING/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
@@ -809,7 +821,7 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/826 - COME TO ME/", Charts = { "PREX3-NORMAL", "ZERO-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/821 - EMPIRE OF THE SUN/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
 
-				{ SongPath = "/Songs/POI-database/A01 - FINAL AUDITION 3 U.F/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/A01 - FINAL AUDITION 3 U.F/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC2-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A02 - NAISSANCE 2/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC2-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A03 - MONKEY FINGERS/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A04 - BLAZING/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
@@ -902,11 +914,13 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/103 - FOREVER LOVE/", Charts = { "1ST-NORMAL", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/109 - FUNKY TONIGHT/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "1ST-HARD", "ZERO-CRAZY", "NX-TRAINING3", "1ST-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "1ST-NORMAL", "1ST-HARD", "ZERO-CRAZY", "NX-TRAINING3", "3RD-FREESTYLE", "NX-AFREESTYLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+
 				{ SongPath = "/Songs/POI-database/204 - FINAL AUDITION/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "PERF-NORMAL", "2ND-HARD", "PREX3-CRAZY", "ZERO-ACRAZY", "NX-TRAINING3", "PREX3-FREESTYLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/205 - EXTRAVAGANZA/", Charts = { "3RD-HARD", "3RD-CRAZY", "ZERO-ACRAZY", "2ND-FREESTYLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/208 - FIGHTING SPIRITS/", Charts = { "2ND-NORMAL", "NX-ACRAZY", "2ND-FREESTYLE", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/212 - COM'BACK/", Charts = { "2ND-HARD", "ZERO-CRAZY", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/213 - MOBIUS STRIP/", Charts = { "2ND-HARD", "ZERO-CRAZY", "2ND-FREESTYLE", "ZERO-NIGHTMARE" } },
+
 				{ SongPath = "/Songs/POI-database/301 - FINAL AUDITION 2/", Charts = { "3RD-HARD", "3RD-CRAZY", "ZERO-ACRAZY", "3RD-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/302 - NAISSANCE/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/303 - TURKEY MARCH/", Charts = { "3RD-HARD", "3RD-CRAZY", "3RD-FREESTYLE", "EXC1-NIGHTMARE" } },
@@ -915,20 +929,24 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/312 - DON'T BOTHER ME/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "3RD-NORMAL", "EXTRA-HARD", "PREX3-CRAZY", "3RD-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/313 - LOVE SONG/", Charts = { "3RD-NORMAL", "3RD-HARD", "EXC2-CRAZY", "3RD-FREESTYLE", "EXC2-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/318 - WE ARE/", Charts = { "3RD-HARD", "PREX3-CRAZY", "3RD-FREESTYLE", "ZERO-NIGHTMARE" } },
+
 				{ SongPath = "/Songs/POI-database/404 - SOLITARY/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "OBGSE-CRAZY", "OBGSE-FREESTYLE", "EXC2-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/405 - MR. LARPUS/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "OBGSE-CRAZY", "NX-ACRAZY", "OBGSE-FREESTYLE", "ZERO-ANIGHTMARE", "PREX3-NIGHTMARE", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/413 - RUN!/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+
 				{ SongPath = "/Songs/POI-database/502 - N/", Charts = { "PERF-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/503 - ROLLING CHRISTMAS/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "NX-TRAINING3", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/505 - BEETHOVEN VIRUS/", Charts = { "PERF-NORMAL", "PERF-HARD", "PERF-CRAZY", "NX-ACRAZY", "PERF-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/507 - COME BACK TO ME/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/516 - SLAM/", Charts = { "PERF-NORMAL", "PERF-HARD", "PERF-CRAZY", "PERF-FREESTYLE", "EXC1-NIGHTMARE" } },
+
 				{ SongPath = "/Songs/POI-database/922 - FINAL AUDITION EPISODE 1/", Charts = { "EXTRA-HARD", "NX-AHARD", "EXTRA-XXPERT", "EXTRA-FREESTYLE", "EXC1-NIGHTMARE", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/902 - CIRCUS MAGIC/", Charts = { "PREX3-NORMAL", "EXTRA-HARD", "PREX3-CRAZY", "EXTRA-FREESTYLE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/906 - STARIAN/", Charts = { "EXTRA-HARD", "PREX3-CRAZY", "EXTRA-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/915 - LONER/", Charts = { "EXTRA-HARD", "EXTRA-XXPERT", "EXTRA-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/919 - LAZENCA, SAVE US/", Charts = { "EXTRA-NORMAL", "EXTRA-HARD", "EXTRA-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/909 - MISTAKE/", Charts = { "EXTRA-NORMAL", "EXTRA-HARD", "EXTRA-FREESTYLE" } },
+
 				{ SongPath = "/Songs/POI-database/735 - VOOK/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-FREESTYLE", "REB-HALFDOUBLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/736 - CSIKOS POST/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-FREESTYLE", "PREX3-NIGHTMARE", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/701 - DR. M/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "NX-ACRAZY", "REB-FREESTYLE", "PREX3-NIGHTMARE" } },
@@ -936,6 +954,7 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/708 - POINT BREAK/", Charts = { "REB-NORMAL", "REB-HARD", "EXC2-CRAZY","REB-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/711 - WINTER/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "REB-NORMAL", "REB-HARD", "REB-CRAZY", "NX-TRAINING3", "REB-FREESTYLE", "PREX3-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/712 - WILL O' THE WISP/", Charts = { "REB-NORMAL", "REB-HARD", "REB-CRAZY", "REB-FREESTYLE", "PREX3-NIGHTMARE" } },
+
 				{ SongPath = "/Songs/POI-database/802 - BEE/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "NX-ACRAZY", "PRM3-FREESTYLE", "NX-AFREESTYLE", "EXC1-NIGHTMARE", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/820 - BEAT OF THE WAR/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "PRM3-FREESTYLE", "EXC2-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/805 - CLAP YOUR HANDS/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
@@ -943,8 +962,10 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/809 - ERES PARA MI/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "PRM3-FREESTYLE" } },
 				{ SongPath = "/Songs/POI-database/818 - MEXI MEXI/", Charts = { "PRM3-NORMAL", "PRM3-HARD", "PRM3-CRAZY", "PRM3-FREESTYLE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/814 - JOIN THE PARTY/", Charts = { "PREX3-NORMAL", "PREX3-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+
 				{ SongPath = "/Songs/POI-database/826 - COME TO ME/", Charts = { "PREX3-NORMAL", "ZERO-HARD", "PREX3-CRAZY", "PREX3-FREESTYLE", "PREX3-NIGHTMARE" } },
-				{ SongPath = "/Songs/POI-database/A01 - FINAL AUDITION 3 U.F/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
+
+				{ SongPath = "/Songs/POI-database/A01 - FINAL AUDITION 3 U.F/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC2-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A02 - NAISSANCE 2/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC2-FREESTYLE", "EXC1-NIGHTMARE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A03 - MONKEY FINGERS/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A04 - BLAZING/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
@@ -964,6 +985,7 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/A21 - WATCH OUT/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A22 - FIESTA/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A23 - SOCA MAKE YUH RAM RAM/", Charts = { "EXC1-NORMAL", "EXC1-HARD", "EXC1-CRAZY", "EXC1-FREESTYLE", "EXC1-NIGHTMARE" } },
+
 				{ SongPath = "/Songs/POI-database/B17 - HI-BI/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "NX-ACRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/B18 - SOLITARY 2/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "ZERO-ACRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE", "ZERO-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/B19 - CANON-D/", Charts = { "NX-TRAINING1", "NX-TRAINING2", "NX-TRAINING3", "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "ZERO-FREESTYLE", "EXC2-NIGHTMARE" } },
@@ -980,6 +1002,7 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/B14 - HUU YAH YEAH/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/B15 - WE DON'T STOP/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/B20 - LE CODE DE BONNE CONDUITE/", Charts = { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" } },
+
 				{ SongPath = "/Songs/POI-database/C01 - BEAT OF THE WAR 2/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/C02 - MOONLIGHT/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/C03 - WITCH DOCTOR/", Charts = { "ZERO-CRAZY", "ZERO-ACRAZY", "ZERO-NIGHTMARE", "ZERO-ANIGHTMARE" } },
@@ -1001,6 +1024,7 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/C20 - TURN AROUND/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/C21 - I LOVE YOU BABY/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/C22 - UP UP/", Charts = { "ZERO-NORMAL", "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE", "ZERO-NIGHTMARE" } },
+
 				-- should start here, song #103
 				{ SongPath = "/Songs/POI-database/D01 - WITCH DOCTOR #1/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/D02 - ARCH OF DARKNESS/", Charts = { "NX-NORMAL", "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
@@ -1072,7 +1096,6 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/503 - ROLLING CHRISTMAS/", },
 				{ SongPath = "/Songs/POI-database/906 - STARIAN/", },
 				{ SongPath = "/Songs/POI-database/708 - POINT BREAK/", },
-				{ SongPath = "/Songs/POI-database/A01 - FINAL AUDITION 3 U.F/", },
 				{ SongPath = "/Songs/POI-database/D03 - CHIMERA/", },
 				{ SongPath = "/Songs/OffsetControl/csikosTest/", },
 			},

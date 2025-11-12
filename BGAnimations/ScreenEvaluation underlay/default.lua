@@ -63,7 +63,7 @@ local t = Def.ActorFrame {
 	LoadActor("EvalLines"),
 
 	-- TODO: Dynamically adjust the Y position relative to the amount of lines on screen?
-	LoadActor("EvalSongInfo") .. {
+	LoadActor("EvalSongInfo.lua") .. {
 		InitCommand=function(self) self:xy(SCREEN_CENTER_X, 140) end,
 	},
 
