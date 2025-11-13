@@ -63,20 +63,17 @@ t[#t+1] = Def.ActorFrame {
 	-- SongInfo (static ribbon that displays information about the song that's currently hovered in the song wheel)
 	Def.ActorFrame {
 		InitCommand=function(self)
-			self:x(126)
-			self:y(326)
+			self:x(SCREEN_CENTER_X)
+			self:y(618)
 		end,
 		SongChosenMessageCommand=function(self)
-			self:stoptweening():easeoutexpo(1):y(326-426)
+			self:stoptweening():easeoutexpo(1):y(618-426)
 		end,
 		SongUnchosenMessageCommand=function(self)
-			self:stoptweening():easeoutexpo(0.5):y(326)
-		end,
-		CurrentSongChangedMessageCommand=function(self)
-			self:stoptweening():diffusealpha(0):sleep(0.125):easeoutexpo(0.125):diffusealpha(1)
+			self:stoptweening():easeoutexpo(0.5):y(618)
 		end,
 
-		LoadActor("SongInfoNoBPM.lua")
+		LoadActor("../SongInfo.lua")
 	},
 
 	-- ChartDisplay (the interactive list of all current possible playable charts for the selected song)

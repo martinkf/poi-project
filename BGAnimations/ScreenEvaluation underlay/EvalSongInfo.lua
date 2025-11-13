@@ -1,6 +1,7 @@
+-- DECLARING LOCAL VARIABLES
 local FrameW = 620
-local FrameH = 76
 
+-- OPERATIONS
 local t = Def.ActorFrame {
 	InitCommand=function(self)
 		local Song = GAMESTATE:GetCurrentSong()

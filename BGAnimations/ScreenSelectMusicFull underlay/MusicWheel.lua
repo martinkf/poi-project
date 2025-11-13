@@ -25,8 +25,10 @@ local focalLength = 5000
 local verticalCurve = 0
 local maxVisibleAngle = math.pi * 0.6
 
-local indexIndicator_y = -88
-local indexIndicator_range = 180
+local indexIndicator_baseX = 640
+local indexIndicator_y = 94
+local indexIndicator_range = 186
+
 
 local IsBusy = false
 
@@ -44,7 +46,6 @@ local GroupMainIndex = LastGroupMainIndex
 SongIndex = LastSongIndex
 
 -- DECLARING MORE VARIABLES - DEFAULT IS TO START AT ALL FOR NOW
-Songs = {}
 Targets = {}
 Songs = GroupsList[GroupMainIndex].Songs
 
@@ -259,8 +260,8 @@ local t = Def.ActorFrame {
 		IsBusy = false
 	end,
 
+
 	-- drawing: sounds
-	-- Play song preview (thanks Luizsan)
 	Def.Actor { Name="Song Preview Player",
 		CurrentSongChangedMessageCommand=function(self)
 			SOUND:StopMusic()
@@ -287,6 +288,71 @@ local t = Def.ActorFrame {
 		File=THEME:GetPathS("Common", "Start"),
 		IsAction=true,
 		MusicWheelStartMessageCommand=function(self) self:play() end
+	},
+
+
+	-- drawing: index indicators
+	Def.Quad { Name="IndexIndicator",
+		InitCommand=function(self)
+			self:y(indexIndicator_y)
+			self:align(0.5,0.5)
+			self:diffuse(color("0,0,0,0.4"))
+
+			self:zoomto(26, 12)
+			self:x(indexIndicator_baseX)
+			self:playcommand("Refresh")
+		end,
+		ForceUpdateMessageCommand=function(self)
+			self:playcommand("Refresh")
+		end,
+		RefreshCommand=function(self, param)
+			-- alters its width depending on the number of songs in the group
+			local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
+			local calculatedWidth = indexIndicator_range / totalSongsFromGroup
+			local usedWidth
+			if calculatedWidth < 26 then
+				usedWidth = 26
+			else
+				usedWidth = calculatedWidth
+			end
+			self:zoomto(usedWidth, 12)
+
+			-- alters its x position depending on the current songindex
+			self:x(indexIndicator_baseX + ((SongIndex - (totalSongsFromGroup + 1) / 2) * calculatedWidth))
+		end,
+	},
+
+	Def.BitmapText { Name="IndexIndicatorText",
+		Font="Montserrat semibold 40px",
+		InitCommand=function(self)
+			self:y(indexIndicator_y)
+			self:zoom(0.3)
+			self:align(0.5,0.5)
+			self:diffuse(color("1,1,1,0.8"))
+
+			self:settext("???")
+			self:x(indexIndicator_baseX)
+			self:playcommand("Refresh")
+		end,
+		
+		ForceUpdateMessageCommand=function(self)
+			self:playcommand("Refresh")
+		end,
+
+		RefreshCommand=function(self,param)
+			-- alters some necessary variables depending on the number of songs in the group
+			local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
+			local calculatedWidth = indexIndicator_range / totalSongsFromGroup
+
+			-- alters its text depending on the current songindex
+			self:settext(SongIndex)
+
+			-- alters its color depending on the song's origin debut version
+			self:diffuse(FetchFromSong(Songs[SongIndex], "Song Origin Color"))
+
+			-- alters its x position depending on the current songindex
+			self:x(indexIndicator_baseX + ((SongIndex - (totalSongsFromGroup + 1) / 2) * calculatedWidth))
+		end,
 	},
 
 }
@@ -353,8 +419,6 @@ for i = 1, WheelSize do
 				self:x(g_to.x):y(g_to.y):z(g_to.z):zoom(g_to.zoom):rotationy(g_to.rotY)
 				self:visible(g_to.visible)
 				-- atualiza textos/children imediatamente
-				self:GetChild("IndexIndicator"):playcommand("Refresh")
-				self:GetChild("IndexIndicatorText"):playcommand("Refresh")
 				self:GetChild("BGFrame"):playcommand("Refresh")
 				self:GetChild("OriginLabel"):playcommand("Refresh")
 				self:GetChild("CategoryLabel"):playcommand("Refresh")
@@ -372,8 +436,6 @@ for i = 1, WheelSize do
 		end,
 
 		RefreshAfterTweenCommand=function(self)
-			self:GetChild("IndexIndicator"):playcommand("Refresh")
-			self:GetChild("IndexIndicatorText"):playcommand("Refresh")
 			self:GetChild("BGFrame"):playcommand("Refresh")
 			self:GetChild("OriginLabel"):playcommand("Refresh")
 			self:GetChild("CategoryLabel"):playcommand("Refresh")
@@ -381,64 +443,8 @@ for i = 1, WheelSize do
 			self:GetChild("ArtistLabel"):playcommand("Refresh")
 		end,
 
-		Def.Quad { Name="IndexIndicator",
-			InitCommand=function(self)
-				self:y(indexIndicator_y)
-				self:align(0.5,0.5)
-				self:diffuse(color("0,0,0,0.4"))
-			end,
-			RefreshCommand=function(self, param)
-				-- alters its width depending on the number of songs in the group
-				local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
-				local calculatedWidth = indexIndicator_range / totalSongsFromGroup
-				local usedWidth
-				if calculatedWidth < 30 then
-					usedWidth = 30
-				else 
-					usedWidth = calculatedWidth
-				end
-				self:zoomto(usedWidth, 12)
 
-				-- alters its x position depending on the current i
-				self:x((Targets[i] - (totalSongsFromGroup + 1) / 2) * calculatedWidth)
-				
-				-- visibility, since this element technically gets cloned for each wheel element
-				if i == WheelCenter then
-					self:visible(true)
-				else
-					self:visible(false)
-				end
-			end,
-		},
-		Def.BitmapText { Name="IndexIndicatorText",
-			Font="Montserrat semibold 40px",
-			InitCommand=function(self)
-				self:addx(0):addy(indexIndicator_y)
-				self:zoom(0.3)
-				self:align(0.5,0.5)
-				self:diffuse(color("1,1,1,0.8"))
-			end,
-			
-			RefreshCommand=function(self,param)
-				-- alters some necessary variables depending on the number of songs in the group
-				local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
-				local calculatedWidth = indexIndicator_range / totalSongsFromGroup
-
-				-- alters its text depending on the current i
-				self:settext(Targets[i])
-
-				-- alters its x position depending on the current i
-				self:x((Targets[i] - (totalSongsFromGroup + 1) / 2) * calculatedWidth)
-				
-				-- visibility, since this element technically gets cloned for each wheel element
-				if i == WheelCenter then
-					self:visible(true)
-				else
-					self:visible(false)
-				end
-			end,
-		},
-
+		-- drawing!
 		Def.Quad { Name="BGFrame",
 			InitCommand=function(self)
 				self:y(-10)
@@ -599,8 +605,9 @@ for i = 1, WheelSize do
 			end,
 
 		},
+	
 	}
-end
 
+end
 
 return t

@@ -1,4 +1,4 @@
--- levers
+-- DECLARING SOME LEVERS AND VARIABLES
 local SongIsChosen = false
 local levelQuads_Y = 0
 local levelQuads_X = 34
@@ -9,17 +9,29 @@ local chartOrigin_Y = -19
 local chartArtist_X = chartDesc_X
 local chartArtist_Y = 17
 
---
-
+-- OPERATIONS
 local t = Def.ActorFrame {}
-
 for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 	t[#t+1] = Def.ActorFrame {
-		InitCommand=function(self) self:y(0):queuecommand("Refresh") end,
+		InitCommand=function(self)
+			self:y(0)
+			self:queuecommand("Refresh")
+		end,
 		
-		SongChosenMessageCommand=function(self) SongIsChosen = true self:playcommand("Refresh") end,
-		SongUnchosenMessageCommand=function(self) SongIsChosen = false end,
-		CurrentChartChangedMessageCommand=function(self) if SongIsChosen then self:playcommand("Refresh") end end,
+		SongChosenMessageCommand=function(self)
+			SongIsChosen = true
+			self:playcommand("Refresh")
+		end,
+
+		SongUnchosenMessageCommand=function(self)
+			SongIsChosen = false
+		end,
+
+		CurrentChartChangedMessageCommand=function(self)
+			if SongIsChosen then
+				self:playcommand("Refresh")
+			end
+		end,
 
 		RefreshCommand=function(self, params)
 			if GAMESTATE:GetCurrentSong() and GAMESTATE:GetCurrentSteps(pn) then
@@ -27,13 +39,10 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 				
 				self:GetChild("ChartOrigin"):settext("Originally from "..FetchFromChart(Chart,"Chart Origin"))
 				self:GetChild("ChartName"):settext("Originally called · "..FetchFromChart(Chart,"Chart POI Name").." ·")
-				--self:GetChild("ChartName"):diffuse(FetchFromChart(Chart, "Chart Stepstype Color"))
 				self:GetChild("ChartAuthor"):settext("By "..FetchFromChart(Chart, "Chart Author"))
-				
 				self:GetChild("LevelBGQuad"):diffuse(FetchFromChart(Chart, "Chart Stepstype Color"))
 				self:GetChild("LevelText"):settext(FetchFromChart(Chart, "Chart Level"))
 			else
-				-- I don't really think this case is ever gonna get displayed on screen so commenting it out
 				--self:GetChild("ChartOrigin"):settext("")
 				--self:GetChild("ChartName"):settext("")				
 				--self:GetChild("ChartAuthor"):settext("")
@@ -50,17 +59,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 				self:x(320 * (pn == PLAYER_2 and 1 or -1))
 				self:y(levelQuads_Y)
 				self:zoomto(632, 60)
-				self:diffuse(color("0,0,0,0.4"))
+				self:diffuse(color("1,1,1,0.6"))
 			end,
 			SongChosenMessageCommand=function(self)
 				self:stoptweening():easeoutexpo(1):diffuse(color("1,1,1,0.6"))
 			end,
-			SongUnchosenMessageCommand=function(self)
-				self:stoptweening():easeoutexpo(0.5):diffuse(color("0,0,0,0.4"))
+			StepsChosenMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(1):diffuse(color("0,0,0,0.4"))
+			end,
+			CurrentChartChangedMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(0.5):diffuse(color("1,1,1,0.6"))
 			end,
 		},
 
-		-- this quad represents the background of the big "Level Number" indicator for the chart
+		-- these are for the square representation of the level of the chart
 		Def.Quad {
 			InitCommand=function(self)
 				self:x(levelQuads_X * (pn == PLAYER_2 and 1 or -1))
@@ -69,8 +81,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 				self:diffuse(color("0,0,0,0.4"))
 			end,
 		},
-		Def.Quad {
-			Name="LevelBGQuad",
+		Def.Quad { Name="LevelBGQuad",
 			InitCommand=function(self)
 				self:x(levelQuads_X * (pn == PLAYER_2 and 1 or -1))
 				self:y(levelQuads_Y)
@@ -78,9 +89,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 				self:diffuse(FetchFromChart(GAMESTATE:GetCurrentSteps(pn), "Chart Stepstype Color"))
 			end,
 		},
-
-		Def.BitmapText {
-			Name="LevelText",
+		Def.BitmapText { Name="LevelText",
 			Font="Montserrat numbers 40px",
 			InitCommand=function(self)
 				self:x((levelQuads_X+1) * (pn == PLAYER_2 and 1 or -1))
@@ -88,48 +97,77 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 				self:zoom(0.9)
 			end,
 		},
-				
-		Def.BitmapText {
+		
+		-- textual information
+		Def.BitmapText { Name="ChartOrigin",
 			Font="Montserrat normal 20px",
-			Name="ChartOrigin",
 			InitCommand=function(self)
 				self:x(chartOrigin_X * (pn == PLAYER_2 and 1 or -1))
 				self:y(chartOrigin_Y)
 				self:zoom(0.7)
-				self:diffuse(color("0,0,0"))
 				self:halign(pn == PLAYER_2 and 0 or 1)
 				self:maxwidth(540)
-			end
-		},
 
-		Def.BitmapText {
+				self:diffuse(color("0,0,0"))
+				self:shadowlength(0)
+			end,
+			SongChosenMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(0.5):diffuse(color("0,0,0")):shadowlength(0)
+			end,
+			StepsChosenMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(1):diffuse(color("1,1,1")):shadowlength(1)
+			end,
+			CurrentChartChangedMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(0.5):diffuse(color("0,0,0")):shadowlength(0)
+			end,
+		},
+		Def.BitmapText { Name="ChartName",
 			Font="Montserrat normal 20px",
-			Name="ChartName",
 			InitCommand=function(self)
 				self:x(chartDesc_X * (pn == PLAYER_2 and 1 or -1))
 				self:y(chartDesc_Y)
-				self:zoom(0.7)
-				self:diffuse(color("0,0,0"))
+				self:zoom(0.7)				
 				self:halign(pn == PLAYER_2 and 0 or 1)
 				self:valign(0.5)
 				self:maxwidth(540)
-			end
+
+				self:diffuse(color("0,0,0"))
+				self:shadowlength(0)
+			end,
+			SongChosenMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(0.5):diffuse(color("0,0,0")):shadowlength(0)
+			end,
+			StepsChosenMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(1):diffuse(color("1,1,1")):shadowlength(1)
+			end,
+			CurrentChartChangedMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(0.5):diffuse(color("0,0,0")):shadowlength(0)
+			end,
 		},
-		
-		Def.BitmapText {
+		Def.BitmapText { Name="ChartAuthor",
 			Font="Montserrat normal 20px",
-			Name="ChartAuthor",
 			InitCommand=function(self)
 				self:x(chartArtist_X * (pn == PLAYER_2 and 1 or -1))
 				self:y(chartArtist_Y)
-				self:zoom(0.7)
-				self:diffuse(color("0,0,0"))
+				self:zoom(0.7)				
 				self:halign(pn == PLAYER_2 and 0 or 1)
 				self:maxwidth(540)
-			end
-		}
-	}
-end
 
+				self:diffuse(color("0,0,0"))
+				self:shadowlength(0)
+			end,
+			SongChosenMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(0.5):diffuse(color("0,0,0")):shadowlength(0)
+			end,
+			StepsChosenMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(1):diffuse(color("1,1,1")):shadowlength(1)
+			end,
+			CurrentChartChangedMessageCommand=function(self)
+				self:stoptweening():easeoutexpo(0.5):diffuse(color("0,0,0")):shadowlength(0)
+			end,
+		},
+	}
+
+end
 
 return t
