@@ -63,7 +63,7 @@ for i,entry in ipairs(choices) do
 				if index == i then
 					self:diffuse(Color.Yellow)
 				else
-					self:diffuse(Color.White)
+					self:diffuse(color("0.2,0.2,0.2"))
 				end
 			end
 		}
