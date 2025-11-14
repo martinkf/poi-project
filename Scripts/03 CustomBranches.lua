@@ -76,5 +76,8 @@ CustomBranch = {
             return SelectMusicOrCourse()
         end
     end,
+    AfterSelectProfile_POI = function()
+        return "ScreenSelectGameMode"
+    end,
 
 }
