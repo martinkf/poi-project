@@ -31,7 +31,6 @@ local indexIndicator_baseX = 640
 local indexIndicator_y = 94
 local indexIndicator_range = 186
 
-
 local IsBusy = false
 
 -- DECLARING MORE VARIABLES - WE WANT THE MUSICWHEEL TO ALWAYS START AT PIU NX ARCADE STATION AT WITCH DOCTOR #1 IN STAGE 1
@@ -55,34 +54,19 @@ Songs = GroupsList[GroupMainIndex].Songs
 local function UpdateItemTargets(val)
     for i = 1, WheelSize do
         Targets[i] = val + i - WheelCenter
-
-		local poi_settings_songlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsSonglistIsWheel", "Save/OutFoxPrefs.ini") or false
-		if poi_settings_songlist_is_wheel then
-			while Targets[i] > #Songs do Targets[i] = Targets[i] - #Songs end
-        	while Targets[i] < 1 do Targets[i] = Targets[i] + #Songs end
-		else
-			-- literally do nothing
-		end
-		
+		while Targets[i] > #Songs do Targets[i] = Targets[i] - #Songs end
+		while Targets[i] < 1 do Targets[i] = Targets[i] + #Songs end
     end
 end
 
 function MusicWheelGoesTo(input_index)
 	-- Clamp or wrap around index to valid range
 	if not Songs or #Songs == 0 then return end
-
-	local poi_settings_songlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsSonglistIsWheel", "Save/OutFoxPrefs.ini") or false
-
-	if poi_settings_songlist_is_wheel then
-		-- wrap around behavior
+	
+	-- wrap around behavior
 		while input_index > #Songs do input_index = input_index - #Songs end
 		while input_index < 1 do input_index = input_index + #Songs end
-	else
-		-- clamp behavior
-		if input_index > #Songs then input_index = #Songs end
-		if input_index < 1 then input_index = 1 end
-	end
-
+	
 	-- Apply the new index logically
 	SongIndex = input_index
 	LastSongIndex = SongIndex
@@ -153,27 +137,19 @@ local function InputHandler(event)
 
 		-- === Lógica de Scroll padrão ===
 		if button == "Left" or button == "MenuLeft" or button == "DownLeft" then
-			local poi_settings_songlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsSonglistIsWheel", "Save/OutFoxPrefs.ini") or false
 			if IsBusy then return end
-			if poi_settings_songlist_is_wheel then
-				SongIndex = SongIndex - 1
-				if SongIndex < 1 then SongIndex = #Songs end
-			else
-				if SongIndex > 1 then SongIndex = SongIndex - 1 end
-			end
+			SongIndex = SongIndex - 1
+			if SongIndex < 1 then SongIndex = #Songs end
+			
 			GAMESTATE:SetCurrentSong(Songs[SongIndex])
 			MESSAGEMAN:Broadcast("Scroll", { Direction = -1, OffsetFrom = 0, OffsetTo = -1, Duration = scroll_duration })
 			IsBusy = true
 
 		elseif button == "Right" or button == "MenuRight" or button == "DownRight" then
-			local poi_settings_songlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsSonglistIsWheel", "Save/OutFoxPrefs.ini") or false
 			if IsBusy then return end
-			if poi_settings_songlist_is_wheel then
-				SongIndex = SongIndex + 1
-				if SongIndex > #Songs then SongIndex = 1 end
-			else
-				if SongIndex < #Songs then SongIndex = SongIndex + 1 end
-			end
+			SongIndex = SongIndex + 1
+			if SongIndex > #Songs then SongIndex = 1 end
+			
 			GAMESTATE:SetCurrentSong(Songs[SongIndex])
 			MESSAGEMAN:Broadcast("Scroll", { Direction = 1, OffsetFrom = 0, OffsetTo = 1, Duration = scroll_duration })
 			IsBusy = true
@@ -420,6 +396,7 @@ for i = 1, WheelSize do
 			if dur <= 0 then
 				self:x(g_to.x):y(g_to.y):z(g_to.z):zoom(g_to.zoom):rotationy(g_to.rotY)
 				self:visible(g_to.visible)
+
 				-- atualiza textos/children imediatamente
 				self:GetChild("BGFrame"):playcommand("Refresh")
 				self:GetChild("SpecialFrame"):playcommand("Refresh")

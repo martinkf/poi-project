@@ -18,18 +18,18 @@ local t = Def.ActorFrame {
 	RefreshCommand=function(self)
 		local Song = GAMESTATE:GetCurrentSong()
 		if Song then
-			local TitleText = Song:GetDisplayFullTitle()
+			TitleText = Song:GetDisplayFullTitle()
 			if TitleText == "" then TitleText = "Unknown" end
 			self:GetChild("Title"):settext(TitleText)
 
-			local AuthorText = Song:GetDisplayArtist()
+			AuthorText = Song:GetDisplayArtist()
 			if AuthorText == "" then AuthorText = "Unknown" end
 			self:GetChild("Artist"):settext(AuthorText)
 
 			local BPMRaw = Song:GetDisplayBpms()
 			local BPMLow = math.ceil(BPMRaw[1])
 			local BPMHigh = math.ceil(BPMRaw[2])
-			local BPMDisplay = (BPMLow == BPMHigh and BPMHigh or BPMLow .. "-" .. BPMHigh)
+			BPMDisplay = (BPMLow == BPMHigh and BPMHigh or BPMLow .. "-" .. BPMHigh)
 			if Song:IsDisplayBpmRandom() or BPMDisplay == 0 then BPMDisplay = "???" end
 			self:GetChild("BPM"):settext(BPMDisplay .. " BPM")
 		else
@@ -61,6 +61,7 @@ local t = Def.ActorFrame {
 			self:align(0.5,0.5)
 			self:diffuse(Color.Black)
 			self:settext("·")
+			self:visible(false) -- disabling this element
 		end,
 		SongChosenMessageCommand=function(self)
 			self:stoptweening():easeoutexpo(1):diffuse(Color.White):shadowlength(1)
@@ -97,6 +98,7 @@ local t = Def.ActorFrame {
 			self:align(1,0.5)
 			self:maxwidth(FrameW * 1 / self:GetZoom())
 			self:diffuse(Color.Black)
+			self:visible(false) -- disabling this element
 		end,
 		SongChosenMessageCommand=function(self)
 			self:stoptweening():easeoutexpo(1):diffuse(Color.White):shadowlength(1)
@@ -115,6 +117,7 @@ local t = Def.ActorFrame {
 			self:align(0,0.5)
 			self:maxwidth(FrameW * 1 / self:GetZoom())
 			self:diffuse(Color.Black)
+			self:visible(false) -- disabling this element
 		end,
 		SongChosenMessageCommand=function(self)
 			self:stoptweening():easeoutexpo(1):diffuse(Color.White):shadowlength(1)
@@ -122,6 +125,43 @@ local t = Def.ActorFrame {
 		SongUnchosenMessageCommand=function(self)
 			self:stoptweening():easeoutexpo(0.5):diffuse(Color.Black):shadowlength(0)
 		end,
+	},
+
+	Def.BitmapText { Name="ArtistAndBPMBlinker",
+		Font="Montserrat normal 20px",
+		InitCommand=function(self)
+			self:x(0)
+			self:y(12)
+			self:zoom(0.8)
+			self:align(0.5,0.5)
+			self:maxwidth(FrameW * 1 / self:GetZoom())
+			self:diffuse(Color.Black)
+			self:queuecommand("BlinkStepOne")
+		end,
+		SongChosenMessageCommand=function(self)
+			self:stoptweening():easeoutexpo(1):diffuse(Color.White):shadowlength(1)
+			self:queuecommand("BlinkStepOne")
+		end,
+		SongUnchosenMessageCommand=function(self)
+			self:stoptweening():easeoutexpo(0.5):diffuse(Color.Black):shadowlength(0)
+			self:queuecommand("BlinkStepOne")
+		end,
+		CurrentSongChangedMessageCommand=function(self)
+			self:stoptweening():queuecommand("BlinkStepOne")
+		end,
+		BlinkStepOneCommand=function(self)
+			self:easeoutexpo(0.5):diffusealpha(1)
+			self:settext(AuthorText)
+			self:sleep(1):easeoutexpo(0.5):diffusealpha(0)
+			self:queuecommand("BlinkStepTwo")
+		end,
+		BlinkStepTwoCommand=function(self)
+			self:easeoutexpo(0.5):diffusealpha(1)
+			self:settext(BPMDisplay .. " BPM")
+			self:sleep(1):easeoutexpo(0.5):diffusealpha(0)
+			self:queuecommand("BlinkStepOne")
+		end,
+
 	},
 
 }

@@ -750,13 +750,13 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/B30 - -REMIX- DEUX REMIX/", Charts = { "EXC2-HARD","EXC2-CRAZY", "EXC2-FREESTYLE" } }, --nonstopremix 05
 				{ SongPath = "/Songs/POI-database/B31 - -REMIX- DIVA REMIX/", Charts = { "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE" } }, --nonstopremix 06
 				{ SongPath = "/Songs/POI-database/B50 - -REMIX- THE WORLD REMIX/", Charts = { "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE" } }, --nonstopremix 07
-				{ SongPath = "/Songs/POI-database/B51 - DIGNITY -FULL SONG-/", Charts = { "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE" } }, --nonstopremix 08				
-				{ SongPath = "/Songs/POI-database/326 - -REMIX- NOVASONIC REMIX/", Charts = { "3RD-HARD", "EXC2-CRAZY", "3RD-DOUBLE" } }, --nonstopremix 09
-				{ SongPath = "/Songs/POI-database/119 - -REMIX- TURBO REMIX/", Charts = { "1ST-HARD", "EXC2-CRAZY", "2ND-DOUBLE" } }, --nonstopremix 10
-				{ SongPath = "/Songs/POI-database/225 - -REMIX- 2ND HIDDEN REMIX/", Charts = { "2ND-HARD", "3RD-CRAZY", "2ND-DOUBLE", "EXC2-NIGHTMARE" } }, --nonstopremix 11
-				{ SongPath = "/Songs/POI-database/221 - -REMIX- DRUNKEN FAMILY REMIX/", Charts = { "2ND-HARD", "EXC2-CRAZY", "2ND-DOUBLE" } }, --nonstopremix 12
-				{ SongPath = "/Songs/POI-database/324 - -REMIX- BANYA HIP-HOP REMIX/", Charts = { "3RD-HARD", "EXC2-CRAZY", "3RD-DOUBLE" } }, --nonstopremix 13
-				{ SongPath = "/Songs/POI-database/B57 - CANON-D -FULL SONG-/", Charts = { "EXC2-CRAZY" } }, --nonstopremix 14
+				{ SongPath = "/Songs/POI-database/B51 - DIGNITY -FULL SONG-/", Charts = { "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE" }, CustomBanner = "/SongMedia/B51.png" }, --nonstopremix 08
+				{ SongPath = "/Songs/POI-database/326 - -REMIX- NOVASONIC REMIX/", Charts = { "3RD-HARD", "EXC2-CRAZY", "3RD-DOUBLE" }, CustomBanner = "/SongMedia/326-exceed2.png" }, --nonstopremix 09
+				{ SongPath = "/Songs/POI-database/119 - -REMIX- TURBO REMIX/", Charts = { "1ST-HARD", "EXC2-CRAZY", "2ND-DOUBLE" }, CustomBanner = "/SongMedia/119-exceed2.png" }, --nonstopremix 10
+				{ SongPath = "/Songs/POI-database/225 - -REMIX- 2ND HIDDEN REMIX/", Charts = { "2ND-HARD", "3RD-CRAZY", "2ND-DOUBLE", "EXC2-NIGHTMARE" }, CustomBanner = "/SongMedia/225-exceed2.png" }, --nonstopremix 11
+				{ SongPath = "/Songs/POI-database/221 - -REMIX- DRUNKEN FAMILY REMIX/", Charts = { "2ND-HARD", "EXC2-CRAZY", "2ND-DOUBLE" }, CustomBanner = "/SongMedia/221-exceed2.png" }, --nonstopremix 12
+				{ SongPath = "/Songs/POI-database/324 - -REMIX- BANYA HIP-HOP REMIX/", Charts = { "3RD-HARD", "EXC2-CRAZY", "3RD-DOUBLE" }, CustomBanner = "/SongMedia/324-exceed2.png" }, --nonstopremix 13
+				{ SongPath = "/Songs/POI-database/B57 - CANON-D -FULL SONG-/", Charts = { "EXC2-CRAZY" }, CustomBanner = "/SongMedia/B57.png" }, --nonstopremix 14
 				
 				{ SongPath = "/Songs/POI-database/1059 - EXCEED 2 OPENING -SHORT CUT-/", Charts = { "EXC2-STAFFROLL" } },
 			},

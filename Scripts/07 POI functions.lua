@@ -29,8 +29,10 @@ function GetColor_POI(inputString)
 		["Exceed 2"] = color("#ff0000"),
 		["Zero"] = color("#ff00ff"),
 		["NX"] = color("#1144ff"),
-		["NX 2"] = color("#33bb00"),
-		["NX Absolute"] = color("#ffff00"),
+		["Pro"] = color("#33bb00"),
+		["Pro Encore"] = color("#33bb00"),
+		["NX2"] = color("#ffff00"),
+		["NX Absolute"] = color("#ff9900"),
 		["Fiesta"] = color("#ff9900"),
 		["Fiesta EX"] = color("#ff0000"),
 		["Fiesta 2"] = color("#ff00ff"),
@@ -39,8 +41,6 @@ function GetColor_POI(inputString)
 		["XX"] = color("#ffff00"),
 		["M"] = color("#ff9900"),
 		["Phoenix"] = color("#ff0000"),
-		["Pro"] = color("#5a5a5a"),
-		["Pro Encore"] = color("#5a5a5a"),
 		["Pro 2"] = color("#888888"),
 		["Infinity"] = color("#aaaaaa"),
 
@@ -67,7 +67,7 @@ function GetColor_POI(inputString)
 
 		-- grades
 		GOLD = color("#ffcc33"),
-		SILVER = color("#aaaaaa"), -- not used
+		SILVER = color("#aaaaaa"),
 		BRONZE = color("#dd7733"),
 		PASSED = color("#3399ff"),
 		FAILED = color("0,0,0,0.4"),
@@ -447,6 +447,8 @@ function FormatDifficultyFromPOIName_POI(input_playlistName, input_poiName_as_st
 		["HARD i"] = "HARD",
 		["CRAZY i"] = "CRAZY",
 		["EXTRA EXPERT"] = "CRAZY",
+		["DOUBLE i"] = "DOUBLE",
+		["DOUBLE ii"] = "DOUBLE",
 		["FREESTYLE"] = "DOUBLE",
 		["FREESTYLE i"] = "DOUBLE",
 		["FREESTYLE ii"] = "DOUBLE",
@@ -457,6 +459,9 @@ function FormatDifficultyFromPOIName_POI(input_playlistName, input_poiName_as_st
 		["NORMAL i"] = "EASY",
 		["HARD i"] = "HARD",
 		["CRAZY i"] = "CRAZY",
+		["DOUBLE"] = "FULL-DOUBLE",
+		["DOUBLE i"] = "FULL-DOUBLE",
+		["DOUBLE ii"] = "FULL-DOUBLE",
 		["FREESTYLE"] = "FULL-DOUBLE",
 		["FREESTYLE i"] = "FULL-DOUBLE",
 		["FREESTYLE ii"] = "FULL-DOUBLE",
@@ -466,6 +471,9 @@ function FormatDifficultyFromPOIName_POI(input_playlistName, input_poiName_as_st
 		["HARD i"] = "HARD",
 		["CRAZY i"] = "CRAZY",
 		["EXTRA EXPERT"] = "CRAZY",
+		["DOUBLE"] = "FULL-DOUBLE",
+		["DOUBLE i"] = "FULL-DOUBLE",
+		["DOUBLE ii"] = "FULL-DOUBLE",
 		["FREESTYLE"] = "FULL-DOUBLE",
 		["FREESTYLE i"] = "FULL-DOUBLE",
 		["FREESTYLE ii"] = "FULL-DOUBLE",
@@ -482,6 +490,9 @@ function FormatDifficultyFromPOIName_POI(input_playlistName, input_poiName_as_st
 		["CRAZY ii"] = "CRAZY",
 		["CRAZY iii"] = "CRAZY",
 		["EXTRA EXPERT"] = "CRAZY",
+		["DOUBLE"] = "FREESTYLE",
+		["DOUBLE i"] = "FREESTYLE",
+		["DOUBLE ii"] = "FREESTYLE",
 		["FREESTYLE i"] = "FREESTYLE",
 		["FREESTYLE ii"] = "FREESTYLE",
 		["NIGHTMARE i"] = "NIGHTMARE",
@@ -508,9 +519,13 @@ function FormatDifficultyFromPOIName_POI(input_playlistName, input_poiName_as_st
 		return difficultyMap_Premiere3[input_poiName_as_string] or input_poiName_as_string
 	elseif input_playlistName == "Pump It Up The Prex 3" or
 	       input_playlistName == "Pump It Up Exceed" or
-		   input_playlistName == "Pump It Up Exceed 2" or
-		   input_playlistName == "Pump It Up Zero" or
-		   input_playlistName == "Pump It Up NX" then
+		   input_playlistName == "Pump It Up Exceed 2 - Arcade Station" or
+		   input_playlistName == "Pump It Up Exceed 2 - Remix Station" or
+		   input_playlistName == "Pump It Up Zero - Easy Station" or
+		   input_playlistName == "Pump It Up Zero - Arcade Station" or
+		   input_playlistName == "Pump It Up Zero - Remix Station" or
+		   input_playlistName == "Pump It Up NX - Arcade Station" or
+		   input_playlistName == "Pump It Up NX - Special Zone" then
 		return difficultyMap_Freevolt[input_poiName_as_string] or input_poiName_as_string
 	else
 		return input_poiName_as_string
@@ -541,8 +556,8 @@ end
 function GetColorFromScoreIndex_POI(input_scoreIndex_as_string)
 	local gradeColorMap = {
 		Pass3S = "GOLD",
-		Pass2S = "SILVER",
-		PassS = "BRONZE",
+		Pass2S = "GOLD",
+		PassS = "SILVER",
 
 		PassA = "PASSED", PassB = "PASSED", PassC = "PASSED",
 		PassD = "PASSED", PassF = "PASSED",

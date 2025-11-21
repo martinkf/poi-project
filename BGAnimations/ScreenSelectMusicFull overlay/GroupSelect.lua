@@ -240,10 +240,10 @@ for i = 1, WheelSize do
 			self:playcommand("ScrollMain", {Direction = 0})
 			
 			-- updates playlist banner pic
-			if i == WheelCenter then
-				UpdateBannerBig(self:GetChild("PlaylistBanner"),GroupsList[Targets[i]].Banner)
+			if slot == WheelCenter then
+				UpdateBannerBig(self:GetChild("PlaylistBanner"),GroupsList[Targets[slot]].Banner)
 			else
-				UpdateBanner(self:GetChild("PlaylistBanner"),GroupsList[Targets[i]].Banner)
+				UpdateBanner(self:GetChild("PlaylistBanner"),GroupsList[Targets[slot]].Banner)
 			end
 		end,
 
@@ -258,7 +258,7 @@ for i = 1, WheelSize do
 			self:stoptweening()
 
 			-- Calculate position
-			local xpos = SCREEN_CENTER_X + (i - WheelCenter) * WheelSpacing
+			local xpos = SCREEN_CENTER_X + (slot - WheelCenter) * WheelSpacing
 
 			-- Calculate displacement based on input
 			local displace = -params.Direction * WheelSpacing
@@ -267,18 +267,10 @@ for i = 1, WheelSize do
 			local tween = params and params.Direction and math.abs(params.Direction) > 0
 							
 			-- Adjust and wrap actor index
-			i = i - params.Direction
+			slot = slot - params.Direction
 			
-			local poi_settings_playlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsPlaylistIsWheel", "Save/OutFoxPrefs.ini") or false
-			if poi_settings_playlist_is_wheel then
-				while i > WheelSize do i = i - WheelSize end
-				while i < 1 do i = i + WheelSize end
-			else
-				-- literally do nothing
-			end
-
 			-- If it's an edge item, update text. Edge items should never tween
-			if i == 2 or i == WheelSize - 1 then
+			if slot == 2 or slot == WheelSize - 1 then
 				--donothing
 			elseif tween then
 				self:easeoutexpo(1)
@@ -289,16 +281,16 @@ for i = 1, WheelSize do
 
 			-- centered element needs to be big and adjust Y accordingly
 			local ypos
-			if i == WheelCenter then
-				UpdateBannerBig(self:GetChild("PlaylistBanner"),GroupsList[Targets[i]].Banner)
+			if slot == WheelCenter then
+				UpdateBannerBig(self:GetChild("PlaylistBanner"),GroupsList[Targets[slot]].Banner)
 				ypos = -159
 			else
-				UpdateBanner(self:GetChild("PlaylistBanner"),GroupsList[Targets[i]].Banner)
+				UpdateBanner(self:GetChild("PlaylistBanner"),GroupsList[Targets[slot]].Banner)
 				ypos = -76
 			end
 			
 			-- corrects offsets			
-			local offsetIndex = i - WheelCenter
+			local offsetIndex = slot - WheelCenter
 			if offsetIndex ~= 0 then
 				local absIndex = math.abs(offsetIndex)
 				local extra = 0
@@ -318,8 +310,6 @@ for i = 1, WheelSize do
 				end
 			end
 
-			
-
 			-- Animate!
 			self:x(xpos + displace)
 			self:y(ypos)
@@ -335,49 +325,59 @@ for i = 1, WheelSize do
 			end,
 		},
 
-		Def.BitmapText { Name="PlaylistName",
-			Font="Montserrat semibold 40px",
-			InitCommand=function(self)
-				self:y(170)
-				self:zoom(1.2)
-				self:shadowlength(2)
-				self:skewx(-0)
-				self:settext(GroupsList[CurPlaylistIndex].Name)
-				self:queuecommand('Refresh')
-			end,
-			ScrollMainMessageCommand=function(self)
-				self:queuecommand('Refresh')
-			end,
-			RefreshCommand=function(self)
-				-- updates the text to match the CurPlaylist
-				self:settext(GroupsList[CurPlaylistIndex].Name)
-				-- only gets displayed if this element is the center one (currently hovered)
-				if i == WheelCenter then self:diffusealpha(1) else self:diffusealpha(0) end
-			end
-		},
-
-		Def.BitmapText { Name="PlaylistDescription",
-			Font="Montserrat normal 20px",
-			InitCommand=function(self)
-				self:y(220)
-				self:zoom(1)
-				self:shadowlength(1)
-				self:align(0.5,0)
-				self:maxwidth(1262)
-				self:settext(GroupsList[CurPlaylistIndex].Description)
-				self:queuecommand('Refresh')
-			end,
-			ScrollMainMessageCommand=function(self)
-				self:queuecommand('Refresh')
-			end,
-			RefreshCommand=function(self)
-				-- updates the text to match the CurPlaylist
-				self:settext(GroupsList[CurPlaylistIndex].Description)
-				-- only gets displayed if this element is the center one (currently hovered)
-				if i == WheelCenter then self:diffusealpha(1) else self:diffusealpha(0) end
-			end
-		},
 	}
 end
+
+t[#t+1] = Def.ActorFrame {
+
+	Def.BitmapText { Name="PlaylistName",
+		Font="Montserrat semibold 40px",
+		InitCommand=function(self)
+			self:x(SCREEN_CENTER_X)
+			self:y(20)
+			self:zoom(1.2)
+			self:shadowlength(2)
+			self:skewx(-0)
+			self:settext(GroupsList[CurPlaylistIndex].Name)
+			self:diffusealpha(0)
+			self:queuecommand('Refresh')
+		end,
+		ScrollMainMessageCommand=function(self)
+			self:queuecommand('Refresh')
+		end,
+		RefreshCommand=function(self)
+			-- updates the text to match the CurPlaylist
+			self:settext(GroupsList[CurPlaylistIndex].Name)
+
+			-- quick animation when scrolling through playlists
+			self:stoptweening():diffusealpha(0):sleep(0.25):easeoutexpo(0.5):diffusealpha(1)
+		end
+	},
+
+	Def.BitmapText { Name="PlaylistDescription",
+		Font="Montserrat normal 20px",
+		InitCommand=function(self)
+			self:x(SCREEN_CENTER_X)
+			self:y(70)
+			self:zoom(1)
+			self:shadowlength(1)
+			self:align(0.5,0)
+			self:maxwidth(1262)
+			self:settext(GroupsList[CurPlaylistIndex].Description)
+			self:queuecommand('Refresh')
+		end,
+		ScrollMainMessageCommand=function(self)
+			self:queuecommand('Refresh')
+		end,
+		RefreshCommand=function(self)
+			-- updates the text to match the CurPlaylist
+			self:settext(GroupsList[CurPlaylistIndex].Description)
+			
+			-- quick animation when scrolling through playlists
+			self:stoptweening():diffusealpha(0):sleep(0.25):easeoutexpo(0.5):diffusealpha(1)
+		end
+	},
+	
+}
 
 return t
