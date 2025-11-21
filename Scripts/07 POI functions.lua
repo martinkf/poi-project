@@ -58,6 +58,13 @@ function GetColor_POI(inputString)
 		REMIX = color("#1144ff"),
 		FULLSONG = color("#33bb00"),
 
+		-- song tags for quads
+		ARCADEQUAD = color("#ffffff00"),
+		ANOTHERQUAD = color("#ee0000bb"),
+		SHORTCUTQUAD = color("#eeee00bb"),
+		REMIXQUAD = color("#0033eebb"),
+		FULLSONGQUAD = color("#22aa00bb"),
+
 		-- grades
 		GOLD = color("#ffcc33"),
 		SILVER = color("#aaaaaa"), -- not used
@@ -216,109 +223,126 @@ function FetchFromSong(input_song, fetch_details)
 	
 	local output = ""
 
-	if fetch_details == "First Tag" then
-		-- returns a string
-		
-		local fullTagAttribute = input_song:GetTags()
-		if fullTagAttribute ~= "" then
-			local words = {} -- array of strings, one for each separate word
-			for thisWord in fullTagAttribute:gmatch("%S+") do
-				table.insert(words, thisWord)
-			end
-		output = words[1] -- gets the first word in that array
-		end
-	
-	elseif fetch_details == "Second Tag" then
-		-- returns a string
-		
-		local fullTagAttribute = input_song:GetTags()
-		if fullTagAttribute ~= "" then
-			local words = {} -- array of strings, one for each separate word
-			for thisWord in fullTagAttribute:gmatch("%S+") do
-				table.insert(words, thisWord)
-			end
+	if input_song then
+		if fetch_details == "First Tag" then
+			-- returns a string
 			
-			-- Check if the words table has more than one element
-			if #words >= 2 then
-				output = words[2] -- gets the second word in that array		
+			local fullTagAttribute = input_song:GetTags()
+			if fullTagAttribute ~= "" then
+				local words = {} -- array of strings, one for each separate word
+				for thisWord in fullTagAttribute:gmatch("%S+") do
+					table.insert(words, thisWord)
+				end
+			output = words[1] -- gets the first word in that array
 			end
-		end
-	
-	elseif fetch_details == "Song Category" then
-		-- returns a string
 		
-		local song_firstTag = FetchFromSong(input_song, "First Tag")
-		local song_secondTag = FetchFromSong(input_song, "Second Tag")
-		if song_firstTag == "SHORTCUT" then	output = "SHORTCUT"
-		elseif song_firstTag == "REMIX" then output = "REMIX"
-		elseif song_firstTag == "FULLSONG" then	output = "FULLSONG"
-		elseif song_secondTag == "ANOTHER" then	output = "ANOTHER"
-		else output = "ARCADE"
-		end
-
-	elseif fetch_details == "Display-formatted Song Category" then
-		-- returns a string
-
-		local song_firstTag = FetchFromSong(input_song, "First Tag")
-		local song_secondTag = FetchFromSong(input_song, "Second Tag")
-		if song_firstTag == "SHORTCUT" then	output = "[SHORT CUT]"
-		elseif song_firstTag == "REMIX" then output = "[REMIX]"
-		elseif song_firstTag == "FULLSONG" then	output = "[FULL SONG]"
-		elseif song_secondTag == "ANOTHER" then	output = "[ANOTHER]"
-		else output = ""
-		end
-
-	elseif fetch_details == "Display-formatted Song Genre" then
-		-- returns a string
-
-		if input_song:GetGenre() == "KPOP" then output = "K-Pop"
-		elseif input_song:GetGenre() == "ORIGINAL" then output = "PIU Originals"
-		elseif input_song:GetGenre() == "WORLDMUSIC" then output = "World Music"
-		else output = input_song:GetGenre()
-		end
-
-	elseif fetch_details == "Minimalist Song Genre" then
-		-- returns a string
-
-		if input_song:GetGenre() == "KPOP" then output = "K"
-		elseif input_song:GetGenre() == "ORIGINAL" then output = "O"
-		elseif input_song:GetGenre() == "WORLDMUSIC" then output = "W"
-		else output = input_song:GetGenre()
-		end
-
-	elseif fetch_details == "Song Display BPMs" then
-		-- returns a string
-
-		local bpm_raw = input_song:GetDisplayBpms()
-		local bpm_low = math.ceil(bpm_raw[1])
-		local bpm_high = math.ceil(bpm_raw[2])
-		local bpm_display = (bpm_low == bpm_high and bpm_high or bpm_low .. "-" .. bpm_high)
-		output = bpm_display .. " BPM"
-
-	elseif fetch_details == "Song Origin Color" then
-		-- returns a color object, such to use inside a self:diffuse(x)
-
-		output = GetColor_POI(input_song:GetOrigin())
-	
-	elseif fetch_details == "Song Genre Color" then
-		-- returns a color object, such to use inside a self:diffuse(x)
-
-		output = GetColor_POI(input_song:GetGenre())
-	
-	elseif fetch_details == "Song Category Color" then
-		-- returns a color object, such to use inside a self:diffuse(x)
+		elseif fetch_details == "Second Tag" then
+			-- returns a string
+			
+			local fullTagAttribute = input_song:GetTags()
+			if fullTagAttribute ~= "" then
+				local words = {} -- array of strings, one for each separate word
+				for thisWord in fullTagAttribute:gmatch("%S+") do
+					table.insert(words, thisWord)
+				end
+				
+				-- Check if the words table has more than one element
+				if #words >= 2 then
+					output = words[2] -- gets the second word in that array		
+				end
+			end
 		
-		local song_firstTag = FetchFromSong(input_song, "First Tag")
-		local song_secondTag = FetchFromSong(input_song, "Second Tag")
-		if song_firstTag == "SHORTCUT" or song_firstTag == "REMIX" or song_firstTag == "FULLSONG" then
-			output = GetColor_POI(song_firstTag)
-		elseif song_secondTag == "ANOTHER" then
-			output = GetColor_POI(song_secondTag)
-		else
-			output = GetColor_POI("ARCADE")
+		elseif fetch_details == "Song Category" then
+			-- returns a string
+			
+			local song_firstTag = FetchFromSong(input_song, "First Tag")
+			local song_secondTag = FetchFromSong(input_song, "Second Tag")
+			if song_firstTag == "SHORTCUT" then	output = "SHORTCUT"
+			elseif song_firstTag == "REMIX" then output = "REMIX"
+			elseif song_firstTag == "FULLSONG" then	output = "FULLSONG"
+			elseif song_secondTag == "ANOTHER" then	output = "ANOTHER"
+			else output = "ARCADE"
+			end
+
+		elseif fetch_details == "Display-formatted Song Category" then
+			-- returns a string
+
+			local song_firstTag = FetchFromSong(input_song, "First Tag")
+			local song_secondTag = FetchFromSong(input_song, "Second Tag")
+			if song_firstTag == "SHORTCUT" then	output = "SHORT CUT"
+			elseif song_firstTag == "REMIX" then output = "REMIX"
+			elseif song_firstTag == "FULLSONG" then	output = "FULL SONG"
+			elseif song_secondTag == "ANOTHER" then	output = "ANOTHER"
+			else output = ""
+			end
+
+		elseif fetch_details == "Display-formatted Song Genre" then
+			-- returns a string
+
+			if input_song:GetGenre() == "KPOP" then output = "K-Pop"
+			elseif input_song:GetGenre() == "ORIGINAL" then output = "PIU Originals"
+			elseif input_song:GetGenre() == "WORLDMUSIC" then output = "World Music"
+			else output = input_song:GetGenre()
+			end
+
+		elseif fetch_details == "Minimalist Song Genre" then
+			-- returns a string
+
+			if input_song:GetGenre() == "KPOP" then output = "K"
+			elseif input_song:GetGenre() == "ORIGINAL" then output = "O"
+			elseif input_song:GetGenre() == "WORLDMUSIC" then output = "W"
+			else output = input_song:GetGenre()
+			end
+
+		elseif fetch_details == "Song Display BPMs" then
+			-- returns a string
+
+			local bpm_raw = input_song:GetDisplayBpms()
+			local bpm_low = math.ceil(bpm_raw[1])
+			local bpm_high = math.ceil(bpm_raw[2])
+			local bpm_display = (bpm_low == bpm_high and bpm_high or bpm_low .. "-" .. bpm_high)
+			output = bpm_display .. " BPM"
+
+		elseif fetch_details == "Song Origin Color" then
+			-- returns a color object, such to use inside a self:diffuse(x)
+
+			output = GetColor_POI(input_song:GetOrigin())
+		
+		elseif fetch_details == "Song Genre Color" then
+			-- returns a color object, such to use inside a self:diffuse(x)
+
+			output = GetColor_POI(input_song:GetGenre())
+		
+		elseif fetch_details == "Song Category Color" then
+			-- returns a color object, such to use inside a self:diffuse(x)
+			
+			local song_firstTag = FetchFromSong(input_song, "First Tag")
+			local song_secondTag = FetchFromSong(input_song, "Second Tag")
+			if song_firstTag == "SHORTCUT" or song_firstTag == "REMIX" or song_firstTag == "FULLSONG" then
+				output = GetColor_POI(song_firstTag)
+			elseif song_secondTag == "ANOTHER" then
+				output = GetColor_POI(song_secondTag)
+			else
+				output = GetColor_POI("ARCADE")
+			end
+
+		elseif fetch_details == "Song Category Color for quads" then
+			-- returns a color object, such to use inside a self:diffuse(x)
+			
+			local song_firstTag = FetchFromSong(input_song, "First Tag")
+			local song_secondTag = FetchFromSong(input_song, "Second Tag")
+			if song_firstTag == "SHORTCUT" or song_firstTag == "REMIX" or song_firstTag == "FULLSONG" then
+				output = GetColor_POI(song_firstTag.."QUAD")
+			elseif song_secondTag == "ANOTHER" then
+				output = GetColor_POI(song_secondTag.."QUAD")
+			else
+				output = GetColor_POI("ARCADEQUAD")
+			end
+
 		end
+
 	end
-
+	
 	return output
 
 end

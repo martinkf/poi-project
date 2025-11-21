@@ -945,114 +945,8 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/C43 - -REMIX- ZERO K HOUSE MIX/", Charts = { "ZERO-HARD", "ZERO-CRAZY", "ZERO-FREESTYLE" } }, --nonstopremix 17
 			},
 		},
-		{	Name = "Pump It Up NX - Training Station",
-			Banner = "Playlists/17a-training.png",
-			Description = "Description for -Pump It Up NX - Training Station-",
-			StartingPoint = 1,
-			AllowedSongs = {
-				-- LESSON 01 - Practice the location of the arrows
-				{ SongPath = "/Songs/POI-database/312 - DON'T BOTHER ME/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/D04 - GO BACK/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/D05 - FLY/", Charts = { "NX-TRAINING1" } },
-
-				-- LESSON 02 - Left/right practice
-				{ SongPath = "/Songs/POI-database/A10 - VALENTI/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/109 - FUNKY TONIGHT/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/C18 - ENTER THE DRAGON/", Charts = { "NX-TRAINING1" } },
-
-				-- LESSON 03 - Up/down practice
-				{ SongPath = "/Songs/POI-database/B05 - DRUNKEN IN MELODY/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/D22 - HOLD THE LINE/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/109 - FUNKY TONIGHT/", Charts = { "NX-TRAINING2" } },
-
-				-- LESSON 04 - Diagonal practice
-				{ SongPath = "/Songs/POI-database/B02 - HOT/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/A17 - LA CUBANITA/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/204 - FINAL AUDITION/", Charts = { "NX-TRAINING1" } },
-
-				-- LESSON 05 - Long note
-				{ SongPath = "/Songs/POI-database/D18 - UGLY DEE/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/B05 - DRUNKEN IN MELODY/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/B19 - CANON-D/", Charts = { "NX-TRAINING1" } },
-
-				-- LESSON 06 - Jumps
-				{ SongPath = "/Songs/POI-database/503 - ROLLING CHRISTMAS/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/B13 - I'LL GIVE YOU ALL MY LOVE/", Charts = { "NX-TRAINING1" } },
-
-				-- LESSON 07 - Jumps + long notes
-				{ SongPath = "/Songs/POI-database/A14 - KISS ME/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/B05 - DRUNKEN IN MELODY/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/D05 - FLY/", Charts = { "NX-TRAINING2" } },
-
-				-- LESSON 08 - Test #1
-				{ SongPath = "/Songs/POI-database/A10 - VALENTI/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/D06 - ONE NIGHT/", Charts = { "NX-TRAINING1" } },
-				{ SongPath = "/Songs/POI-database/C18 - ENTER THE DRAGON/", Charts = { "NX-TRAINING2" } },
-
-				-- LESSON 09 - Long note + step
-				{ SongPath = "/Songs/POI-database/312 - DON'T BOTHER ME/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/D18 - UGLY DEE/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/B19 - CANON-D/", Charts = { "NX-TRAINING2" } },
-
-				-- LESSON 10 - Jumps and triples
-				{ SongPath = "/Songs/POI-database/B02 - HOT/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/D05 - FLY/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "NX-TRAINING2" } },
-
-				-- LESSON 11 - Turning
-				{ SongPath = "/Songs/POI-database/312 - DON'T BOTHER ME/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/503 - ROLLING CHRISTMAS/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/711 - WINTER/", Charts = { "NX-TRAINING1" } },
-
-				-- LESSON 12 - Runs
-				{ SongPath = "/Songs/POI-database/D04 - GO BACK/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/D06 - ONE NIGHT/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/736 - CSIKOS POST/", Charts = { "NX-TRAINING1" } },
-
-				-- LESSON 13 - Offbeat
-				{ SongPath = "/Songs/POI-database/A17 - LA CUBANITA/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/D22 - HOLD THE LINE/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/204 - FINAL AUDITION/", Charts = { "NX-TRAINING2" } },
-
-				-- LESSON 14 - Waist turns
-				{ SongPath = "/Songs/POI-database/D04 - GO BACK/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/C18 - ENTER THE DRAGON/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/736 - CSIKOS POST/", Charts = { "NX-TRAINING2" } },
-
-				-- LESSON 15 - Test #2
-				{ SongPath = "/Songs/POI-database/D18 - UGLY DEE/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/B02 - HOT/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/D06 - ONE NIGHT/", Charts = { "NX-TRAINING3" } },
-
-				-- LESSON 16 - Fast BPM
-				{ SongPath = "/Songs/POI-database/B19 - CANON-D/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/736 - CSIKOS POST/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/711 - WINTER/", Charts = { "NX-TRAINING2" } },
-
-				-- LESSON 17 - Half-Double
-				{ SongPath = "/Songs/POI-database/A14 - KISS ME/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/A17 - LA CUBANITA/", Charts = { "NX-TRAINING3" } },
-
-				-- LESSON 18 - Double stairs
-				{ SongPath = "/Songs/POI-database/503 - ROLLING CHRISTMAS/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/D22 - HOLD THE LINE/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/204 - FINAL AUDITION/", Charts = { "NX-TRAINING3" } },
-
-				-- LESSON 19 - Double waist turns
-				{ SongPath = "/Songs/POI-database/A14 - KISS ME/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/B13 - I'LL GIVE YOU ALL MY LOVE/", Charts = { "NX-TRAINING2" } },
-				{ SongPath = "/Songs/POI-database/711 - WINTER/", Charts = { "NX-TRAINING3" } },
-
-				-- LESSON 20 - Final test
-				{ SongPath = "/Songs/POI-database/109 - FUNKY TONIGHT/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/A10 - VALENTI/", Charts = { "NX-TRAINING3" } },
-				{ SongPath = "/Songs/POI-database/B13 - I'LL GIVE YOU ALL MY LOVE/", Charts = { "NX-TRAINING3" } },
-			},
-		},
 		{	Name = "Pump It Up NX - Arcade Station",
-			Banner = "Playlists/17b-arcade.png",
+			Banner = "Playlists/17a-arcade.png",
 			Description = "Description for -Pump It Up NX - Arcade Station-",
 			StartingPoint = 102,
 			AllowedSongs = {
@@ -1202,7 +1096,7 @@ function Database_POI()
 			},
 		},
 		{	Name = "Pump It Up NX - Special Zone",
-			Banner = "Playlists/17c-special.png",
+			Banner = "Playlists/17b-special.png",
 			Description = "Description for -Pump It Up NX - Special Zone-",
 			StartingPoint = 1,
 			AllowedSongs = {
@@ -1263,7 +1157,7 @@ function Database_POI()
 				{ SongPath = "/Songs/POI-database/802 - BEE/", Charts = { "NX-ACRAZY", "NX-AFREESTYLE", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/922 - FINAL AUDITION EPISODE 1/", Charts = { "NX-AHARD", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/D28 - FINAL AUDITION EPISODE 2-1/", Charts = { "NX-ACRAZY", "NX-ANIGHTMARE" } },
-				{ SongPath = "/Songs/POI-database/D30 - FINAL AUDITION EPISODE 2-2/", Charts = { "NX-AHARD", "NX-ACRAZY", "NX-AFREESTYLE", "NX-ANIGHTMARE" } },
+				{ SongPath = "/Songs/POI-database/D30 - FINAL AUDITION EPISODE 2-2/", Charts = { "NX-ACRAZY", "NX-AFREESTYLE", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/A14 - KISS ME/", Charts = { "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/208 - FIGHTING SPIRITS/", Charts = { "NX-ACRAZY", "NX-ANIGHTMARE" } },
 				{ SongPath = "/Songs/POI-database/701 - DR. M/", Charts = { "NX-ACRAZY" } },

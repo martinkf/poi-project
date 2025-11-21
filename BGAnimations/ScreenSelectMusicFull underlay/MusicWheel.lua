@@ -1,10 +1,12 @@
 -- SAFECHECK - GENERATES A GLOBAL VARIABLE GroupsList IF IT DOESN'T EXIST ALREADY
 if next(GroupsList) == nil then
+	Trace("Running AssembleGroupSorting_POI from MusicWheel.lua now")
 	AssembleGroupSorting_POI()
+	Trace("Running UpdateGroupSorting_POI from MusicWheel.lua now")
     UpdateGroupSorting_POI()
 
     if next(GroupsList) == nil then
-        Warn("Groups list is currently inaccessible, halting music wheel!")
+        Warn("Groups list is currently inaccessible!")
         return Def.Actor {}
     end
 end
@@ -34,7 +36,7 @@ local IsBusy = false
 
 -- DECLARING MORE VARIABLES - WE WANT THE MUSICWHEEL TO ALWAYS START AT PIU NX ARCADE STATION AT WITCH DOCTOR #1 IN STAGE 1
 if GAMESTATE:GetCurrentStageIndex() == 0 then --this means this is stage 1, we just came from the select profile screen
-	LastGroupMainIndex = 16
+	LastGroupMainIndex = 15
 	LastSongIndex = 102
 else --this means a song has been played and we're back to the select song screen
 	LastGroupMainIndex = tonumber(LoadModule("Config.Load.lua")("GroupMainIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
@@ -420,8 +422,8 @@ for i = 1, WheelSize do
 				self:visible(g_to.visible)
 				-- atualiza textos/children imediatamente
 				self:GetChild("BGFrame"):playcommand("Refresh")
+				self:GetChild("SpecialFrame"):playcommand("Refresh")
 				self:GetChild("OriginLabel"):playcommand("Refresh")
-				self:GetChild("CategoryLabel"):playcommand("Refresh")
 				self:GetChild("NameLabel"):playcommand("Refresh")
 				self:GetChild("ArtistLabel"):playcommand("Refresh")
 				return
@@ -437,8 +439,8 @@ for i = 1, WheelSize do
 
 		RefreshAfterTweenCommand=function(self)
 			self:GetChild("BGFrame"):playcommand("Refresh")
+			self:GetChild("SpecialFrame"):playcommand("Refresh")
 			self:GetChild("OriginLabel"):playcommand("Refresh")
-			self:GetChild("CategoryLabel"):playcommand("Refresh")
 			self:GetChild("NameLabel"):playcommand("Refresh")
 			self:GetChild("ArtistLabel"):playcommand("Refresh")
 		end,
@@ -484,39 +486,77 @@ for i = 1, WheelSize do
 				end,
 			},
 		},
+		Def.ActorFrame { Name="SpecialFrame",
+			InitCommand=function(self)
+				self:playcommand("Refresh")
+			end,
+			RefreshCommand=function(self, param)
+				self:GetChild("SpecialFrame-filter"):playcommand("Refresh")
+				self:GetChild("SpecialFrame-text"):playcommand("Refresh")
+				self:queuecommand("StartBlink")
+			end,
+			StartBlinkCommand=function(self, param)
+				self:stoptweening():easeoutexpo(0.5):diffusealpha(1)
+				self:sleep(0.5):queuecommand("ContinueBlink")
+			end,
+			ContinueBlinkCommand=function(self, param)
+				self:stoptweening():easeoutexpo(0.5):diffusealpha(0)
+				self:sleep(0.5):queuecommand("StartBlink")
+			end,
+			Def.Quad { Name="SpecialFrame-filter",
+				InitCommand=function(self)
+					self:y(-0.1)
+					self:zoomto(WheelItem.Width, WheelItem.Height)
+					self:diffuse(color("0,0,0,0.8"))
+					self:playcommand("Refresh")
+				end,
+				RefreshCommand=function(self, param)
+					local value = FetchFromSong(Songs[Targets[i]], "Song Category Color for quads")
+					if type(value) == "string" then
+						value = color(value)
+					end
+					if value then
+						self:diffuse(value)
+					end
+				end,
+			},
+			Def.BitmapText { Name="SpecialFrame-text",
+				Font="Montserrat semibold 40px",
+				InitCommand=function(self)
+					self:addx(0):addy(-4)
+					self:zoom(0.8)
+					self:shadowlength(3)
+					self:align(0.5,0.5)
+					self:skewx(-0.3)
+					self:playcommand("Refresh")
+				end,
+				RefreshCommand=function(self, param)
+					local value = FetchFromSong(Songs[Targets[i]], "Display-formatted Song Category")
+					if value then
+						self:settext(value)
+					end
+					local value2 = FetchFromSong(Songs[Targets[i]], "Song Category Color")
+					if type(value2) == "string" then
+						value2 = color(value)
+					end
+					if value2 then
+						self:diffuse(value2)
+					end
+				end,
+			},
+		},
 		Def.BitmapText { Name="OriginLabel",
 			Font="Montserrat semibold 40px",
 			InitCommand=function(self)
 				self:addx(0):addy(-70)
-				self:zoom(0.4)				
-				:shadowlength(1)
+				self:zoom(0.4)
+				self:shadowlength(1)
 				self:align(0.5,0.5)
 			end,
 			
 			RefreshCommand=function(self,param)
 				self:diffuse(FetchFromSong(Songs[Targets[i]], "Song Origin Color"))
 				self:settext(Songs[Targets[i]]:GetOrigin())
-
-				if i >  WheelCenter+WheelSizeHelper or i <  WheelCenter-WheelSizeHelper then
-					self:visible(false)
-				else
-					self:visible(true)
-				end
-			end,
-		},
-		Def.BitmapText { Name="CategoryLabel",
-			Font="Montserrat semibold 40px",
-			InitCommand=function(self)
-				self:addx(-104):addy(-67)
-				self:zoom(0.2)
-				:shadowlength(0.5)
-				self:align(0,0)
-				self:maxwidth(832)
-			end,
-			
-			RefreshCommand=function(self,param)
-				self:settext(FetchFromSong(Songs[Targets[i]], "Display-formatted Song Category"))
-				self:diffuse(FetchFromSong(Songs[Targets[i]], "Song Category Color"))
 
 				if i >  WheelCenter+WheelSizeHelper or i <  WheelCenter-WheelSizeHelper then
 					self:visible(false)

@@ -19,7 +19,9 @@ local t = Def.ActorFrame {
 			if Song:IsDisplayBpmRandom() or BPMDisplay == 0 then BPMDisplay = "???" end
 							
 			local FirstTag = ""
-			FirstTag = FetchFromSong(Song, "First Tag")
+			if Song then
+				FirstTag = FetchFromSong(Song, "First Tag")
+			end
 			local HeartsCost = ""
 			if FirstTag == "SHORTCUT" then HeartsCost = 1 
 			elseif FirstTag == "ARCADE" then HeartsCost = 2 
@@ -56,7 +58,9 @@ local t = Def.ActorFrame {
 			if Song:IsDisplayBpmRandom() or BPMDisplay == 0 then BPMDisplay = "???" end
 							
 			local FirstTag = ""
-			FirstTag = FetchFromSong(Song, "First Tag")
+			if Song then
+				FirstTag = FetchFromSong(Song, "First Tag")
+			end
 			local HeartsCost = ""
 			if FirstTag == "SHORTCUT" then HeartsCost = 1 
 			elseif FirstTag == "ARCADE" then HeartsCost = 2 

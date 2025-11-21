@@ -1,10 +1,12 @@
 -- SAFECHECK - GENERATES A GLOBAL VARIABLE GroupsList IF IT DOESN'T EXIST ALREADY
 if next(GroupsList) == nil then
+	Trace("Running AssembleGroupSorting_POI from GroupSelect.lua now")
 	AssembleGroupSorting_POI()
+	Trace("Running UpdateGroupSorting_POI from GroupSelect.lua now")
     UpdateGroupSorting_POI()
 
     if next(GroupsList) == nil then
-        Warn("Groups list is currently inaccessible, halting music wheel!")
+        Warn("Groups list is currently inaccessible!")
         return Def.Actor {}
     end
 end
@@ -15,10 +17,11 @@ if SONGMAN:GetNumSongs() == 0 then
 end
 
 -- DECLARING SOME LEVERS AND VARIABLES
-local MainWheelSize = 70
-local MainWheelCenter = math.ceil( MainWheelSize * 0.5 )
-local MainWheelSpacing = 180 + 280
-local WheelItem = { Width = 212, Height = 120 }
+local WheelSize = 31
+local WheelCenter = math.ceil( WheelSize * 0.5 )
+local WheelSpacing = 112
+local WheelSpacingMain = 224
+local WheelItem = { Width = 222, Height = 124 }
 
 local ScreenSelectMusic
 
@@ -26,17 +29,17 @@ local IsOptionsList = { PLAYER_1 = false, PLAYER_2 = false }
 local IsSelectingGroup = false
 local IsBusy = false
 
-local MainTargets = {}
+local Targets = {}
 
 -- DECLARING USEFUL FUNCTIONS
 local function UpdateMainItemTargets(val)
-	for i = 1, MainWheelSize do
-		MainTargets[i] = val + i - MainWheelCenter
+	for i = 1, WheelSize do
+		Targets[i] = val + i - WheelCenter
 
 		local poi_settings_playlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsPlaylistIsWheel", "Save/OutFoxPrefs.ini") or false
 		if poi_settings_playlist_is_wheel then
-			while MainTargets[i] > #GroupsList do MainTargets[i] = MainTargets[i] - #GroupsList end
-			while MainTargets[i] < 1 do MainTargets[i] = MainTargets[i] + #GroupsList end
+			while Targets[i] > #GroupsList do Targets[i] = Targets[i] - #GroupsList end
+			while Targets[i] < 1 do Targets[i] = Targets[i] + #GroupsList end
 		else
 			-- literally do nothing
 		end
@@ -44,9 +47,14 @@ local function UpdateMainItemTargets(val)
 	end
 end
 
-function UpdateBanner(self, Banner)
+local function UpdateBanner(self, Banner)
 	if Banner == "" then Banner = THEME:GetPathG("Common fallback", "banner") end
 	self:Load(Banner):scaletofit(-WheelItem.Width / 2, -WheelItem.Height / 2, WheelItem.Width / 2, WheelItem.Height / 2)
+end
+
+local function UpdateBannerBig(self, Banner)
+	if Banner == "" then Banner = THEME:GetPathG("Common fallback", "banner") end
+	self:Load(Banner):scaletofit(-WheelItem.Width , -WheelItem.Height, WheelItem.Width, WheelItem.Height)
 end
 
 -- DECLARING INPUT HANDLER
@@ -220,8 +228,8 @@ local t = Def.ActorFrame {
 	},
 }
 
--- The Wheel: originally made by Luizsan
-for i = 1, MainWheelSize do
+for i = 1, WheelSize do
+	local slot = i
 	t[#t+1] = Def.ActorFrame {
 		InitCommand=function(self)
 			self:y(-159)
@@ -231,18 +239,16 @@ for i = 1, MainWheelSize do
 			-- Set initial position, Direction = 0 means it won't tween
 			self:playcommand("ScrollMain", {Direction = 0})
 			
-			-- updates playlist banner pic								
-			if GroupsList[MainTargets[i]].Banner == "" then
-				GroupsList[MainTargets[i]].Banner = THEME:GetPathG("Common fallback", "banner")
+			-- updates playlist banner pic
+			if i == WheelCenter then
+				UpdateBannerBig(self:GetChild("PlaylistBanner"),GroupsList[Targets[i]].Banner)
+			else
+				UpdateBanner(self:GetChild("PlaylistBanner"),GroupsList[Targets[i]].Banner)
 			end
-			self:GetChild("PlaylistBanner"):visible(true)
-			self:GetChild("PlaylistBanner"):Load(GroupsList[MainTargets[i]].Banner):zoom(0.23)
 		end,
 
 		OpenGroupWheelMessageCommand=function(self)
 			self:stoptweening():easeoutexpo(0.5):diffusealpha(1)
-
-			if i ~= MainWheelCenter then self:diffusealpha(0) end
 		end,
 		CloseGroupWheelMessageCommand=function(self, params)
 			self:stoptweening():easeoutexpo(1):diffusealpha(0)
@@ -252,10 +258,10 @@ for i = 1, MainWheelSize do
 			self:stoptweening()
 
 			-- Calculate position
-			local xpos = SCREEN_CENTER_X + (i - MainWheelCenter) * MainWheelSpacing
+			local xpos = SCREEN_CENTER_X + (i - WheelCenter) * WheelSpacing
 
 			-- Calculate displacement based on input
-			local displace = -params.Direction * MainWheelSpacing
+			local displace = -params.Direction * WheelSpacing
 
 			-- Only tween if a direction was specified
 			local tween = params and params.Direction and math.abs(params.Direction) > 0
@@ -265,25 +271,58 @@ for i = 1, MainWheelSize do
 			
 			local poi_settings_playlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsPlaylistIsWheel", "Save/OutFoxPrefs.ini") or false
 			if poi_settings_playlist_is_wheel then
-				while i > MainWheelSize do i = i - MainWheelSize end
-				while i < 1 do i = i + MainWheelSize end
+				while i > WheelSize do i = i - WheelSize end
+				while i < 1 do i = i + WheelSize end
 			else
 				-- literally do nothing
 			end
 
 			-- If it's an edge item, update text. Edge items should never tween
-			if i == 2 or i == MainWheelSize - 1 then
+			if i == 2 or i == WheelSize - 1 then
 				--donothing
 			elseif tween then
 				self:easeoutexpo(1)
 			end
-
-			-- this wheel only displays the center item
-			if i == MainWheelCenter then self:diffusealpha(1)
-			else self:diffusealpha(0) end
 			
+			-- i wanna see all elements
+			self:diffusealpha(1)
+
+			-- centered element needs to be big and adjust Y accordingly
+			local ypos
+			if i == WheelCenter then
+				UpdateBannerBig(self:GetChild("PlaylistBanner"),GroupsList[Targets[i]].Banner)
+				ypos = -159
+			else
+				UpdateBanner(self:GetChild("PlaylistBanner"),GroupsList[Targets[i]].Banner)
+				ypos = -76
+			end
+			
+			-- corrects offsets			
+			local offsetIndex = i - WheelCenter
+			if offsetIndex ~= 0 then
+				local absIndex = math.abs(offsetIndex)
+				local extra = 0
+
+				for step = 1, absIndex do
+					if step == 1 then
+						extra = extra + WheelSpacingMain -- spacing between center and neighbours
+					else
+						extra = extra + WheelSpacing -- spacing between small items
+					end
+				end
+
+				if offsetIndex < 0 then
+					xpos = xpos - extra
+				else
+					xpos = xpos + extra
+				end
+			end
+
+			
+
 			-- Animate!
 			self:x(xpos + displace)
+			self:y(ypos)
 		end,
 		
 		Def.Banner {
@@ -310,7 +349,10 @@ for i = 1, MainWheelSize do
 				self:queuecommand('Refresh')
 			end,
 			RefreshCommand=function(self)
+				-- updates the text to match the CurPlaylist
 				self:settext(GroupsList[CurPlaylistIndex].Name)
+				-- only gets displayed if this element is the center one (currently hovered)
+				if i == WheelCenter then self:diffusealpha(1) else self:diffusealpha(0) end
 			end
 		},
 
@@ -329,7 +371,10 @@ for i = 1, MainWheelSize do
 				self:queuecommand('Refresh')
 			end,
 			RefreshCommand=function(self)
+				-- updates the text to match the CurPlaylist
 				self:settext(GroupsList[CurPlaylistIndex].Description)
+				-- only gets displayed if this element is the center one (currently hovered)
+				if i == WheelCenter then self:diffusealpha(1) else self:diffusealpha(0) end
 			end
 		},
 	}

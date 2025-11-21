@@ -1,7 +1,7 @@
 -- LEVERS AND VARIABLES
 local choices = {
-	{ name="Modo Completo", go="ScreenSelectMusicFull" },
-	{ name="Modo Básico",   go="ScreenSelectMusicBasic" }
+	{ name="ScreenSelectMusicFull", go="ScreenSelectMusicFull" },
+	{ name="ScreenSelectMusicBasic",   go="ScreenSelectMusicBasic" }
 }
 local index = 1
 

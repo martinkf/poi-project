@@ -8,8 +8,9 @@ local t = Def.ActorFrame {
 			Trace("No Basic Mode song list needed!")
 		end
 		
+		Trace("Running AssembleGroupSorting_POI from ScreenSystemLayer overlay.lua now")
 		AssembleGroupSorting_POI()
-	end,	
+	end,
 }
 
 -- SCREENMAN:SystemMessage display
