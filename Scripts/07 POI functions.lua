@@ -433,7 +433,8 @@ function FormatDate_POI(input_date_as_string)
 	MonthAsString = monthMap[MonthAsNumberString] or ""
 	
 	-- Creates output
-	output = YearAsString .. ", " .. DayAsNumberString .. " " .. MonthAsString
+	--output = YearAsString .. ", " .. DayAsNumberString .. " " .. MonthAsString
+	output =  DayAsNumberString .. "-" .. MonthAsString .. "-" .. YearAsString
 	
 	return output
 end
