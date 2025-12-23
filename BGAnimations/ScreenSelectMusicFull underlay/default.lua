@@ -174,24 +174,24 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 		-- background quad			
 		Def.Quad {
 			InitCommand=function(self)
-				self:xy(0 + (pn == PLAYER_2 and 86 or -86),229)
-				self:zoomto(632, 368)
+				self:xy(0 + (pn == PLAYER_2 and 86 or -86),230)
+				self:zoomto(632, 353)
 				self:align(0.5,1)
-				self:diffuse(color("1,1,1,0.9"))
+				self:diffuse(color("0,0,0,0.9"))
 			end,
 		},
 		-- READY graphic
 		Def.Sprite {
 			Texture=THEME:GetPathG("", "UI/Ready" .. ToEnumShortString(pn)),
 			InitCommand=function(self)
-				self:xy(0 + (pn == PLAYER_2 and 84 or -84),-60)
+				self:xy(0 + (pn == PLAYER_2 and 84 or -84),-40)
 				self:zoom(3)
 			end,
 		},
 		-- press center step graphic
 		LoadActor(THEME:GetPathG("", "PressCenterStep")) .. {
 			InitCommand=function(self)
-				self:xy(0 + (pn == PLAYER_2 and 96 or -96),80)
+				self:xy(0 + (pn == PLAYER_2 and 96 or -96),100)
 			end,
 		},
 	}
