@@ -85,85 +85,118 @@ function AssembleGroupSorting_POI()
     end
 	
 	-- initialize/clean the global variables
-	MasterGroupsList = {}
-	GroupsList = {}
+	MasterPlaylistsArray = {}
+	PlaylistsArray = {}
 
 	-- initialize local helper variables
 	local allSongs = SONGMAN:GetAllSongs()
 
 	-- for each playlist found in Database_POI,
-	for i, thisPlaylist in ipairs(Database_POI()) do
+	for _, thisPlaylist in ipairs(Database_POI()) do
 
-		-- grab an array of strings which is the list of songs allowed in		
-		local listOfAllowedSongsAsString = {}
-		for _, song in ipairs(thisPlaylist.AllowedSongs) do
-			table.insert(listOfAllowedSongsAsString, song.SongPath)
-		end
+		-- initialize the sublists array
+		local arrayOfSublists = {}
 
-		-- grab an array of Song elements related to the list of songs allowed in		
-		local arrayOfAllowedSongs = {}
-		for _, listedDir in ipairs(listOfAllowedSongsAsString) do
-			for _, thisSong in ipairs(allSongs) do
-				if thisSong:GetSongDir() == listedDir then
-					table.insert(arrayOfAllowedSongs, thisSong)
+		for _, thisSublist in ipairs(thisPlaylist.Sublists) do
+		
+			-- grab an array of strings which is the list of songs allowed in		
+			local listOfAllowedSongsAsString = {}
+			for _, song in ipairs(thisSublist.AllowedSongs) do
+				table.insert(listOfAllowedSongsAsString, song.SongPath)
+			end
+		
+			-- grab an array of Song elements related to the list of songs allowed in		
+			local arrayOfAllowedSongs = {}
+			for _, listedDir in ipairs(listOfAllowedSongsAsString) do
+				for _, thisSong in ipairs(allSongs) do
+					if thisSong:GetSongDir() == listedDir then
+						table.insert(arrayOfAllowedSongs, thisSong)
+					end
 				end
 			end
+
+			-- populates a sublist "object" and adds it to the temporary array variable
+			arrayOfSublists[#arrayOfSublists + 1] = {
+				SublistName = thisSublist.SublistName,
+				StartingSong = thisSublist.StartingSong,
+				AllowedSongs = thisSublist.AllowedSongs,
+				Songs = arrayOfAllowedSongs
+			}
+
+			-- trace
+			Trace("Sublist added to temporary arrayOfSublists: " .. thisPlaylist.PlaylistName .. " - " .. thisSublist.SublistName)
+
 		end
 
-		-- adds everything to the global variable called MasterGroupsList
-		MasterGroupsList[#MasterGroupsList + 1] = {
-			Name = thisPlaylist.Name,
+		-- adds the playlist to the global variable called MasterPlaylistsArray
+		MasterPlaylistsArray[#MasterPlaylistsArray + 1] = {
+			PlaylistName = thisPlaylist.PlaylistName,
 			Banner = THEME:GetPathG("", thisPlaylist.Banner),
 			Description = thisPlaylist.Description,
-			StartingPoint = thisPlaylist.StartingPoint,
-			AllowedSongs = thisPlaylist.AllowedSongs,
-			Songs = arrayOfAllowedSongs
+			StartingSublist = thisPlaylist.StartingSublist,
+			Sublists = arrayOfSublists
 		}
 
 		-- trace
-		Trace("Playlist added: " .. MasterGroupsList[#MasterGroupsList].Name .. " - " .. #MasterGroupsList[#MasterGroupsList].Songs .. " songs")
+		Trace("Playlist added to global MasterPlaylistsArray: " .. MasterPlaylistsArray[#MasterPlaylistsArray].PlaylistName)
+
 	end
 
-	--trace
-	Trace("POI Playlist sorting created!")
+	-- trace
+	Trace("FINISHED AssembleGroupSorting_POI() - all playlists added to global MasterPlaylistsArray variable.")
+
 end
 
 -- Updates the Groups list as required
 function UpdateGroupSorting_POI()
-	Trace("Creating group list copy from master...")
-    GroupsList = deepcopy(MasterGroupsList)
+	-- creates a deepcopy of MasterPlaylistsArray to work with
+	Trace("STARTED UpdateGroupSorting_POI() - creating group list copy from master...")
+    PlaylistsArray = deepcopy(MasterPlaylistsArray)
 
-    Trace("Removing unplayable songs from list...")
-    for MainGroup in pairs(GroupsList) do
-		GroupsList[MainGroup].Songs = PlayableSongs(GroupsList[MainGroup].Songs)
-        if #GroupsList[MainGroup].Songs == 0 then
-        	table.remove(GroupsList, MainGroup)
-        end
+	-- sanitizes sublists songs (removes unplayable)
+    Trace("UpdateGroupSorting_POI() - Songs sanitization: removing unplayable songs from sublists")
+    for _, thisPlaylist in ipairs(PlaylistsArray) do
+		for _, thisSublist in ipairs(thisPlaylist.Sublists) do
+			thisSublist.Songs = PlayableSongs(thisSublist.Songs)
+			if #thisSublist.Songs == 0 then
+				table.remove(thisPlaylist.Sublists, thisSublist)
+			end
+		end
     end
 
+	-- sends a message for UI to update itself
     MESSAGEMAN:Broadcast("UpdateChartDisplay")
-    Trace("POI Playlist sorting updated!")
+
+	-- end trace
+    Trace("FINISHED UpdateGroupSorting_POI() - all unplayable songs removed from all sublists.")
+
 end
 
 -- inputs:
--- 1) a string related to the name of the group, such as |"Pump It Up Exceed 2"|
--- 2) an integer, related to the index of a song, such as |3|
+-- 1) a string related to the name of a playlist, such as |"Legacy Korean exclusives"|
+-- 2) a string related to the name of a sublist, such as |"Exclusive charts from Pump It Up O.B.G The 3rd Dance Floor"|
+-- 3) an integer, related to the index of a song, such as |1|
 -- returns: an array of strings, as in this example:
--- { "EXC2-NORMAL", "EXC2-HARD", "EXC2-CRAZY", "EXC2-FREESTYLE", "EXC2-NIGHTMARE" }
-function GetAllowedChartsAsString_POI(input_groupName, input_currentIndex)
+-- { "3RD-NORMAL", "3RD-HARD" }
+function GetAllowedChartsAsString_POI(input_playlistName, input_sublistName, input_currentIndex)
 
 	local output = {}
 
-	for _, playlist in ipairs(Database_POI()) do
-		if playlist.Name == input_groupName then
-			local songEntry = playlist.AllowedSongs[input_currentIndex]
-			if songEntry then
-				output = songEntry.Charts
+	for _, thisPlaylist in ipairs(Database_POI()) do
+		if thisPlaylist.PlaylistName == input_playlistName then
+			for _, thisSublist in ipairs(thisPlaylist.Sublists) do
+				if thisSublist.SublistName == input_sublistName then
+					local songEntry = thisSublist.AllowedSongs[input_currentIndex]
+					if songEntry then
+						output = songEntry.Charts
+					end
+				end
 			end
 		end
 	end
-	
+
 	return output
+
 end
 
 -- inputs:
@@ -190,17 +223,18 @@ end
 
 -- inputs:
 -- 1) an array of Chart objects
--- 2) a string related to the name of the group, such as |"Pump It Up Exceed 2"|
--- 3) an integer, related to the index of a song, such as |3|
+-- 2) a string related to the name of the playlist, such as |"Legacy Korean exclusives"|
+-- 3) a string related to the name of the sublist, such as |"Exclusive charts from Pump It Up O.B.G The 3rd Dance Floor"|
+-- 4) an integer, related to the index of a song, such as |1|
 -- returns: an array of Chart objects, as in this example:
--- { [Object for a "EXC2-NORMAL" chart], [Object for a "EXC2-HARD" chart], [Object for a "EXC2-CRAZY" chart] }
-function GetAllowedCharts_POI(input_chartArray, input_groupName, input_currentIndex)
+-- { [Object for a "3RD-NORMAL" chart], [Object for a "3RD-HARD" chart] }
+function GetAllowedCharts_POI(input_chartArray, input_playlistName, input_sublistName, input_currentIndex)
 	local output = {}
 
-	if input_groupName == "Problematic songs" or input_groupName == "All Tunes" then
+	if input_playlistName == "Problematic songs" or input_playlistName == "All Tunes" then
 		output = input_chartArray
 	else
-		local listOfAllowedChartsAsString = GetAllowedChartsAsString_POI(input_groupName, input_currentIndex)
+		local listOfAllowedChartsAsString = GetAllowedChartsAsString_POI(input_playlistName, input_sublistName, input_currentIndex)
 		output = CreateChartArrayBasedOnList_POI(input_chartArray, listOfAllowedChartsAsString)
 	end
 
@@ -520,13 +554,9 @@ function FormatDifficultyFromPOIName_POI(input_playlistName, input_poiName_as_st
 		return difficultyMap_Premiere3[input_poiName_as_string] or input_poiName_as_string
 	elseif input_playlistName == "Pump It Up The Prex 3" or
 	       input_playlistName == "Pump It Up Exceed" or
-		   input_playlistName == "Pump It Up Exceed 2 - Arcade Station" or
-		   input_playlistName == "Pump It Up Exceed 2 - Remix Station" or
-		   input_playlistName == "Pump It Up Zero - Easy Station" or
-		   input_playlistName == "Pump It Up Zero - Arcade Station" or
-		   input_playlistName == "Pump It Up Zero - Remix Station" or
-		   input_playlistName == "Pump It Up NX - Arcade Station" or
-		   input_playlistName == "Pump It Up NX - Special Zone" then
+		   input_playlistName == "Pump It Up Exceed 2" or
+		   input_playlistName == "Pump It Up Zero" or
+		   input_playlistName == "Pump It Up NX" then
 		return difficultyMap_Freevolt[input_poiName_as_string] or input_poiName_as_string
 	else
 		return input_poiName_as_string

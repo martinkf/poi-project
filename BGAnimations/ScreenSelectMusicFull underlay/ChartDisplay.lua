@@ -14,7 +14,8 @@ local SongIsChosen = false
 local CenterList = LoadModule("Config.Load.lua")("CenterChartList", "Save/OutFoxPrefs.ini")
 local CanWrap = LoadModule("Config.Load.lua")("WrapChartScroll", "Save/OutFoxPrefs.ini")
 
-local CurGroupName
+local CurPlaylistName
+local CurSublistName
 
 --
 
@@ -148,7 +149,8 @@ local t = Def.ActorFrame {
 			ChartArray = SongUtil.GetPlayableSteps(CurrentSong)
 			
 			-- Filter out unwanted charts recursively
-			CurGroupName = GroupsList[LastGroupMainIndex] ~= nil and GroupsList[LastGroupMainIndex].Name or ""
+			CurPlaylistName = PlaylistsArray[LastPlaylistIndex] ~= nil and PlaylistsArray[LastPlaylistIndex].PlaylistName or ""
+			CurSublistName = PlaylistsArray[LastPlaylistIndex].Sublists[LastSublistIndex] ~= nil and PlaylistsArray[LastPlaylistIndex].Sublists[LastSublistIndex].SublistName or ""
 			
 			local ShowFilters = {"ShowUCSCharts", "ShowQuestCharts", "ShowHiddenCharts" }
 			local ChartFilters = {"UCS", "QUEST", "HIDDEN" }
@@ -179,7 +181,7 @@ local t = Def.ActorFrame {
 				
 				-- POI - temporarily (maybe?) disabling this part
 				-- Co-op group should only display co-op charts
-				--if CurGroupName ~= nil and CurGroupName == "Co-op" then
+				--if CurPlaylistName ~= nil and CurPlaylistName == "Co-op" then
 				--	if ChartArray[i]:GetStepsType() == 'StepsType_Pump_Double' and
 				--	(string.find(ToUpper(ChartArray[i]:GetDescription()), "DP") or 
 				--	string.find(ToUpper(ChartArray[i]:GetDescription()), "COOP")) and 
@@ -192,7 +194,7 @@ local t = Def.ActorFrame {
 			-- POI - this is where I set up my interference rigging module!
 			-- uses the FilterChartFromSublist POI function to filter out the charts that will be displayed.
 			-- takes into consideration the current Playlist, the current Sublist, and the current Song being selected (by checking the MusicWheel SongIndex)
-			ChartArray = GetAllowedCharts_POI(ChartArray, CurGroupName, GetCurrentSongIndex())
+			ChartArray = GetAllowedCharts_POI(ChartArray, CurPlaylistName, CurSublistName, GetCurrentSongIndex())
 			
 			-- If no charts are left, load all of them again in an attempt to avoid other crashes
 			if #ChartArray == 0 then ChartArray = SongUtil.GetPlayableSteps(CurrentSong) end
@@ -285,7 +287,7 @@ local t = Def.ActorFrame {
 					self:GetChild("")[i]:GetChild("BotDivider1"):visible(true)
 					self:GetChild("")[i]:GetChild("BotDivider2"):visible(true)
 					self:GetChild("")[i]:GetChild("ChartOrigin"):visible(false):settext(FetchFromChart(Chart, "Chart Origin")) -- disabling it for now
-					self:GetChild("")[i]:GetChild("DifficultyName"):visible(true):settext(FormatDifficultyFromPOIName_POI(CurGroupName,FetchFromChart(Chart,"Chart POI Name")))
+					self:GetChild("")[i]:GetChild("DifficultyName"):visible(true):settext(FormatDifficultyFromPOIName_POI(CurPlaylistName,FetchFromChart(Chart,"Chart POI Name")))
 					--self:GetChild("")[i]:GetChild("DifficultyName"):visible(true):settext("TRAINING STATION")
 					self:GetChild("")[i]:GetChild("Level"):visible(true):settext(ChartMeter)
 					

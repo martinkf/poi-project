@@ -1,5 +1,5 @@
-LastGroupMainIndex = 0
-LastGroupSubIndex = 0
+LastPlaylistIndex = 0
+LastSublistIndex = 0
 LastSongIndex = 0
 
 function OptionNameString(str)

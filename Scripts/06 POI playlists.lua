@@ -1,20 +1,20 @@
 function Database_POI()
 	return {
 		-- playlist 1
-		{	Name = "Legacy Korean exclusives",
+		{	PlaylistName = "Legacy Korean exclusives",
 			Banner = "Playlists/001-legacykor.png",
 			Description = "Description for -Legacy Korean exclusives-",
 			StartingSublist = 1,
 			Sublists = {
 			-- sublist 1
-				{	Name = "Exclusive charts from Pump It Up The 2nd Dance Floor",
+				{	SublistName = "Exclusive charts from Pump It Up The 2nd Dance Floor",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "2ND-DOUBLE" } },
 					},
 				},
 			-- sublist 2
-				{	Name = "Exclusive charts from Pump It Up O.B.G The 3rd Dance Floor",
+				{	SublistName = "Exclusive charts from Pump It Up O.B.G The 3rd Dance Floor",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/112 - ANOTHER TRUTH/", Charts = { "3RD-NORMAL", "3RD-HARD" } },
@@ -22,14 +22,14 @@ function Database_POI()
 					},
 				},
 			-- sublist 3
-				{	Name = "Exclusive charts from Pump It Up O.B.G Season Evolution",
+				{	SublistName = "Exclusive charts from Pump It Up O.B.G Season Evolution",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/408 - KISS/", Charts = { "OBGSE-NORMAL", "OBGSE-HARD", "OBGSE-CRAZY", "OBGSE-DOUBLE" } },
 					},
 				},
 			-- sublist 4
-				{	Name = "Exclusive charts from Pump It Up Extra",
+				{	SublistName = "Exclusive charts from Pump It Up Extra",
 					StartingSong = 7,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/205 - EXTRAVAGANZA/", Charts = { "EXTRA-XXDOUBLE" } },
@@ -46,7 +46,7 @@ function Database_POI()
 					},
 				},
 			-- sublist 5
-				{	Name = "Exclusive Korean remixes",
+				{	SublistName = "Exclusive Korean remixes",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/116 - -REMIX- 1ST DIVA REMIX/", Charts = { "1ST-HARD" } },
@@ -71,13 +71,13 @@ function Database_POI()
 			},
 		},
 		-- playlist 2
-		{	Name = "Premiere Brazil exclusives",
+		{	PlaylistName = "Premiere Brazil exclusives",
 			Banner = "Playlists/002-premierebr.png",
 			Description = "Description for -Premiere Brazil exclusives-",
-			StartingSublist = 2,
+			StartingSublist = 1,
 			Sublists = {
 			-- sublist 1
-				{	Name = "By difficulty: NORMAL",
+				{	SublistName = "By difficulty: NORMAL",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/611 - A CERCA/", Charts = { "PRM1-NORMAL" } },
@@ -91,7 +91,7 @@ function Database_POI()
 					},
 				},
 			-- sublist 2
-				{	Name = "By difficulty: HARD",
+				{	SublistName = "By difficulty: HARD",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/611 - A CERCA/", Charts = { "PRM1-HARD" } },
@@ -105,7 +105,7 @@ function Database_POI()
 					},
 				},
 			-- sublist 3
-				{	Name = "By difficulty: DOUBLE",
+				{	SublistName = "By difficulty: DOUBLE",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/611 - A CERCA/", Charts = { "PRM1-DOUBLE" } },
@@ -121,13 +121,13 @@ function Database_POI()
 			},
 		},
 		-- playlist 3
-		{	Name = "Exceed S.E exclusives",
+		{	PlaylistName = "Exceed S.E exclusives",
 			Banner = "Playlists/003-exceedse.png",
 			Description = "Description for -Exceed S.E exclusives-",
-			StartingSublist = 3,
+			StartingSublist = 1,
 			Sublists = {
 			-- sublist 1
-				{	Name = "By difficulty: NORMAL",
+				{	SublistName = "By difficulty: NORMAL",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/AE01 - A LITTLE LESS CONVERSATION/", Charts = { "EXCSE-NORMAL" } },
@@ -138,7 +138,7 @@ function Database_POI()
 					},
 				},
 			-- sublist 2
-				{	Name = "By difficulty: HARD",
+				{	SublistName = "By difficulty: HARD",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/AE01 - A LITTLE LESS CONVERSATION/", Charts = { "EXCSE-HARD" } },
@@ -149,7 +149,7 @@ function Database_POI()
 					},
 				},
 			-- sublist 3
-				{	Name = "By difficulty: CRAZY",
+				{	SublistName = "By difficulty: CRAZY",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/AE01 - A LITTLE LESS CONVERSATION/", Charts = { "EXCSE-CRAZY" } },
@@ -160,7 +160,7 @@ function Database_POI()
 					},
 				},
 			-- sublist 4
-				{	Name = "By difficulty: FREESTYLE",
+				{	SublistName = "By difficulty: FREESTYLE",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/AE01 - A LITTLE LESS CONVERSATION/", Charts = { "EXCSE-FREESTYLE" } },
@@ -171,7 +171,7 @@ function Database_POI()
 					},
 				},
 			-- sublist 5
-				{	Name = "By difficulty: NIGHTMARE",
+				{	SublistName = "By difficulty: NIGHTMARE",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/AE01 - A LITTLE LESS CONVERSATION/", Charts = { "EXCSE-NIGHTMARE" } },

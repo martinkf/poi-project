@@ -1,12 +1,12 @@
--- SAFECHECK - GENERATES A GLOBAL VARIABLE GroupsList IF IT DOESN'T EXIST ALREADY
-if next(GroupsList) == nil then
+-- SAFECHECK - GENERATES A GLOBAL VARIABLE PlaylistsArray IF IT DOESN'T EXIST ALREADY
+if next(PlaylistsArray) == nil then
 	Trace("Running AssembleGroupSorting_POI from GroupSelect.lua now")
 	AssembleGroupSorting_POI()
 	Trace("Running UpdateGroupSorting_POI from GroupSelect.lua now")
     UpdateGroupSorting_POI()
 
-    if next(GroupsList) == nil then
-        Warn("Groups list is currently inaccessible!")
+    if next(PlaylistsArray) == nil then
+        Warn("Groups list (PlaylistsArray) is currently inaccessible!")
         return Def.Actor {}
     end
 end
@@ -35,15 +35,6 @@ local Targets = {}
 local function UpdateMainItemTargets(val)
 	for i = 1, WheelSize do
 		Targets[i] = val + i - WheelCenter
-
-		local poi_settings_playlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsPlaylistIsWheel", "Save/OutFoxPrefs.ini") or false
-		if poi_settings_playlist_is_wheel then
-			while Targets[i] > #GroupsList do Targets[i] = Targets[i] - #GroupsList end
-			while Targets[i] < 1 do Targets[i] = Targets[i] + #GroupsList end
-		else
-			-- literally do nothing
-		end
-
 	end
 end
 
@@ -75,49 +66,39 @@ local function InputHandler(event)
 	if pn == PLAYER_2 and not GAMESTATE:IsPlayerEnabled(PLAYER_2) then return end
 	
 	if IsSelectingGroup then
-		if button == "Left" or button == "MenuLeft" or button == "DownLeft" then
-
-			local poi_settings_playlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsPlaylistIsWheel", "Save/OutFoxPrefs.ini") or false
-			if poi_settings_playlist_is_wheel then
+		if button == "Left" or button == "MenuLeft" or button == "DownLeft" then			
+			
+			if CurPlaylistIndex > 1 then
 				CurPlaylistIndex = CurPlaylistIndex - 1
-				if CurPlaylistIndex < 1 then CurPlaylistIndex = #GroupsList end
 				UpdateMainItemTargets(CurPlaylistIndex)
 				MESSAGEMAN:Broadcast("ScrollMain", { Direction = -1 })
-			else
-				if CurPlaylistIndex > 1 then
-					CurPlaylistIndex = CurPlaylistIndex - 1
-					UpdateMainItemTargets(CurPlaylistIndex)
-					MESSAGEMAN:Broadcast("ScrollMain", { Direction = -1 })
-				end
 			end
 			
 		elseif button == "Right" or button == "MenuRight" or button == "DownRight" then
 
-			local poi_settings_playlist_is_wheel = LoadModule("Config.Load.lua")("POISettingsPlaylistIsWheel", "Save/OutFoxPrefs.ini") or false
-			if poi_settings_playlist_is_wheel then
+			if CurPlaylistIndex < #PlaylistsArray then
 				CurPlaylistIndex = CurPlaylistIndex + 1
-				if CurPlaylistIndex > #GroupsList then CurPlaylistIndex = 1 end
 				UpdateMainItemTargets(CurPlaylistIndex)
 				MESSAGEMAN:Broadcast("ScrollMain", { Direction = 1 })
-			else
-				if CurPlaylistIndex < #GroupsList then
-					CurPlaylistIndex = CurPlaylistIndex + 1
-					UpdateMainItemTargets(CurPlaylistIndex)
-					MESSAGEMAN:Broadcast("ScrollMain", { Direction = 1 })
-				end
 			end
 			
 		elseif button == "Start" or button == "MenuStart" or button == "Center" then
 			
-			if CurPlaylistIndex == LastGroupMainIndex then
+			if CurPlaylistIndex == LastPlaylistIndex then
 				MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = true })
 			else -- this means, if the group was actually changed, instead of just selected the same as previously
-				GroupIndex = CurPlaylistIndex
-				LastGroupMainIndex = CurPlaylistIndex
-				LoadModule("Config.Save.lua")("GroupMainIndex", LastGroupMainIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+				PlaylistIndex = CurPlaylistIndex
+				LastPlaylistIndex = CurPlaylistIndex
+				LoadModule("Config.Save.lua")("PlaylistIndex", LastPlaylistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
 				
-				SongIndex = GroupsList[CurPlaylistIndex].StartingPoint
-				LastSongIndex = GroupsList[CurPlaylistIndex].StartingPoint
+				local temporaryStartingSublist = PlaylistsArray[CurPlaylistIndex].StartingSublist
+				SublistIndex = temporaryStartingSublist
+				LastSublistIndex = SublistIndex
+				CurSublistIndex = SublistIndex
+				LoadModule("Config.Save.lua")("SublistIndex", LastSublistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+
+				SongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
+				LastSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
 				LoadModule("Config.Save.lua")("SongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
 				
 				MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = false })
@@ -241,9 +222,9 @@ for i = 1, WheelSize do
 			
 			-- updates playlist banner pic
 			if slot == WheelCenter then
-				UpdateBannerBig(self:GetChild("PlaylistBanner"),GroupsList[Targets[slot]].Banner)
+				UpdateBannerBig(self:GetChild("PlaylistBanner"),PlaylistsArray[Targets[slot]].Banner)
 			else
-				UpdateBanner(self:GetChild("PlaylistBanner"),GroupsList[Targets[slot]].Banner)
+				UpdateBanner(self:GetChild("PlaylistBanner"),PlaylistsArray[Targets[slot]].Banner)
 			end
 		end,
 
@@ -282,10 +263,10 @@ for i = 1, WheelSize do
 			-- centered element needs to be big and adjust Y accordingly
 			local ypos
 			if slot == WheelCenter then
-				UpdateBannerBig(self:GetChild("PlaylistBanner"),GroupsList[Targets[slot]].Banner)
+				UpdateBannerBig(self:GetChild("PlaylistBanner"),PlaylistsArray[Targets[slot]].Banner)
 				ypos = -159
 			else
-				UpdateBanner(self:GetChild("PlaylistBanner"),GroupsList[Targets[slot]].Banner)
+				UpdateBanner(self:GetChild("PlaylistBanner"),PlaylistsArray[Targets[slot]].Banner)
 				ypos = -76
 			end
 			
@@ -338,7 +319,7 @@ t[#t+1] = Def.ActorFrame {
 			self:zoom(1.2)
 			self:shadowlength(2)
 			self:skewx(-0)
-			self:settext(GroupsList[CurPlaylistIndex].Name)
+			self:settext(PlaylistsArray[CurPlaylistIndex].PlaylistName)
 			self:diffusealpha(0)
 			self:queuecommand('Refresh')
 		end,
@@ -347,7 +328,7 @@ t[#t+1] = Def.ActorFrame {
 		end,
 		RefreshCommand=function(self)
 			-- updates the text to match the CurPlaylist
-			self:settext(GroupsList[CurPlaylistIndex].Name)
+			self:settext(PlaylistsArray[CurPlaylistIndex].PlaylistName)
 
 			-- quick animation when scrolling through playlists
 			self:stoptweening():diffusealpha(0):sleep(0.25):easeoutexpo(0.5):diffusealpha(1)
@@ -363,7 +344,7 @@ t[#t+1] = Def.ActorFrame {
 			self:shadowlength(1)
 			self:align(0.5,0)
 			self:maxwidth(1262)
-			self:settext(GroupsList[CurPlaylistIndex].Description)
+			self:settext(PlaylistsArray[CurPlaylistIndex].Description)
 			self:queuecommand('Refresh')
 		end,
 		ScrollMainMessageCommand=function(self)
@@ -371,7 +352,7 @@ t[#t+1] = Def.ActorFrame {
 		end,
 		RefreshCommand=function(self)
 			-- updates the text to match the CurPlaylist
-			self:settext(GroupsList[CurPlaylistIndex].Description)
+			self:settext(PlaylistsArray[CurPlaylistIndex].Description)
 			
 			-- quick animation when scrolling through playlists
 			self:stoptweening():diffusealpha(0):sleep(0.25):easeoutexpo(0.5):diffusealpha(1)

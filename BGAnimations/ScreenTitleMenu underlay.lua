@@ -5,8 +5,8 @@ local t = Def.ActorFrame {
         ResetLuaMods(PLAYER_2)
         
         -- Reset song and group wheel indexes
-        LastGroupMainIndex = 0
-        LastGroupSubIndex = 0
+        LastPlaylistIndex = 0
+        LastSublistIndex = 0
         LastSongIndex = 0
 
         GAMESTATE:UpdateDiscordGameMode(GAMESTATE:GetCurrentGame():GetName())

@@ -14,7 +14,7 @@ local t = Def.ActorFrame {
 			self:y(CurPlaylistText_y)
 			self:zoom(0.4)
 			self:shadowlength(1)
-			self:settext("Current playlist: "..GroupsList[LastGroupMainIndex].Name)
+			self:settext("Current playlist: "..PlaylistsArray[LastPlaylistIndex].PlaylistName)
 			self:queuecommand('Refresh')
 			self:visible(false) -- disabling it for now
 		end,
@@ -36,7 +36,7 @@ local t = Def.ActorFrame {
 			end
 		end,
 		RefreshCommand=function(self)
-			self:settext("Current playlist: "..GroupsList[LastGroupMainIndex].Name)
+			self:settext("Current playlist: "..PlaylistsArray[LastPlaylistIndex].PlaylistName)
 			--self:settext("QEQEQE to change playlists")
 		end
 	},
@@ -59,7 +59,7 @@ local t = Def.ActorFrame {
 	Def.Banner { Name="CurPlaylistBanner",
 		InitCommand=function(self)
 			self:y(CurPlaylistBannerBgQuad_y + 72)
-			self:Load(GroupsList[LastGroupMainIndex].Banner)
+			self:Load(PlaylistsArray[LastPlaylistIndex].Banner)
 
 			local texWidth, texHeight = 1920, 1080 -- your banner’s actual resolution
 			local desiredWidth, desiredHeight = 443, 138
@@ -104,7 +104,7 @@ local t = Def.ActorFrame {
 			self:stoptweening():easeoutexpo(0.5):diffusealpha(1)
 		end,
 		RefreshCommand=function(self)
-			self:Load(GroupsList[LastGroupMainIndex].Banner)
+			self:Load(PlaylistsArray[LastPlaylistIndex].Banner)
 		end,
 	},
 

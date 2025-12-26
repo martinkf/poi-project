@@ -1,12 +1,12 @@
--- SAFECHECK - GENERATES A GLOBAL VARIABLE GroupsList IF IT DOESN'T EXIST ALREADY
-if next(GroupsList) == nil then
+-- SAFECHECK - GENERATES A GLOBAL VARIABLE PlaylistsArray IF IT DOESN'T EXIST ALREADY
+if next(PlaylistsArray) == nil then
 	Trace("Running AssembleGroupSorting_POI from MusicWheel.lua now")
 	AssembleGroupSorting_POI()
 	Trace("Running UpdateGroupSorting_POI from MusicWheel.lua now")
     UpdateGroupSorting_POI()
 
-    if next(GroupsList) == nil then
-        Warn("Groups list is currently inaccessible!")
+    if next(PlaylistsArray) == nil then
+        Warn("Groups list (PlaylistsArray) is currently inaccessible!")
         return Def.Actor {}
     end
 end
@@ -35,20 +35,28 @@ local IsBusy = false
 
 -- DECLARING MORE VARIABLES - WE WANT THE MUSICWHEEL TO ALWAYS START AT PIU NX ARCADE STATION AT WITCH DOCTOR #1 IN STAGE 1
 if GAMESTATE:GetCurrentStageIndex() == 0 then --this means this is stage 1, we just came from the select profile screen
-	LastGroupMainIndex = 1
+	LastPlaylistIndex = 1
+	LastSublistIndex = 1
 	LastSongIndex = 1
 else --this means a song has been played and we're back to the select song screen
-	LastGroupMainIndex = tonumber(LoadModule("Config.Load.lua")("GroupMainIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
+	LastPlaylistIndex = tonumber(LoadModule("Config.Load.lua")("PlaylistIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
+	LastSublistIndex = tonumber(LoadModule("Config.Load.lua")("SublistIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
 	LastSongIndex = tonumber(LoadModule("Config.Load.lua")("SongIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
 end
-CurPlaylistIndex = LastGroupMainIndex
-GroupIndex = LastGroupMainIndex
-local GroupMainIndex = LastGroupMainIndex
+
+CurPlaylistIndex = LastPlaylistIndex
+PlaylistIndex = LastPlaylistIndex
+
+CurSublistIndex = LastSublistIndex
+SublistIndex = LastSublistIndex
+
 SongIndex = LastSongIndex
 
 -- DECLARING MORE VARIABLES - DEFAULT IS TO START AT ALL FOR NOW
 Targets = {}
-Songs = GroupsList[GroupMainIndex].Songs
+local StartingPlaylistIndex = LastPlaylistIndex
+local StartingSublistIndex = LastSublistIndex
+Songs = PlaylistsArray[StartingPlaylistIndex].Sublists[StartingSublistIndex].Songs
 
 -- DECLARING USEFUL FUNCTIONS
 local function UpdateItemTargets(val)
@@ -199,14 +207,17 @@ local t = Def.ActorFrame {
 	OpenGroupWheelMessageCommand=function(self) IsBusy = true end,
 	CloseGroupWheelMessageCommand=function(self, params)
 		if params.Silent == false then
-			-- Grab the new list of songs from the selected group
-			Songs = GroupsList[GroupIndex].Songs
+			-- grab the starting sublist of the selected group
+			local temporaryStartingSublist = PlaylistsArray[PlaylistIndex].StartingSublist
 
-			-- Fetches what the "StartingPoint" of this playlist should be
-			local thisStartingPoint = tonumber(GroupsList[GroupIndex].StartingPoint)
+			-- Grab the new list of songs from the selected group
+			Songs = PlaylistsArray[PlaylistIndex].Sublists[temporaryStartingSublist].Songs
+
+			-- Fetches what the "StartingSong" of this sublist should be
+			local temporaryStartingSong = tonumber(PlaylistsArray[PlaylistIndex].Sublists[temporaryStartingSublist].StartingSong)
 						
 			-- Sets the song in GAMESTATE so everything else can work when ForceUpdate
-			GAMESTATE:SetCurrentSong(Songs[thisStartingPoint])
+			GAMESTATE:SetCurrentSong(Songs[temporaryStartingSong])
 		end
 
 		-- Update wheel yada yada
@@ -285,7 +296,7 @@ local t = Def.ActorFrame {
 		end,
 		RefreshCommand=function(self, param)
 			-- alters its width depending on the number of songs in the group
-			local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
+			local totalSongsFromGroup = #PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].AllowedSongs
 			local calculatedWidth = indexIndicator_range / totalSongsFromGroup
 			local usedWidth
 			if calculatedWidth < 26 then
@@ -319,7 +330,7 @@ local t = Def.ActorFrame {
 
 		RefreshCommand=function(self,param)
 			-- alters some necessary variables depending on the number of songs in the group
-			local totalSongsFromGroup = #GroupsList[GroupIndex].AllowedSongs
+			local totalSongsFromGroup = #PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].AllowedSongs
 			local calculatedWidth = indexIndicator_range / totalSongsFromGroup
 
 			-- alters its text depending on the current songindex
