@@ -1,7 +1,3 @@
---levers
-
-local VCR_Effect_y = -40
-
 local FrameW2 = 1600
 local FrameH2 = 900
 local PreviewDelay = THEME:GetMetric("ScreenSelectMusic", "SampleMusicDelay")
@@ -29,8 +25,31 @@ local t = Def.ActorFrame {
 				Font="VCR OSD Mono 40px",
 				Text="",
 				InitCommand=function(self)
-					self:zoom(2):xy(0,VCR_Effect_y)
+					self:zoom(2):xy(0,-40)
 					:shadowlength(4)
+				end,
+				CloseGroupWheelMessageCommand=function(self, params)
+					if params.Silent == false then
+						self:stoptweening()
+						:settext("PLAYLIST CHANGE")
+						:zoom(2.3)
+						:easeoutquad(0.2)
+						:zoom(2)
+					end
+				end,
+				PrevSublistMessageCommand=function(self)
+					self:stoptweening()
+					:settext("PREV SUBLIST")
+					:zoom(2.3)
+					:easeoutquad(0.2)
+					:zoom(2)
+				end,
+				NextSublistMessageCommand=function(self)
+					self:stoptweening()
+					:settext("NEXT SUBLIST")
+					:zoom(2.3)
+					:easeoutquad(0.2)
+					:zoom(2)
 				end,
 				ScrollMessageCommand=function(self, params)
 					local direction = params.Direction

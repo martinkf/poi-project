@@ -1,5 +1,4 @@
 --levers
-local CurPlaylistText_y = -41
 local CurPlaylistBannerBgQuad_y = -52
 
 local t = Def.ActorFrame {
@@ -7,16 +6,41 @@ local t = Def.ActorFrame {
         self:xy(SCREEN_CENTER_X, SCREEN_CENTER_Y - 288)
     end,
 
-	-- currently disabled currently disabled currently disabled currently disabled currently disabled currently disabled currently disabled
-	Def.BitmapText { Name="CurPlaylistText",
+	Def.Quad { Name="CurSublistBgQuad",
+		InitCommand=function(self)
+			self:y(110-6+6-15)
+			self:zoomto(1272, 21)
+			self:align(0.5,0)
+			self:diffuse(color("0,0,0,0.4"))
+		end,
+		SongChosenMessageCommand=function(self)
+			self:stoptweening():easeoutexpo(1):diffusealpha(0)
+		end,
+		SongUnchosenMessageCommand=function(self)
+			self:stoptweening():easeoutexpo(0.5):diffusealpha(0.4)
+		end,
+		ScreenChangedMessageCommand=function(self)
+			self:playcommand('Refresh')
+		end,
+		CurrentSongChangedMessageCommand=function(self)
+			self:playcommand('Refresh')
+		end,
+		OpenGroupWheelMessageCommand=function(self, params)
+			self:stoptweening():easeoutexpo(1):diffusealpha(0)
+		end,
+		CloseGroupWheelMessageCommand=function(self)
+			self:stoptweening():easeoutexpo(0.5):diffusealpha(0.4)
+		end,
+	},
+
+	Def.BitmapText { Name="CurSublistText",
 		Font="Montserrat semibold 40px",
 		InitCommand=function(self)
-			self:y(CurPlaylistText_y)
+			self:y(110-6)
 			self:zoom(0.4)
 			self:shadowlength(1)
-			self:settext("Current playlist: "..PlaylistsArray[LastPlaylistIndex].PlaylistName)
+			self:settext(PlaylistsArray[LastPlaylistIndex].Sublists[LastSublistIndex].SublistName)
 			self:queuecommand('Refresh')
-			self:visible(false) -- disabling it for now
 		end,
 		SongChosenMessageCommand=function(self)
 			self:stoptweening():easeoutexpo(1):diffusealpha(0)
@@ -30,14 +54,23 @@ local t = Def.ActorFrame {
 		CurrentSongChangedMessageCommand=function(self)
 			self:playcommand('Refresh')
 		end,
+		OpenGroupWheelMessageCommand=function(self, params)
+			self:stoptweening():easeoutexpo(1):diffusealpha(0)
+		end,
 		CloseGroupWheelMessageCommand=function(self, params)
+			self:stoptweening():easeoutexpo(0.5):diffusealpha(1)
 			if params.Silent == false then
 				self:playcommand('Refresh')
 			end
 		end,
+		PrevSublistMessageCommand=function(self)
+			self:playcommand('Refresh')
+		end,
+		NextSublistMessageCommand=function(self)
+			self:playcommand('Refresh')
+		end,
 		RefreshCommand=function(self)
-			self:settext("Current playlist: "..PlaylistsArray[LastPlaylistIndex].PlaylistName)
-			--self:settext("QEQEQE to change playlists")
+			self:settext(PlaylistsArray[LastPlaylistIndex].Sublists[LastSublistIndex].SublistName)
 		end
 	},
 

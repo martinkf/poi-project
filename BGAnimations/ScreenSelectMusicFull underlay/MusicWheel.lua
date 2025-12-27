@@ -88,7 +88,7 @@ function MusicWheelGoesTo(input_index)
 
 	-- Update mapping and visuals instantly
 	UpdateItemTargets(SongIndex)
-	MESSAGEMAN:Broadcast("ForceUpdate", { Duration = 0 })
+	MESSAGEMAN:Broadcast("ForceUpdate")
 end
 
 local function UpdateBanner(self, Song)
@@ -225,6 +225,40 @@ local t = Def.ActorFrame {
 		MESSAGEMAN:Broadcast("ForceUpdate")
 		self:sleep(0.01):queuecommand("NotBusy")
 	end,
+	PrevSublistMessageCommand=function(self)
+		-- Grab the new list of songs from the selected group
+		Songs = PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].Songs
+				
+		local tempStartingSong = PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].StartingSong
+		SongIndex = tempStartingSong
+		LastSongIndex = SongIndex
+
+		-- Sets the song in GAMESTATE so everything else can work when ForceUpdate
+		GAMESTATE:SetCurrentSong(Songs[tempStartingSong])
+		
+		-- Update wheel yada yada
+		UpdateItemTargets(SongIndex)
+		MESSAGEMAN:Broadcast("ForceUpdate")
+		self:sleep(0.01):queuecommand("NotBusy")
+	end,
+	NextSublistMessageCommand=function(self)
+		-- Grab the new list of songs from the selected group
+		Songs = PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].Songs
+				
+		local tempStartingSong = PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].StartingSong
+		SongIndex = tempStartingSong
+		LastSongIndex = SongIndex
+
+		-- Sets the song in GAMESTATE so everything else can work when ForceUpdate
+		GAMESTATE:SetCurrentSong(Songs[tempStartingSong])
+		
+		-- Update wheel yada yada
+		UpdateItemTargets(SongIndex)
+		MESSAGEMAN:Broadcast("ForceUpdate")
+		self:sleep(0.01):queuecommand("NotBusy")
+	end,
+
+	
 
 	-- Root: recebe o Scroll, agenda finalização (swap lógico Targets -> agora que a animação terminou)
 	ScrollMessageCommand=function(self,param)
@@ -244,7 +278,7 @@ local t = Def.ActorFrame {
 		-- Agora que a animação visual terminou: atualizar mapeamento lógico dos slots
 		UpdateItemTargets(SongIndex)
 		-- Forçar cada slot a recarregar banners e posicionar com Offset 0 (jump final)
-		MESSAGEMAN:Broadcast("ForceUpdate", { Duration = 0 })
+		MESSAGEMAN:Broadcast("ForceUpdate")
 		-- liberar input
 		IsBusy = false
 	end,
