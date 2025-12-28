@@ -149,8 +149,8 @@ local t = Def.ActorFrame {
 			ChartArray = SongUtil.GetPlayableSteps(CurrentSong)
 			
 			-- Filter out unwanted charts recursively
-			CurPlaylistName = PlaylistsArray[LastPlaylistIndex] ~= nil and PlaylistsArray[LastPlaylistIndex].PlaylistName or ""
-			CurSublistName = PlaylistsArray[LastPlaylistIndex].Sublists[LastSublistIndex] ~= nil and PlaylistsArray[LastPlaylistIndex].Sublists[LastSublistIndex].SublistName or ""
+			CurPlaylistName = PlaylistsArray[CurPlaylistIndex] ~= nil and PlaylistsArray[CurPlaylistIndex].PlaylistName or ""
+			CurSublistName = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex] ~= nil and PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].SublistName or ""
 			
 			local ShowFilters = {"ShowUCSCharts", "ShowQuestCharts", "ShowHiddenCharts" }
 			local ChartFilters = {"UCS", "QUEST", "HIDDEN" }
@@ -193,8 +193,8 @@ local t = Def.ActorFrame {
 
 			-- POI - this is where I set up my interference rigging module!
 			-- uses the FilterChartFromSublist POI function to filter out the charts that will be displayed.
-			-- takes into consideration the current Playlist, the current Sublist, and the current Song being selected (by checking the MusicWheel SongIndex)
-			ChartArray = GetAllowedCharts_POI(ChartArray, CurPlaylistName, CurSublistName, GetCurrentSongIndex())
+			-- takes into consideration the current Playlist, the current Sublist, and the current Song being selected (by checking global variable CurSongIndex)
+			ChartArray = GetAllowedCharts_POI(ChartArray, CurPlaylistName, CurSublistName, CurSongIndex)
 			
 			-- If no charts are left, load all of them again in an attempt to avoid other crashes
 			if #ChartArray == 0 then ChartArray = SongUtil.GetPlayableSteps(CurrentSong) end

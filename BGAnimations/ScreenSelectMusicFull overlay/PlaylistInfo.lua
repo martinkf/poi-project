@@ -39,7 +39,7 @@ local t = Def.ActorFrame {
 			self:y(110-6)
 			self:zoom(0.4)
 			self:shadowlength(1)
-			self:settext(PlaylistsArray[LastPlaylistIndex].Sublists[LastSublistIndex].SublistName)
+			self:settext(PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].SublistName)
 			self:queuecommand('Refresh')
 		end,
 		SongChosenMessageCommand=function(self)
@@ -70,7 +70,7 @@ local t = Def.ActorFrame {
 			self:playcommand('Refresh')
 		end,
 		RefreshCommand=function(self)
-			self:settext(PlaylistsArray[LastPlaylistIndex].Sublists[LastSublistIndex].SublistName)
+			self:settext(PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].SublistName)
 		end
 	},
 
@@ -92,7 +92,7 @@ local t = Def.ActorFrame {
 	Def.Banner { Name="CurPlaylistBanner",
 		InitCommand=function(self)
 			self:y(CurPlaylistBannerBgQuad_y + 72)
-			self:Load(PlaylistsArray[LastPlaylistIndex].Banner)
+			self:Load(PlaylistsArray[CurPlaylistIndex].Banner)
 
 			local texWidth, texHeight = 1920, 1080 -- your banner’s actual resolution
 			local desiredWidth, desiredHeight = 443, 138
@@ -137,7 +137,7 @@ local t = Def.ActorFrame {
 			self:stoptweening():easeoutexpo(0.5):diffusealpha(1)
 		end,
 		RefreshCommand=function(self)
-			self:Load(PlaylistsArray[LastPlaylistIndex].Banner)
+			self:Load(PlaylistsArray[CurPlaylistIndex].Banner)
 		end,
 	},
 

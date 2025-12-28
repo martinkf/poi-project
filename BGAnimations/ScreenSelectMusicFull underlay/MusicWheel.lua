@@ -33,30 +33,28 @@ local indexIndicator_range = 186
 
 local IsBusy = false
 
--- DECLARING MORE VARIABLES - WE WANT THE MUSICWHEEL TO ALWAYS START AT PIU NX ARCADE STATION AT WITCH DOCTOR #1 IN STAGE 1
-if GAMESTATE:GetCurrentStageIndex() == 0 then --this means this is stage 1, we just came from the select profile screen
-	LastPlaylistIndex = 1
-	LastSublistIndex = 1
-	LastSongIndex = 1
+-- DECLARING MORE VARIABLES
+-- declaring CurPlaylistIndex , CurSublistIndex , and CurSongIndex
+if GAMESTATE:GetCurrentStageIndex() == 0 then
+	-- this means this is STAGE 1 (we just came from the select profile screen)
+	-- here I can hard-code what the "default first song" is
+	CurPlaylistIndex = 5 -- Prex
+	CurSublistIndex = PlaylistsArray[CurPlaylistIndex].StartingSublist -- Playlist 5 = Full Display Mode sublist
+	CurSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong -- Playlist 5 and sublist 1 = song 82, Oops I Did It Again
 else --this means a song has been played and we're back to the select song screen
-	LastPlaylistIndex = tonumber(LoadModule("Config.Load.lua")("PlaylistIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
-	LastSublistIndex = tonumber(LoadModule("Config.Load.lua")("SublistIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
-	LastSongIndex = tonumber(LoadModule("Config.Load.lua")("SongIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
+	LastPlaylistIndex = tonumber(LoadModule("Config.Load.lua")("LastPlaylistIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
+	CurPlaylistIndex = LastPlaylistIndex
+	
+	LastSublistIndex = tonumber(LoadModule("Config.Load.lua")("LastSublistIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
+	CurSublistIndex = LastSublistIndex
+	
+	LastSongIndex = tonumber(LoadModule("Config.Load.lua")("LastSongIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
+	CurSongIndex = LastSongIndex
 end
 
-CurPlaylistIndex = LastPlaylistIndex
-PlaylistIndex = LastPlaylistIndex
-
-CurSublistIndex = LastSublistIndex
-SublistIndex = LastSublistIndex
-
-SongIndex = LastSongIndex
-
--- DECLARING MORE VARIABLES - DEFAULT IS TO START AT ALL FOR NOW
+-- declaring the Targets{} and the Songs global variables
 Targets = {}
-local StartingPlaylistIndex = LastPlaylistIndex
-local StartingSublistIndex = LastSublistIndex
-Songs = PlaylistsArray[StartingPlaylistIndex].Sublists[StartingSublistIndex].Songs
+Songs = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].Songs
 
 -- DECLARING USEFUL FUNCTIONS
 local function UpdateItemTargets(val)
@@ -76,18 +74,18 @@ function MusicWheelGoesTo(input_index)
 		while input_index < 1 do input_index = input_index + #Songs end
 	
 	-- Apply the new index logically
-	SongIndex = input_index
-	LastSongIndex = SongIndex
+	CurSongIndex = input_index
+	LastSongIndex = CurSongIndex
 
 	-- Update current song (no animation)
-	local song = Songs[SongIndex]
+	local song = Songs[CurSongIndex]
 	if song then
 		GAMESTATE:SetCurrentSong(song)
 		MESSAGEMAN:Broadcast("CurrentSongChanged")
 	end
 
 	-- Update mapping and visuals instantly
-	UpdateItemTargets(SongIndex)
+	UpdateItemTargets(CurSongIndex)
 	MESSAGEMAN:Broadcast("ForceUpdate")
 end
 
@@ -97,10 +95,6 @@ end
 
 local function UpdateBannerTwo(self, Song)
     self:LoadFromSongBanner(Song):zoomtoheight_POI(WheelItem.Height)
-end
-
-function GetCurrentSongIndex()
-    return SongIndex
 end
 
 -- DECLARING INPUT HANDLER
@@ -146,25 +140,25 @@ local function InputHandler(event)
 		-- === Lógica de Scroll padrão ===
 		if button == "Left" or button == "MenuLeft" or button == "DownLeft" then
 			if IsBusy then return end
-			SongIndex = SongIndex - 1
-			if SongIndex < 1 then SongIndex = #Songs end
+			CurSongIndex = CurSongIndex - 1
+			if CurSongIndex < 1 then CurSongIndex = #Songs end
 			
-			GAMESTATE:SetCurrentSong(Songs[SongIndex])
+			GAMESTATE:SetCurrentSong(Songs[CurSongIndex])
 			MESSAGEMAN:Broadcast("Scroll", { Direction = -1, OffsetFrom = 0, OffsetTo = -1, Duration = scroll_duration })
 			IsBusy = true
 
 		elseif button == "Right" or button == "MenuRight" or button == "DownRight" then
 			if IsBusy then return end
-			SongIndex = SongIndex + 1
-			if SongIndex > #Songs then SongIndex = 1 end
+			CurSongIndex = CurSongIndex + 1
+			if CurSongIndex > #Songs then CurSongIndex = 1 end
 			
-			GAMESTATE:SetCurrentSong(Songs[SongIndex])
+			GAMESTATE:SetCurrentSong(Songs[CurSongIndex])
 			MESSAGEMAN:Broadcast("Scroll", { Direction = 1, OffsetFrom = 0, OffsetTo = 1, Duration = scroll_duration })
 			IsBusy = true
 
 		elseif button == "Start" or button == "MenuStart" or button == "Center" then
-			LastSongIndex = SongIndex
-			LoadModule("Config.Save.lua")("SongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+			LastSongIndex = CurSongIndex
+			LoadModule("Config.Save.lua")("LastSongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
 			MESSAGEMAN:Broadcast("MusicWheelStart")
 
 		elseif button == "Back" then
@@ -181,11 +175,11 @@ local t = Def.ActorFrame {
 		self:fov(fieldOfView)
 		self:SetDrawByZPosition(false)
 		self:vanishpoint(SCREEN_CENTER_X, SCREEN_BOTTOM - 150 + curvature)
-		UpdateItemTargets(SongIndex)
+		UpdateItemTargets(CurSongIndex)
 	end,
 
 	OnCommand=function(self)
-		GAMESTATE:SetCurrentSong(Songs[SongIndex])
+		GAMESTATE:SetCurrentSong(Songs[CurSongIndex])
 		SCREENMAN:GetTopScreen():AddInputCallback(InputHandler)
 	end,
 	BusyCommand=function(self) IsBusy = true end,
@@ -204,56 +198,50 @@ local t = Def.ActorFrame {
 	end,
 
 	-- logic related to the GroupSelect overlay
-	OpenGroupWheelMessageCommand=function(self) IsBusy = true end,
+	OpenGroupWheelMessageCommand=function(self)
+		IsBusy = true
+	end,
 	CloseGroupWheelMessageCommand=function(self, params)
 		if params.Silent == false then
 			-- grab the starting sublist of the selected group
-			local temporaryStartingSublist = PlaylistsArray[PlaylistIndex].StartingSublist
+			local temporaryStartingSublist = PlaylistsArray[CurPlaylistIndex].StartingSublist
 
 			-- Grab the new list of songs from the selected group
-			Songs = PlaylistsArray[PlaylistIndex].Sublists[temporaryStartingSublist].Songs
+			Songs = PlaylistsArray[CurPlaylistIndex].Sublists[temporaryStartingSublist].Songs
 
 			-- Fetches what the "StartingSong" of this sublist should be
-			local temporaryStartingSong = tonumber(PlaylistsArray[PlaylistIndex].Sublists[temporaryStartingSublist].StartingSong)
+			local temporaryStartingSong = tonumber(PlaylistsArray[CurPlaylistIndex].Sublists[temporaryStartingSublist].StartingSong)
 						
 			-- Sets the song in GAMESTATE so everything else can work when ForceUpdate
 			GAMESTATE:SetCurrentSong(Songs[temporaryStartingSong])
 		end
 
 		-- Update wheel yada yada
-		UpdateItemTargets(SongIndex)
+		UpdateItemTargets(CurSongIndex)
 		MESSAGEMAN:Broadcast("ForceUpdate")
 		self:sleep(0.01):queuecommand("NotBusy")
 	end,
 	PrevSublistMessageCommand=function(self)
 		-- Grab the new list of songs from the selected group
-		Songs = PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].Songs
-				
-		local tempStartingSong = PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].StartingSong
-		SongIndex = tempStartingSong
-		LastSongIndex = SongIndex
+		Songs = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].Songs
 
 		-- Sets the song in GAMESTATE so everything else can work when ForceUpdate
-		GAMESTATE:SetCurrentSong(Songs[tempStartingSong])
-		
+		GAMESTATE:SetCurrentSong(Songs[CurSongIndex])
+			
 		-- Update wheel yada yada
-		UpdateItemTargets(SongIndex)
+		UpdateItemTargets(CurSongIndex)
 		MESSAGEMAN:Broadcast("ForceUpdate")
 		self:sleep(0.01):queuecommand("NotBusy")
 	end,
 	NextSublistMessageCommand=function(self)
 		-- Grab the new list of songs from the selected group
-		Songs = PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].Songs
-				
-		local tempStartingSong = PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].StartingSong
-		SongIndex = tempStartingSong
-		LastSongIndex = SongIndex
-
+		Songs = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].Songs
+			
 		-- Sets the song in GAMESTATE so everything else can work when ForceUpdate
-		GAMESTATE:SetCurrentSong(Songs[tempStartingSong])
-		
+		GAMESTATE:SetCurrentSong(Songs[CurSongIndex])
+			
 		-- Update wheel yada yada
-		UpdateItemTargets(SongIndex)
+		UpdateItemTargets(CurSongIndex)
 		MESSAGEMAN:Broadcast("ForceUpdate")
 		self:sleep(0.01):queuecommand("NotBusy")
 	end,
@@ -276,7 +264,7 @@ local t = Def.ActorFrame {
 
 	FinalizeScrollCommand=function(self)
 		-- Agora que a animação visual terminou: atualizar mapeamento lógico dos slots
-		UpdateItemTargets(SongIndex)
+		UpdateItemTargets(CurSongIndex)
 		-- Forçar cada slot a recarregar banners e posicionar com Offset 0 (jump final)
 		MESSAGEMAN:Broadcast("ForceUpdate")
 		-- liberar input
@@ -330,7 +318,7 @@ local t = Def.ActorFrame {
 		end,
 		RefreshCommand=function(self, param)
 			-- alters its width depending on the number of songs in the group
-			local totalSongsFromGroup = #PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].AllowedSongs
+			local totalSongsFromGroup = #PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].AllowedSongs
 			local calculatedWidth = indexIndicator_range / totalSongsFromGroup
 			local usedWidth
 			if calculatedWidth < 26 then
@@ -340,8 +328,8 @@ local t = Def.ActorFrame {
 			end
 			self:zoomto(usedWidth, 12)
 
-			-- alters its x position depending on the current songindex
-			self:x(indexIndicator_baseX + ((SongIndex - (totalSongsFromGroup + 1) / 2) * calculatedWidth))
+			-- alters its x position depending on the current CurSongIndex
+			self:x(indexIndicator_baseX + ((CurSongIndex - (totalSongsFromGroup + 1) / 2) * calculatedWidth))
 		end,
 	},
 
@@ -364,17 +352,17 @@ local t = Def.ActorFrame {
 
 		RefreshCommand=function(self,param)
 			-- alters some necessary variables depending on the number of songs in the group
-			local totalSongsFromGroup = #PlaylistsArray[PlaylistIndex].Sublists[SublistIndex].AllowedSongs
+			local totalSongsFromGroup = #PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].AllowedSongs
 			local calculatedWidth = indexIndicator_range / totalSongsFromGroup
 
-			-- alters its text depending on the current songindex
-			self:settext(SongIndex)
+			-- alters its text depending on the current CurSongIndex
+			self:settext(CurSongIndex)
 
 			-- alters its color depending on the song's origin debut version
-			self:diffuse(FetchFromSong(Songs[SongIndex], "Song Origin Color"))
+			self:diffuse(FetchFromSong(Songs[CurSongIndex], "Song Origin Color"))
 
-			-- alters its x position depending on the current songindex
-			self:x(indexIndicator_baseX + ((SongIndex - (totalSongsFromGroup + 1) / 2) * calculatedWidth))
+			-- alters its x position depending on the current CurSongIndex
+			self:x(indexIndicator_baseX + ((CurSongIndex - (totalSongsFromGroup + 1) / 2) * calculatedWidth))
 		end,
 	},
 

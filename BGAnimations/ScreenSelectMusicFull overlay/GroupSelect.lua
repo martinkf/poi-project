@@ -31,6 +31,8 @@ local IsBusy = false
 
 local Targets = {}
 
+local HoveredPlaylistIndex
+
 -- DECLARING USEFUL FUNCTIONS
 local function UpdateMainItemTargets(val)
 	for i = 1, WheelSize do
@@ -66,40 +68,38 @@ local function InputHandler(event)
 	if pn == PLAYER_2 and not GAMESTATE:IsPlayerEnabled(PLAYER_2) then return end
 	
 	if IsSelectingGroup then
-		if button == "Left" or button == "MenuLeft" or button == "DownLeft" then			
+		if button == "Left" or button == "MenuLeft" or button == "DownLeft" then
 			
-			if CurPlaylistIndex > 1 then
-				CurPlaylistIndex = CurPlaylistIndex - 1
-				UpdateMainItemTargets(CurPlaylistIndex)
+			if HoveredPlaylistIndex > 1 then
+				HoveredPlaylistIndex = HoveredPlaylistIndex - 1
+				UpdateMainItemTargets(HoveredPlaylistIndex)
 				MESSAGEMAN:Broadcast("ScrollMain", { Direction = -1 })
 			end
 			
 		elseif button == "Right" or button == "MenuRight" or button == "DownRight" then
 
-			if CurPlaylistIndex < #PlaylistsArray then
-				CurPlaylistIndex = CurPlaylistIndex + 1
-				UpdateMainItemTargets(CurPlaylistIndex)
+			if HoveredPlaylistIndex < #PlaylistsArray then
+				HoveredPlaylistIndex = HoveredPlaylistIndex + 1
+				UpdateMainItemTargets(HoveredPlaylistIndex)
 				MESSAGEMAN:Broadcast("ScrollMain", { Direction = 1 })
 			end
 			
 		elseif button == "Start" or button == "MenuStart" or button == "Center" then
 			
-			if CurPlaylistIndex == LastPlaylistIndex then
+			if HoveredPlaylistIndex == CurPlaylistIndex then
 				MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = true })
 			else -- this means, if the group was actually changed, instead of just selected the same as previously
-				PlaylistIndex = CurPlaylistIndex
+				CurPlaylistIndex = HoveredPlaylistIndex
 				LastPlaylistIndex = CurPlaylistIndex
-				LoadModule("Config.Save.lua")("PlaylistIndex", LastPlaylistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+				LoadModule("Config.Save.lua")("LastPlaylistIndex", LastPlaylistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
 				
-				local temporaryStartingSublist = PlaylistsArray[CurPlaylistIndex].StartingSublist
-				SublistIndex = temporaryStartingSublist
-				LastSublistIndex = SublistIndex
-				CurSublistIndex = SublistIndex
-				LoadModule("Config.Save.lua")("SublistIndex", LastSublistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+				CurSublistIndex = PlaylistsArray[CurPlaylistIndex].StartingSublist
+				LastSublistIndex = CurSublistIndex
+				LoadModule("Config.Save.lua")("LastSublistIndex", LastSublistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
 
-				SongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
-				LastSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
-				LoadModule("Config.Save.lua")("SongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+				CurSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
+				LastSongIndex = CurSongIndex
+				LoadModule("Config.Save.lua")("LastSongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
 				
 				MESSAGEMAN:Broadcast("CloseGroupWheel", { Silent = false })
 			end
@@ -151,13 +151,45 @@ local t = Def.ActorFrame {
 
 		if params.Name == "PrevSublistCombo" then
 			if not IsBusy and not IsOptionsList[PLAYER_1] and not IsOptionsList[PLAYER_2] and not IsSelectingGroup then
-				MESSAGEMAN:Broadcast("PrevSublist")
+				
+				local tempPreviousSublistIndex = CurSublistIndex
+				local tempNumberOfSublists = #PlaylistsArray[CurPlaylistIndex].Sublists
+				local tempNewSublistIndex = tempPreviousSublistIndex - 1
+				if tempNewSublistIndex == 0 then tempNewSublistIndex = tempNumberOfSublists end
+				
+				if tempNewSublistIndex ~= tempPreviousSublistIndex then
+					CurSublistIndex = tempNewSublistIndex
+					CurSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
+
+					-- as the CurSublistIndex was updated, updates the LastSublistIndex and LastSongIndex and stores them
+					-- disabling it because it breaks things for some reason lol
+					--LoadModule("Config.Save.lua")("LastSublistIndex", CurSublistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+					--LoadModule("Config.Save.lua")("LastSongIndex", CurSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+
+					MESSAGEMAN:Broadcast("PrevSublist")
+				end
 			end
 		end
 
 		if params.Name == "NextSublistCombo" then
 			if not IsBusy and not IsOptionsList[PLAYER_1] and not IsOptionsList[PLAYER_2] and not IsSelectingGroup then
-				MESSAGEMAN:Broadcast("NextSublist")
+
+				local tempPreviousSublistIndex = CurSublistIndex
+				local tempNumberOfSublists = #PlaylistsArray[CurPlaylistIndex].Sublists
+				local tempNewSublistIndex = tempPreviousSublistIndex + 1
+				if tempNewSublistIndex > tempNumberOfSublists then tempNewSublistIndex = 1 end
+				
+				if tempNewSublistIndex ~= tempPreviousSublistIndex then
+					CurSublistIndex = tempNewSublistIndex
+					CurSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
+
+					-- as the CurSublistIndex was updated, updates the LastSublistIndex and LastSongIndex and stores them
+					-- disabling it because it breaks things for some reason lol
+					--LoadModule("Config.Save.lua")("LastSublistIndex", CurSublistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+					--LoadModule("Config.Save.lua")("LastSongIndex", CurSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
+
+					MESSAGEMAN:Broadcast("NextSublist")
+				end
 			end
 		end
 
@@ -172,6 +204,7 @@ local t = Def.ActorFrame {
 	
 	OpenGroupCommand=function(self)
 		IsSelectingGroup = true
+		HoveredPlaylistIndex = CurPlaylistIndex
 	end,
 	CloseGroupCommand=function(self)
 		IsSelectingGroup = false
@@ -185,38 +218,7 @@ local t = Def.ActorFrame {
 
 		IsSelectingGroup = false
 	end,
-
-	PrevSublistMessageCommand=function(self)
-		local tempPreviousSublist = SublistIndex
-		local tempNumberOfAvailableSublists = #PlaylistsArray[CurPlaylistIndex].Sublists
-		local tempNewSublist = tempPreviousSublist - 1
-		if tempNewSublist == 0 then tempNewSublist = tempNumberOfAvailableSublists end
-
-		SublistIndex = tempNewSublist
-		LastSublistIndex = SublistIndex
-		CurSublistIndex = SublistIndex
-		LoadModule("Config.Save.lua")("SublistIndex", LastSublistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
-
-		SongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
-		LastSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
-		LoadModule("Config.Save.lua")("SongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
-	end,
-	NextSublistMessageCommand=function(self)
-		local tempPreviousSublist = SublistIndex
-		local tempNumberOfAvailableSublists = #PlaylistsArray[CurPlaylistIndex].Sublists
-		local tempNewSublist = tempPreviousSublist + 1
-		if tempNewSublist > tempNumberOfAvailableSublists then tempNewSublist = 1 end
-
-		SublistIndex = tempNewSublist
-		LastSublistIndex = SublistIndex
-		CurSublistIndex = SublistIndex
-		LoadModule("Config.Save.lua")("SublistIndex", LastSublistIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
-
-		SongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
-		LastSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong
-		LoadModule("Config.Save.lua")("SongIndex", LastSongIndex, CheckIfUserOrMachineProfile(string.sub(pn,-1)-1).."/OutFoxPrefs.ini")
-	end,
-
+	
 	-- sounds
 	Def.Sound {
 		File=THEME:GetPathS("MusicWheel", "change"),

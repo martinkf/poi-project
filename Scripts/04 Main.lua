@@ -1,3 +1,4 @@
+-- Reset song and group wheel indexes
 LastPlaylistIndex = 0
 LastSublistIndex = 0
 LastSongIndex = 0
