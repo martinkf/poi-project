@@ -137,24 +137,41 @@ local function InputHandler(event)
 			end
 		end
 
-		-- === Lógica de Scroll padrão ===
+		-- scrolling logic
 		if button == "Left" or button == "MenuLeft" or button == "DownLeft" then
+			-- dont do nothing if IsBusy
 			if IsBusy then return end
-			CurSongIndex = CurSongIndex - 1
-			if CurSongIndex < 1 then CurSongIndex = #Songs end
-			
-			GAMESTATE:SetCurrentSong(Songs[CurSongIndex])
-			MESSAGEMAN:Broadcast("Scroll", { Direction = -1, OffsetFrom = 0, OffsetTo = -1, Duration = scroll_duration })
-			IsBusy = true
+
+			-- lets see what the new CurSongIndex would be
+			local tempPrevSongIndex = CurSongIndex
+			local tempNewSongIndex = tempPrevSongIndex - 1
+			if tempNewSongIndex == 0 then tempNewSongIndex = 1 end
+
+			-- lets see if a scroll was made (or if it was an edge item)
+			if tempNewSongIndex ~= tempPrevSongIndex then
+				CurSongIndex = tempNewSongIndex
+				GAMESTATE:SetCurrentSong(Songs[CurSongIndex])
+				MESSAGEMAN:Broadcast("Scroll", { Direction = -1, OffsetFrom = 0, OffsetTo = -1, Duration = scroll_duration })
+				IsBusy = true
+			end
 
 		elseif button == "Right" or button == "MenuRight" or button == "DownRight" then
+			-- dont do nothing if IsBusy
 			if IsBusy then return end
-			CurSongIndex = CurSongIndex + 1
-			if CurSongIndex > #Songs then CurSongIndex = 1 end
-			
-			GAMESTATE:SetCurrentSong(Songs[CurSongIndex])
-			MESSAGEMAN:Broadcast("Scroll", { Direction = 1, OffsetFrom = 0, OffsetTo = 1, Duration = scroll_duration })
-			IsBusy = true
+
+			-- lets see what the new CurSongIndex would be
+			local tempPrevSongIndex = CurSongIndex
+			local tempNumberOfSongs = #Songs
+			local tempNewSongIndex = tempPrevSongIndex + 1
+			if tempNewSongIndex > tempNumberOfSongs then tempNewSongIndex = tempNumberOfSongs end
+
+			-- lets see if a scroll was made (or if it was an edge item)
+			if tempNewSongIndex ~= tempPrevSongIndex then
+				CurSongIndex = tempNewSongIndex
+				GAMESTATE:SetCurrentSong(Songs[CurSongIndex])
+				MESSAGEMAN:Broadcast("Scroll", { Direction = 1, OffsetFrom = 0, OffsetTo = 1, Duration = scroll_duration })
+				IsBusy = true
+			end
 
 		elseif button == "Start" or button == "MenuStart" or button == "Center" then
 			LastSongIndex = CurSongIndex
@@ -303,11 +320,22 @@ local t = Def.ActorFrame {
 
 
 	-- drawing: index indicators
-	Def.Quad { Name="IndexIndicator",
+	Def.Quad { Name="IndexIndicatorBase",
 		InitCommand=function(self)
 			self:y(indexIndicator_y)
 			self:align(0.5,0.5)
 			self:diffuse(color("0,0,0,0.4"))
+
+			self:zoomto(210, 12)
+			self:x(640)
+		end,
+	},
+
+	Def.Quad { Name="IndexIndicatorNode",
+		InitCommand=function(self)
+			self:y(indexIndicator_y)
+			self:align(0.5,0.5)
+			self:diffuse(color("0,0,0,0.8"))
 
 			self:zoomto(26, 12)
 			self:x(indexIndicator_baseX)
@@ -432,6 +460,7 @@ for i = 1, WheelSize do
 
 				-- atualiza textos/children imediatamente
 				self:GetChild("BGFrame"):playcommand("Refresh")
+				self:GetChild("MusicWheelPicture"):playcommand("Refresh")
 				self:GetChild("SpecialFrame"):playcommand("Refresh")
 				self:GetChild("OriginLabel"):playcommand("Refresh")
 				self:GetChild("NameLabel"):playcommand("Refresh")
@@ -449,6 +478,7 @@ for i = 1, WheelSize do
 
 		RefreshAfterTweenCommand=function(self)
 			self:GetChild("BGFrame"):playcommand("Refresh")
+			self:GetChild("MusicWheelPicture"):playcommand("Refresh")
 			self:GetChild("SpecialFrame"):playcommand("Refresh")
 			self:GetChild("OriginLabel"):playcommand("Refresh")
 			self:GetChild("NameLabel"):playcommand("Refresh")
@@ -464,16 +494,46 @@ for i = 1, WheelSize do
 				self:diffuse(color("0,0,0,0.4"))
 			end,
 			RefreshCommand=function(self, param)
-				if i >  WheelCenter+WheelSizeHelper or i <  WheelCenter-WheelSizeHelper then
-					self:visible(false)
-				else
-					self:visible(true)
+				
+				-- OoB checks
+				local outOfBounds = false
+				-- à esquerda do último item da wheel
+				if (slot < 6) and (Targets[slot] >= CurSongIndex) then
+					outOfBounds = true
 				end
+				-- à direita do último item da wheel
+				if (slot > 6) and (Targets[slot] <= CurSongIndex) then
+					outOfBounds = true
+				end
+				-- outside the screen (more than 4 items from the center)
+				if i > (WheelCenter + WheelSizeHelper) or i < (WheelCenter - WheelSizeHelper) then
+					outOfBounds = true
+				end
+				-- OoB checks
+				if outOfBounds then self:visible(false) else self:visible(true) end
+				
 			end,
 		},
 		Def.ActorFrame { Name="MusicWheelPicture",
 			RefreshCommand=function(self, param)
-				--donothing
+				
+				-- OoB checks
+				local outOfBounds = false
+				-- à esquerda do último item da wheel
+				if (slot < 6) and (Targets[slot] >= CurSongIndex) then
+					outOfBounds = true
+				end
+				-- à direita do último item da wheel
+				if (slot > 6) and (Targets[slot] <= CurSongIndex) then
+					outOfBounds = true
+				end
+				-- outside the screen (more than 4 items from the center)
+				if i > (WheelCenter + WheelSizeHelper) or i < (WheelCenter - WheelSizeHelper) then
+					outOfBounds = true
+				end
+				-- OoB checks
+				if outOfBounds then self:visible(false) else self:visible(true) end
+
 			end,
 			Def.Banner { Name="BannerBG",
 				RefreshCommand=function(self, param)
@@ -504,6 +564,24 @@ for i = 1, WheelSize do
 				self:GetChild("SpecialFrame-filter"):playcommand("Refresh")
 				self:GetChild("SpecialFrame-text"):playcommand("Refresh")
 				self:queuecommand("StartBlink")
+				
+				-- OoB checks
+				local outOfBounds = false
+				-- à esquerda do último item da wheel
+				if (slot < 6) and (Targets[slot] >= CurSongIndex) then
+					outOfBounds = true
+				end
+				-- à direita do último item da wheel
+				if (slot > 6) and (Targets[slot] <= CurSongIndex) then
+					outOfBounds = true
+				end
+				-- outside the screen (more than 4 items from the center)
+				if i > (WheelCenter + WheelSizeHelper) or i < (WheelCenter - WheelSizeHelper) then
+					outOfBounds = true
+				end
+				-- OoB checks
+				if outOfBounds then self:visible(false) else self:visible(true) end
+
 			end,
 			StartBlinkCommand=function(self, param)
 				self:stoptweening():easeoutexpo(0.5):diffusealpha(1)
@@ -567,12 +645,28 @@ for i = 1, WheelSize do
 			RefreshCommand=function(self,param)
 				self:diffuse(FetchFromSong(Songs[Targets[i]], "Song Origin Color"))
 				self:settext(Songs[Targets[i]]:GetOrigin())
+				--self:settext(slot) --displays slot (6 is center)
+				--self:settext(Targets[slot]) --displays songindex
+				--self:settext(CurSongIndex) --displays CurSongIndex
+				--self:settext(#Songs) --displays total number of songs
 
-				if i >  WheelCenter+WheelSizeHelper or i <  WheelCenter-WheelSizeHelper then
-					self:visible(false)
-				else
-					self:visible(true)
+				-- OoB checks
+				local outOfBounds = false
+				-- à esquerda do último item da wheel
+				if (slot < 6) and (Targets[slot] >= CurSongIndex) then
+					outOfBounds = true
 				end
+				-- à direita do último item da wheel
+				if (slot > 6) and (Targets[slot] <= CurSongIndex) then
+					outOfBounds = true
+				end
+				-- outside the screen (more than 4 items from the center)
+				if i > (WheelCenter + WheelSizeHelper) or i < (WheelCenter - WheelSizeHelper) then
+					outOfBounds = true
+				end
+				-- OoB checks
+				if outOfBounds then self:visible(false) else self:visible(true) end
+
 			end,
 		},
 		Def.BitmapText { Name="NameLabel",
