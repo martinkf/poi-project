@@ -86,11 +86,12 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					-- MAXCOMBO
 					local displayMaxCombo = scoreIndex:GetMaxCombo()
 					--local displayMaxCombo = "9999"
-					self:GetChild("MachineRecords_module"):GetChild("MachineRecordsGroup_" .. i):GetChild("NotesMaxCombo"):settext(displayMaxCombo)
+					self:GetChild("MachineRecords_module"):GetChild("MachineRecordsGroup_" .. i):GetChild("NotesMaxCombo"):settext(displayMaxCombo.." COMBO")
 
 					-- PERFECT
 					local displayPerfects = scoreIndex:GetTapNoteScore("TapNoteScore_W1")
 					--local displayPerfects = "9999"
+					if displayPerfects == 0 then displayPerfects = "·" end
 					self:GetChild("MachineRecords_module"):GetChild("MachineRecordsGroup_" .. i):GetChild("NotesPerfect"):settext(displayPerfects)
 
 					-- GREAT
@@ -147,31 +148,36 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						-- MAXCOMBO
 						local displayMaxCombo = scoreIndex:GetMaxCombo()
 						--local displayMaxCombo = "9999"
-						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("NotesMaxCombo"):settext(displayMaxCombo)
+						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("NotesMaxCombo"):settext(displayMaxCombo.." COMBO")
 
 						-- PERFECT
 						local displayPerfects = scoreIndex:GetTapNoteScore("TapNoteScore_W1")
 						--local displayPerfects = "9999"
+						if displayPerfects == 0 then displayPerfects = "·" end
 						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("NotesPerfect"):settext(displayPerfects)
 
 						-- GREAT
 						local displayGreats = scoreIndex:GetTapNoteScore("TapNoteScore_W2")
 						--local displayGreats = "9999"
+						if displayGreats == 0 then displayGreats = "·" end
 						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("NotesGreat"):settext(displayGreats)
 
 						-- GOOD
 						local displayGoods = scoreIndex:GetTapNoteScore("TapNoteScore_W3")
 						--local displayGoods = "9999"
+						if displayGoods == 0 then displayGoods = "·" end
 						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("NotesGood"):settext(displayGoods)
 
 						-- BAD
 						local displayBads = scoreIndex:GetTapNoteScore("TapNoteScore_W4")
 						--local displayBads = "9999"
+						if displayBads == 0 then displayBads = "·" end
 						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("NotesBad"):settext(displayBads)
 
 						-- MISS
 						local displayMisses = scoreIndex:GetTapNoteScore("TapNoteScore_Miss")
 						--local displayMisses = "9999"
+						if displayMisses == 0 then displayMisses = "·" end
 						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("NotesMiss"):settext(displayMisses)
 
 						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):visible(true)
@@ -258,21 +264,12 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:zoom(0.11)
 					end,
 				},
-				Def.BitmapText { Name="LabelMaxCombo",
-					Font="Montserrat semibold 20px",
-					InitCommand=function(self)
-						self:xy(1,-15)
-						self:zoom(0.6)
-						self:settext("MAX")
-						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(265)
-					end,
-				},
 				Def.BitmapText { Name="NotesMaxCombo",
 					Font="Montserrat semibold 20px",
 					InitCommand=function(self)
-						self:xy(21,-15)
+						self:xy(30,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(130)
 					end,
 				},
 				Def.BitmapText { Name="LabelPerfect",
@@ -289,7 +286,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Blue):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGreat",
@@ -306,7 +303,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Green):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGood",
@@ -323,7 +320,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Orange):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelBad",
@@ -340,7 +337,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Purple):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelMiss",
@@ -357,7 +354,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 

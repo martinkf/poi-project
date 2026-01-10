@@ -38,9 +38,9 @@ local IsBusy = false
 if GAMESTATE:GetCurrentStageIndex() == 0 then
 	-- this means this is STAGE 1 (we just came from the select profile screen)
 	-- here I can hard-code what the "default first song" is
-	CurPlaylistIndex = 5 -- Prex
-	CurSublistIndex = PlaylistsArray[CurPlaylistIndex].StartingSublist -- Playlist 5 = Full Display Mode sublist
-	CurSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong -- Playlist 5 and sublist 1 = song 82, Oops I Did It Again
+	CurPlaylistIndex = 2 -- Prex
+	CurSublistIndex = PlaylistsArray[CurPlaylistIndex].StartingSublist -- sublist 1 Full Display Mode sublist
+	CurSongIndex = PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].StartingSong -- song 82, Oops I Did It Again
 else --this means a song has been played and we're back to the select song screen
 	LastPlaylistIndex = tonumber(LoadModule("Config.Load.lua")("LastPlaylistIndex", CheckIfUserOrMachineProfile(string.sub(GAMESTATE:GetMasterPlayerNumber(),-1)-1).."/OutFoxPrefs.ini")) or 1
 	CurPlaylistIndex = LastPlaylistIndex

@@ -31,7 +31,7 @@ local IsBusy = false
 
 local Targets = {}
 
-local HoveredPlaylistIndex
+local HoveredPlaylistIndex = CurPlaylistIndex
 
 -- DECLARING USEFUL FUNCTIONS
 local function UpdateMainItemTargets(val)
@@ -372,7 +372,7 @@ t[#t+1] = Def.ActorFrame {
 			self:zoom(1.2)
 			self:shadowlength(2)
 			self:skewx(-0)
-			self:settext(PlaylistsArray[CurPlaylistIndex].PlaylistName)
+			self:settext(PlaylistsArray[HoveredPlaylistIndex].PlaylistName)
 			self:diffusealpha(0)
 			self:queuecommand('Refresh')
 		end,
@@ -381,7 +381,7 @@ t[#t+1] = Def.ActorFrame {
 		end,
 		RefreshCommand=function(self)
 			-- updates the text to match the CurPlaylist
-			self:settext(PlaylistsArray[CurPlaylistIndex].PlaylistName)
+			self:settext(PlaylistsArray[HoveredPlaylistIndex].PlaylistName)
 
 			-- quick animation when scrolling through playlists
 			self:stoptweening():diffusealpha(0):sleep(0.25):easeoutexpo(0.5):diffusealpha(1)
@@ -397,7 +397,7 @@ t[#t+1] = Def.ActorFrame {
 			self:shadowlength(1)
 			self:align(0.5,0)
 			self:maxwidth(1262)
-			self:settext(PlaylistsArray[CurPlaylistIndex].Description)
+			self:settext(PlaylistsArray[HoveredPlaylistIndex].Description)
 			self:queuecommand('Refresh')
 		end,
 		ScrollMainMessageCommand=function(self)
@@ -405,7 +405,7 @@ t[#t+1] = Def.ActorFrame {
 		end,
 		RefreshCommand=function(self)
 			-- updates the text to match the CurPlaylist
-			self:settext(PlaylistsArray[CurPlaylistIndex].Description)
+			self:settext(PlaylistsArray[HoveredPlaylistIndex].Description)
 			
 			-- quick animation when scrolling through playlists
 			self:stoptweening():diffusealpha(0):sleep(0.25):easeoutexpo(0.5):diffusealpha(1)
