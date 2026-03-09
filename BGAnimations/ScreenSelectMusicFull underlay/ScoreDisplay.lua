@@ -79,9 +79,11 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					local MachineDP = round(scoreIndex:GetPercentDP() * 100, 2) .. "%"
 					self:GetChild("MachineRecords_module"):GetChild("MachineRecordsGroup_" .. i):GetChild("Score"):settext(MachineDP)
 
-					--
-					local displayGrade = THEME:GetPathG("", "LetterGrades/" .. LoadModule("PIU/Score.Grading.lua")(scoreIndex))
-					self:GetChild("MachineRecords_module"):GetChild("MachineRecordsGroup_" .. i):GetChild("Grade"):Load(displayGrade)
+					--					
+					local displayGrade = FormatGradeFromScoreIndex_POI(LoadModule("PIU/Score.Grading.lua")(scoreIndex))
+					local displayGradeColor = GetColorFromScoreIndex_POI(LoadModule("PIU/Score.Grading.lua")(scoreIndex))
+					self:GetChild("MachineRecords_module"):GetChild("MachineRecordsGroup_" .. i):GetChild("Grade"):settext(displayGrade)
+					self:GetChild("MachineRecords_module"):GetChild("MachineRecordsGroup_" .. i):GetChild("Grade"):diffuse(displayGradeColor)
 
 					-- MAXCOMBO
 					local displayMaxCombo = scoreIndex:GetMaxCombo()
@@ -142,8 +144,10 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("Score"):settext(MachineDP)
 
 						--
-						local displayGrade = THEME:GetPathG("", "LetterGrades/" .. LoadModule("PIU/Score.Grading.lua")(scoreIndex))
-						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("Grade"):Load(displayGrade)
+						local displayGrade = FormatGradeFromScoreIndex_POI(LoadModule("PIU/Score.Grading.lua")(scoreIndex))
+						local displayGradeColor = GetColorFromScoreIndex_POI(LoadModule("PIU/Score.Grading.lua")(scoreIndex))
+						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("Grade"):settext(displayGrade)
+						self:GetChild("PersonalRecords_module"):GetChild("PersonalRecordsGroup_" .. i):GetChild("Grade"):diffuse(displayGradeColor)
 
 						-- MAXCOMBO
 						local displayMaxCombo = scoreIndex:GetMaxCombo()
@@ -258,10 +262,12 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-				Def.Sprite { Name="Grade",
+				Def.BitmapText { Name="Grade",
+					Font="Montserrat extrabold 40px",
 					InitCommand=function(self)
-						self:xy(120,-8)
-						self:zoom(0.11)
+						self:xy(120,-9)
+						self:zoom(0.8)
+						self:halign(0.5):shadowlength(2)
 					end,
 				},
 				Def.BitmapText { Name="NotesMaxCombo",
@@ -357,7 +363,6 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-
 			},
 
 			Def.ActorFrame { Name="MachineRecordsGroup_2",
@@ -396,27 +401,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-				Def.Sprite { Name="Grade",
+				Def.BitmapText { Name="Grade",
+					Font="Montserrat extrabold 40px",
 					InitCommand=function(self)
-						self:xy(120,-8)
-						self:zoom(0.11)
-					end,
-				},
-				Def.BitmapText { Name="LabelMaxCombo",
-					Font="Montserrat semibold 20px",
-					InitCommand=function(self)
-						self:xy(1,-15)
-						self:zoom(0.6)
-						self:settext("MAX")
-						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:xy(120,-9)
+						self:zoom(0.8)
+						self:halign(0.5):shadowlength(2)
 					end,
 				},
 				Def.BitmapText { Name="NotesMaxCombo",
 					Font="Montserrat semibold 20px",
 					InitCommand=function(self)
-						self:xy(21,-15)
+						self:xy(30,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(130)
 					end,
 				},
 				Def.BitmapText { Name="LabelPerfect",
@@ -433,7 +431,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Blue):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGreat",
@@ -450,7 +448,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Green):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGood",
@@ -467,7 +465,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Orange):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelBad",
@@ -484,7 +482,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Purple):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelMiss",
@@ -501,10 +499,9 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-
 			},
 
 			Def.ActorFrame { Name="MachineRecordsGroup_3",
@@ -543,27 +540,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-				Def.Sprite { Name="Grade",
+				Def.BitmapText { Name="Grade",
+					Font="Montserrat extrabold 40px",
 					InitCommand=function(self)
-						self:xy(120,-8)
-						self:zoom(0.11)
-					end,
-				},
-				Def.BitmapText { Name="LabelMaxCombo",
-					Font="Montserrat semibold 20px",
-					InitCommand=function(self)
-						self:xy(1,-15)
-						self:zoom(0.6)
-						self:settext("MAX")
-						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:xy(120,-9)
+						self:zoom(0.8)
+						self:halign(0.5):shadowlength(2)
 					end,
 				},
 				Def.BitmapText { Name="NotesMaxCombo",
 					Font="Montserrat semibold 20px",
 					InitCommand=function(self)
-						self:xy(21,-15)
+						self:xy(30,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(130)
 					end,
 				},
 				Def.BitmapText { Name="LabelPerfect",
@@ -580,7 +570,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Blue):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGreat",
@@ -597,7 +587,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Green):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGood",
@@ -614,7 +604,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Orange):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelBad",
@@ -631,7 +621,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Purple):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelMiss",
@@ -648,10 +638,9 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-
 			},
 
 			Def.ActorFrame { Name="MachineRecordsGroup_4",
@@ -690,27 +679,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-				Def.Sprite { Name="Grade",
+				Def.BitmapText { Name="Grade",
+					Font="Montserrat extrabold 40px",
 					InitCommand=function(self)
-						self:xy(120,-8)
-						self:zoom(0.11)
-					end,
-				},
-				Def.BitmapText { Name="LabelMaxCombo",
-					Font="Montserrat semibold 20px",
-					InitCommand=function(self)
-						self:xy(1,-15)
-						self:zoom(0.6)
-						self:settext("MAX")
-						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:xy(120,-9)
+						self:zoom(0.8)
+						self:halign(0.5):shadowlength(2)
 					end,
 				},
 				Def.BitmapText { Name="NotesMaxCombo",
 					Font="Montserrat semibold 20px",
 					InitCommand=function(self)
-						self:xy(21,-15)
+						self:xy(30,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(130)
 					end,
 				},
 				Def.BitmapText { Name="LabelPerfect",
@@ -727,7 +709,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Blue):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGreat",
@@ -744,7 +726,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Green):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGood",
@@ -761,7 +743,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Orange):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelBad",
@@ -778,7 +760,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Purple):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelMiss",
@@ -795,10 +777,9 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-
 			},
 
 			Def.ActorFrame { Name="MachineRecordsGroup_5",
@@ -837,27 +818,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-				Def.Sprite { Name="Grade",
+				Def.BitmapText { Name="Grade",
+					Font="Montserrat extrabold 40px",
 					InitCommand=function(self)
-						self:xy(120,-8)
-						self:zoom(0.11)
-					end,
-				},
-				Def.BitmapText { Name="LabelMaxCombo",
-					Font="Montserrat semibold 20px",
-					InitCommand=function(self)
-						self:xy(1,-15)
-						self:zoom(0.6)
-						self:settext("MAX")
-						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:xy(120,-9)
+						self:zoom(0.8)
+						self:halign(0.5):shadowlength(2)
 					end,
 				},
 				Def.BitmapText { Name="NotesMaxCombo",
 					Font="Montserrat semibold 20px",
 					InitCommand=function(self)
-						self:xy(21,-15)
+						self:xy(30,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(130)
 					end,
 				},
 				Def.BitmapText { Name="LabelPerfect",
@@ -874,7 +848,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Blue):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGreat",
@@ -891,7 +865,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Green):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGood",
@@ -908,7 +882,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Orange):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelBad",
@@ -925,7 +899,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Purple):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelMiss",
@@ -942,10 +916,9 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-
 			},
 
 			Def.ActorFrame { Name="MachineRecordsGroup_6",
@@ -984,27 +957,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-				Def.Sprite { Name="Grade",
+				Def.BitmapText { Name="Grade",
+					Font="Montserrat extrabold 40px",
 					InitCommand=function(self)
-						self:xy(120,-8)
-						self:zoom(0.11)
-					end,
-				},
-				Def.BitmapText { Name="LabelMaxCombo",
-					Font="Montserrat semibold 20px",
-					InitCommand=function(self)
-						self:xy(1,-15)
-						self:zoom(0.6)
-						self:settext("MAX")
-						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:xy(120,-9)
+						self:zoom(0.8)
+						self:halign(0.5):shadowlength(2)
 					end,
 				},
 				Def.BitmapText { Name="NotesMaxCombo",
 					Font="Montserrat semibold 20px",
 					InitCommand=function(self)
-						self:xy(21,-15)
+						self:xy(30,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(130)
 					end,
 				},
 				Def.BitmapText { Name="LabelPerfect",
@@ -1021,7 +987,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Blue):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGreat",
@@ -1038,7 +1004,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Green):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGood",
@@ -1055,7 +1021,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Orange):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelBad",
@@ -1072,7 +1038,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Purple):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelMiss",
@@ -1089,10 +1055,9 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-
 			},
 
 		},
@@ -1153,27 +1118,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-				Def.Sprite { Name="Grade",
+				Def.BitmapText { Name="Grade",
+					Font="Montserrat extrabold 40px",
 					InitCommand=function(self)
-						self:xy(120,-8)
-						self:zoom(0.11)
-					end,
-				},
-				Def.BitmapText { Name="LabelMaxCombo",
-					Font="Montserrat semibold 20px",
-					InitCommand=function(self)
-						self:xy(1,-15)
-						self:zoom(0.6)
-						self:settext("MAX")
-						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:xy(120,-9)
+						self:zoom(0.8)
+						self:halign(0.5):shadowlength(2)
 					end,
 				},
 				Def.BitmapText { Name="NotesMaxCombo",
 					Font="Montserrat semibold 20px",
 					InitCommand=function(self)
-						self:xy(21,-15)
+						self:xy(30,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(130)
 					end,
 				},
 				Def.BitmapText { Name="LabelPerfect",
@@ -1190,7 +1148,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Blue):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGreat",
@@ -1207,7 +1165,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Green):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGood",
@@ -1224,7 +1182,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Orange):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelBad",
@@ -1241,7 +1199,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Purple):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelMiss",
@@ -1258,10 +1216,9 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-
 			},
 
 			Def.ActorFrame { Name="PersonalRecordsGroup_2",
@@ -1292,27 +1249,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-				Def.Sprite { Name="Grade",
+				Def.BitmapText { Name="Grade",
+					Font="Montserrat extrabold 40px",
 					InitCommand=function(self)
-						self:xy(120,-8)
-						self:zoom(0.11)
-					end,
-				},
-				Def.BitmapText { Name="LabelMaxCombo",
-					Font="Montserrat semibold 20px",
-					InitCommand=function(self)
-						self:xy(1,-15)
-						self:zoom(0.6)
-						self:settext("MAX")
-						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:xy(120,-9)
+						self:zoom(0.8)
+						self:halign(0.5):shadowlength(2)
 					end,
 				},
 				Def.BitmapText { Name="NotesMaxCombo",
 					Font="Montserrat semibold 20px",
 					InitCommand=function(self)
-						self:xy(21,-15)
+						self:xy(30,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(130)
 					end,
 				},
 				Def.BitmapText { Name="LabelPerfect",
@@ -1329,7 +1279,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Blue):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGreat",
@@ -1346,7 +1296,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Green):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGood",
@@ -1363,7 +1313,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Orange):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelBad",
@@ -1380,7 +1330,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Purple):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelMiss",
@@ -1397,10 +1347,9 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-
 			},
 
 			Def.ActorFrame { Name="PersonalRecordsGroup_3",
@@ -1431,27 +1380,20 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
-				Def.Sprite { Name="Grade",
+				Def.BitmapText { Name="Grade",
+					Font="Montserrat extrabold 40px",
 					InitCommand=function(self)
-						self:xy(120,-8)
-						self:zoom(0.11)
-					end,
-				},
-				Def.BitmapText { Name="LabelMaxCombo",
-					Font="Montserrat semibold 20px",
-					InitCommand=function(self)
-						self:xy(1,-15)
-						self:zoom(0.6)
-						self:settext("MAX")
-						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:xy(120,-9)
+						self:zoom(0.8)
+						self:halign(0.5):shadowlength(2)
 					end,
 				},
 				Def.BitmapText { Name="NotesMaxCombo",
 					Font="Montserrat semibold 20px",
 					InitCommand=function(self)
-						self:xy(21,-15)
+						self:xy(30,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(1):diffuse(Color.Yellow):vertspacing(-6):shadowlength(1):maxwidth(130)
 					end,
 				},
 				Def.BitmapText { Name="LabelPerfect",
@@ -1468,7 +1410,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Blue):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGreat",
@@ -1485,7 +1427,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(21,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Green):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelGood",
@@ -1502,7 +1444,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-15)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Orange):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelBad",
@@ -1519,7 +1461,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,-1)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Purple):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 				Def.BitmapText { Name="LabelMiss",
@@ -1536,7 +1478,7 @@ for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 					InitCommand=function(self)
 						self:xy(71,13)
 						self:zoom(0.6)
-						self:halign(0.5):diffuse(Color.White):vertspacing(-6):shadowlength(1):maxwidth(265)
+						self:halign(0.5):diffuse(Color.Red):vertspacing(-6):shadowlength(1):maxwidth(265)
 					end,
 				},
 

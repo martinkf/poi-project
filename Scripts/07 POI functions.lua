@@ -588,7 +588,7 @@ function GetColorFromScoreIndex_POI(input_scoreIndex_as_string)
 	local gradeColorMap = {
 		Pass3S = "GOLD",
 		Pass2S = "GOLD",
-		PassS = "SILVER",
+		PassS = "GOLD",
 
 		PassA = "PASSED", PassB = "PASSED", PassC = "PASSED",
 		PassD = "PASSED", PassF = "PASSED",
