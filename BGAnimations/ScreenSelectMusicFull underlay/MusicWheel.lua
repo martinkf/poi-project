@@ -331,6 +331,36 @@ local t = Def.ActorFrame {
 		end,
 	},
 
+	Def.BitmapText { Name="IndexIndicatorMaxText",
+		Font="Montserrat semibold 40px",
+		InitCommand=function(self)
+			self:y(indexIndicator_y)
+			self:zoom(0.3)
+			self:align(0.5,0.5)
+			self:diffuse(color("0,0,0,1"))
+
+			self:settext("???")
+			self:x(indexIndicator_baseX)
+			self:playcommand("Refresh")
+		end,
+		
+		ForceUpdateMessageCommand=function(self)
+			self:playcommand("Refresh")
+		end,
+
+		RefreshCommand=function(self,param)
+			-- alters some necessary variables depending on the number of songs in the group
+			local totalSongsFromGroup = #PlaylistsArray[CurPlaylistIndex].Sublists[CurSublistIndex].AllowedSongs
+			local calculatedWidth = indexIndicator_range / totalSongsFromGroup
+
+			-- alters its text depending on the totalSongsFromGroup
+			self:settext(totalSongsFromGroup)
+
+			-- alters its x position to match the last song from group
+			self:x(indexIndicator_baseX + ((totalSongsFromGroup - (totalSongsFromGroup + 1) / 2) * calculatedWidth))
+		end,
+	},
+
 	Def.Quad { Name="IndexIndicatorNode",
 		InitCommand=function(self)
 			self:y(indexIndicator_y)
@@ -496,21 +526,13 @@ for i = 1, WheelSize do
 			RefreshCommand=function(self, param)
 				
 				-- OoB checks
-				local outOfBounds = false
-				-- à esquerda do último item da wheel
-				if (slot < 6) and (Targets[slot] >= CurSongIndex) then
-					outOfBounds = true
-				end
-				-- à direita do último item da wheel
-				if (slot > 6) and (Targets[slot] <= CurSongIndex) then
-					outOfBounds = true
-				end
-				-- outside the screen (more than 4 items from the center)
-				if i > (WheelCenter + WheelSizeHelper) or i < (WheelCenter - WheelSizeHelper) then
-					outOfBounds = true
-				end
-				-- OoB checks
-				if outOfBounds then self:visible(false) else self:visible(true) end
+				local songIndexForSlot = CurSongIndex + (slot - WheelCenter)
+				local outOfBounds =
+					songIndexForSlot < 1 or
+					songIndexForSlot > #Songs or
+					slot > (WheelCenter + WheelSizeHelper) or
+					slot < (WheelCenter - WheelSizeHelper)
+				self:visible(not outOfBounds)
 				
 			end,
 		},
@@ -518,21 +540,13 @@ for i = 1, WheelSize do
 			RefreshCommand=function(self, param)
 				
 				-- OoB checks
-				local outOfBounds = false
-				-- à esquerda do último item da wheel
-				if (slot < 6) and (Targets[slot] >= CurSongIndex) then
-					outOfBounds = true
-				end
-				-- à direita do último item da wheel
-				if (slot > 6) and (Targets[slot] <= CurSongIndex) then
-					outOfBounds = true
-				end
-				-- outside the screen (more than 4 items from the center)
-				if i > (WheelCenter + WheelSizeHelper) or i < (WheelCenter - WheelSizeHelper) then
-					outOfBounds = true
-				end
-				-- OoB checks
-				if outOfBounds then self:visible(false) else self:visible(true) end
+				local songIndexForSlot = CurSongIndex + (slot - WheelCenter)
+				local outOfBounds =
+					songIndexForSlot < 1 or
+					songIndexForSlot > #Songs or
+					slot > (WheelCenter + WheelSizeHelper) or
+					slot < (WheelCenter - WheelSizeHelper)
+				self:visible(not outOfBounds)
 
 			end,
 			Def.Banner { Name="BannerBG",
@@ -566,21 +580,13 @@ for i = 1, WheelSize do
 				self:queuecommand("StartBlink")
 				
 				-- OoB checks
-				local outOfBounds = false
-				-- à esquerda do último item da wheel
-				if (slot < 6) and (Targets[slot] >= CurSongIndex) then
-					outOfBounds = true
-				end
-				-- à direita do último item da wheel
-				if (slot > 6) and (Targets[slot] <= CurSongIndex) then
-					outOfBounds = true
-				end
-				-- outside the screen (more than 4 items from the center)
-				if i > (WheelCenter + WheelSizeHelper) or i < (WheelCenter - WheelSizeHelper) then
-					outOfBounds = true
-				end
-				-- OoB checks
-				if outOfBounds then self:visible(false) else self:visible(true) end
+				local songIndexForSlot = CurSongIndex + (slot - WheelCenter)
+				local outOfBounds =
+					songIndexForSlot < 1 or
+					songIndexForSlot > #Songs or
+					slot > (WheelCenter + WheelSizeHelper) or
+					slot < (WheelCenter - WheelSizeHelper)
+				self:visible(not outOfBounds)
 
 			end,
 			StartBlinkCommand=function(self, param)
@@ -651,22 +657,13 @@ for i = 1, WheelSize do
 				--self:settext(#Songs) --displays total number of songs
 
 				-- OoB checks
-				local outOfBounds = false
-				-- à esquerda do último item da wheel
-				if (slot < 6) and (Targets[slot] >= CurSongIndex) then
-					outOfBounds = true
-				end
-				-- à direita do último item da wheel
-				if (slot > 6) and (Targets[slot] <= CurSongIndex) then
-					outOfBounds = true
-				end
-				-- outside the screen (more than 4 items from the center)
-				if i > (WheelCenter + WheelSizeHelper) or i < (WheelCenter - WheelSizeHelper) then
-					outOfBounds = true
-				end
-				-- OoB checks
-				if outOfBounds then self:visible(false) else self:visible(true) end
-
+				local songIndexForSlot = CurSongIndex + (slot - WheelCenter)
+				local outOfBounds =
+					songIndexForSlot < 1 or
+					songIndexForSlot > #Songs or
+					slot > (WheelCenter + WheelSizeHelper) or
+					slot < (WheelCenter - WheelSizeHelper)
+				self:visible(not outOfBounds)
 			end,
 		},
 		Def.BitmapText { Name="NameLabel",
