@@ -5687,13 +5687,20 @@ function Database_POI()
 					},
 				},
 			-- sublist 16
+				{	SublistName = "Progressive level: HALF-DOUBLES - 21 TO 22",
+					StartingSong = 1,
+					AllowedSongs = {
+						{ SongPath = "/Songs/POI-database/C05 - PHANTOM/", Charts = { "NX-ANIGHTMARE" } },
+					},
+				},
+			-- sublist 17
 				{	SublistName = "Progressive level: HALF-DOUBLES - LEVEL 23",
 					StartingSong = 1,
 					AllowedSongs = {
 						{ SongPath = "/Songs/POI-database/C41 - -REMIX- TRY TO B.P.M. - LIADZ/", Charts = { "ZERO-NIGHTMARE" } },
 					},
 				},
-			-- sublist 17
+			-- sublist 18
 				{	SublistName = "Progressive level: DOUBLES - 01 TO 05",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -5750,7 +5757,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/D32 - -REMIX- GROOVE PARTY/", Charts = { "NX-FREESTYLE" } },
 					},
 				},
-			-- sublist 18
+			-- sublist 19
 				{	SublistName = "Progressive level: DOUBLES - 06 TO 08",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -5807,7 +5814,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/D43 - HOLD THE LINE -FULL SONG-/", Charts = { "NX-FREESTYLE" } },
 					},
 				},
-			-- sublist 19
+			-- sublist 20
 				{	SublistName = "Progressive level: DOUBLES - 09 TO 11",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -5841,7 +5848,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/119 - -REMIX- TURBO REMIX/", Charts = { "2ND-DOUBLE" } },
 					},
 				},
-			-- sublist 20
+			-- sublist 21
 				{	SublistName = "Progressive level: DOUBLES - 12 TO 15",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -5909,7 +5916,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/D32 - -REMIX- GROOVE PARTY/", Charts = { "NX-NIGHTMARE" } },
 					},
 				},
-			-- sublist 21
+			-- sublist 22
 				{	SublistName = "Progressive level: DOUBLES - 16 TO 18",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -5963,7 +5970,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/D43 - HOLD THE LINE -FULL SONG-/", Charts = { "NX-NIGHTMARE" } },
 					},
 				},
-			-- sublist 22
+			-- sublist 23
 				{	SublistName = "Progressive level: DOUBLES - 19 TO 20",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -6000,7 +6007,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/D39 - FIRE GAME -FULL SONG-/", Charts = { "NX-NIGHTMARE" } },
 					},
 				},
-			-- sublist 23
+			-- sublist 24
 				{	SublistName = "Progressive level: DOUBLES - 21 TO 22",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -6010,7 +6017,6 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/704 - LOVE IS A DANGER ZONE/", Charts = { "EXC2-NIGHTMARE" } },
 						{ SongPath = "/Songs/POI-database/A05 - PUMP ME AMADEUS/", Charts = { "EXC1-NIGHTMARE" } },
 						{ SongPath = "/Songs/POI-database/C02 - MOONLIGHT/", Charts = { "ZERO-NIGHTMARE" } },
-						{ SongPath = "/Songs/POI-database/C05 - PHANTOM/", Charts = { "NX-ANIGHTMARE" } },
 						{ SongPath = "/Songs/POI-database/D03 - CHIMERA/", Charts = { "NX-FREESTYLE" } },
 						{ SongPath = "/Songs/POI-database/D17 - BULLFIGHTING'S SONG/", Charts = { "NX-NIGHTMARE" } },
 						{ SongPath = "/Songs/POI-database/D28 - FINAL AUDITION EPISODE 2-1/", Charts = { "NX-ANIGHTMARE" } },
@@ -6024,7 +6030,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/B51 - DIGNITY -FULL SONG-/", Charts = { "NX-NIGHTMARE" } },
 					},
 				},
-			-- sublist 24
+			-- sublist 25
 				{	SublistName = "Progressive level: DOUBLES - LEVEL 23",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -6036,7 +6042,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/D28 - FINAL AUDITION EPISODE 2-1/", Charts = { "NX-NIGHTMARE" } },
 					},
 				},
-			-- sublist 25
+			-- sublist 26
 				{	SublistName = "Progressive level: DOUBLES - LEVEL 24 AND UP",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -6051,7 +6057,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/D30 - FINAL AUDITION EPISODE 2-2/", Charts = { "NX-ANIGHTMARE" } },
 					},
 				},
-			-- sublist 26
+			-- sublist 27
 				{	SublistName = "SWAN SONG charts",
 					StartingSong = 1,
 					AllowedSongs = {
@@ -6093,7 +6099,7 @@ function Database_POI()
 						{ SongPath = "/Songs/POI-database/D37 - -REMIX- CHICAGO CLUB MIX/", Charts = { "NX-HARD", "NX-CRAZY", "NX-FREESTYLE", "NX-NIGHTMARE" } },
 					},
 				},
-			-- sublist 27
+			-- sublist 28
 				{	SublistName = "BRAND-NEW charts",
 					StartingSong = 1,
 					AllowedSongs = {
